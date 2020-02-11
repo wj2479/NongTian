@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.qdhc.ny.activity.NoticeActivity">
+
+    <include layout="@layout/layout_title_theme"></include>
+
+    <View style="@style/line_vertical"></View>
+
+    <!--tabIndicatorColor：指示器的颜色-->
+    <!--tabIndicatorHeight：指示器的高度，可设置为0，相当于没有指示器-->
+    <!--tabTextColor：Tab未选中时字体的颜色-->
+    <!--tabSelectedTextColor：Tab选中时字体的颜色-->
+    <!--tabTextAppearance：Tab内文字的样式，TabLayout没有提供直接属性设置文字大小，需通过该属性指定style样式从而改变文字大小-->
+    <!--tabMode：Tab的显示模式，默认为fixed（固定不能滑动，标签很多时会被挤压），可设置为scrollable（标签很多时可向左滑动）-->
+    <!--tabGravity：内容的显示模式，可选center（居中）和fill（填充）-->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/mTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:tabIndicatorColor="@color/themecolor"
+        app:tabIndicatorHeight="3dp"
+        app:tabSelectedTextColor="@color/themecolor"
+        app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+        app:tabTextColor="@color/_8c"
+        app:tabMode="fixed"
+        app:tabGravity="fill"></android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+</LinearLayout>
+

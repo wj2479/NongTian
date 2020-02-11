@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--底部按钮-->
+    <string-array name="tab_titles">
+        <item>工程</item>
+        <item>通知</item>
+        <item>个人</item>
+    </string-array>
+
+    <string-array name="tab2_titles">
+        <item>工程</item>
+        <item>质量</item>
+        <item>人员</item>
+        <item>个人</item>
+    </string-array>
+
+    <string-array name="tab3_titles">
+        <item>工程</item>
+        <item>通知</item>
+        <item>个人</item>
+    </string-array>
+
+    <!--信息类型-->
+    <string-array name="types">
+        <item>其它信息</item>
+    </string-array>
+    <!--紧急程度-->
+    <string-array name="levels">
+        <item>一般</item>
+        <item>紧急</item>
+    </string-array>
+
+    <!--工作标签-->
+    <string-array name="report_titles">
+        <item>日  报</item>
+        <item>周  报</item>
+        <item>月  报</item>
+    </string-array>
+
+    <string-array name="daily_report_types">
+        <item>管 沟</item>
+        <item>塘 坝</item>
+        <item>井 类</item>
+        <item>道 路</item>
+        <item>林 网</item>
+        <item>电 泵</item>
+        <item>整 地</item>
+        <item>其 他</item>
+    </string-array>
+
+    <!--信息来源-->
+    <string-array name="froms">
+        <item>主动摸排</item>
+        <item>当事人申请</item>
+        <item>群众来访</item>
+        <item>领导批示</item>
+        <item>上级交办</item>
+        <item>其他途径</item>
+    </string-array>
+
+
+    <!--项目名称分类-->
+    <string-array name="project_types">
+        <item>项目A</item>
+        <item>项目B</item>
+        <item>项目C</item>
+        <item>项目D</item>
+    </string-array>
+
+    <!--上报类别-->
+    <string-array name="upload_types">
+        <item>工作日志</item>
+        <item>紧急上报</item>
+    </string-array>
+
+    <!--用户角色-->
+    <string-array name="roles">
+        <item>监  理</item>
+        <item>监  理</item>
+        <item>主管领导</item>
+    </string-array>
+
+</resources>

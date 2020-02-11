@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="themecolor">#4DC06B</color>
+    <!--白跟白-->
+    <color name="line_waw">#eaebeb</color>
+    <!--白跟灰-->
+    <color name="line_wag">#cacbcc</color>
+
+    <color name="backgroundColor">#f6f6f6</color>
+    <color name="text_color_green">#4DC06B</color>
+    <color name="text_color_orange">#FFB32F</color>
+
+    <color name="hui">#808080</color>
+    <color name="icon_color">#dbdbdb</color>
+    <color name="black">#333333</color>
+    <color name="white">#ffffff</color>
+</resources>

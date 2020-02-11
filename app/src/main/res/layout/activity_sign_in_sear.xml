@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.qdhc.ny.activity.SignInSearActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/layout_title_theme"></include>
+    </LinearLayout>
+
+    <View style="@style/line_vertical"></View>
+
+    <EditText
+        android:id="@+id/edt_sear"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_margin="@dimen/dp_8"
+        android:background="@drawable/corner_view"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="@dimen/dp_4"
+        android:gravity="center_vertical"
+        android:hint="请输入要搜索的内容"
+        android:imeOptions="actionSearch"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_8"
+        android:singleLine="true"
+        android:textSize="@dimen/textsize_8" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/main_srl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+            android:id="@+id/smrw"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/backgroundColor" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

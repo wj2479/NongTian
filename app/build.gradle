@@ -1,0 +1,121 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+android {
+
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.qdhc.ny"
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 20
+        versionName "1.2.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        useLibrary 'org.apache.http.legacy'
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('..\\keystore\\my.jks')
+            storePassword 'wangjie'
+            keyAlias = 'wangjie'
+            keyPassword 'wangjie'
+        }
+
+        //        release {
+//            storeFile file('D:/AndoridProject/OA/app/oa_j.jks')
+//            storePassword 'qq123456'
+//            keyAlias "oa_sj"
+//            keyPassword 'qq123456'
+//        }
+    }
+
+    buildTypes {
+        release {
+            //是否混淆
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //    signingConfig signingConfigs.release
+        }
+    }
+
+    //打包后应用名称
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "高标农田_${defaultConfig.versionName}_${buildType.name}.apk"
+        }
+    }
+
+    dexOptions {
+        //避免项目中存在相同的jar包，导致运行失败
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
+    }
+
+    //为了解决第三方库重复打包了META_INF问题，替换为有冲突的依赖
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+    configurations.all {
+        resolutionStrategy {
+            exclude group: 'com.android.support.animated-vector-drawable'
+            exclude group: 'com.android.support', module: 'support-v4'
+            exclude group: 'com.android.support', module: 'support-v7'
+        }
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    api project(':core')
+    api project(':library')
+    //Zxing核心包
+    implementation 'com.google.zxing:core:3.3.0'
+    // 高仿微信相机
+    implementation 'cjt.library.wheel:camera:1.1.9'
+    // 可拖动进度条
+    implementation 'com.xw.repo:bubbleseekbar:3.18-lite'
+    // eventbus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    // 标签控件
+    implementation 'com.lcodecorex:labellayout:1.0.1'
+    // 仿Iphone对话框
+    implementation 'com.baoyz.actionsheet:library:1.1.7'
+
+    // 版本更新框架
+//    implementation 'com.github.xuexiangjys:XUpdate:1.1.0'
+//    implementation 'com.zhy:okhttputils:2.6.2'
+
+    // 图标 控件库
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
+    implementation project(path: ':zloadingview')
+    implementation project(path: ':treeview_lib')
+}
+
+repositories {
+    mavenCentral()
+}
