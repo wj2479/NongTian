@@ -147,41 +147,41 @@ class ContradictionInfoActivity : BaseActivity() {
             statusTv.setTextColor(Color.RED)
             statusTv.text = "未处理"
             // 可以处理
-            if (userInfo.role == 2 || userInfo.role == 0) {
-                resultEt.visibility = View.VISIBLE
-                buttonLayout.visibility = View.VISIBLE
-            } else if (userInfo.role == 3) {
-                resultLayout.visibility = View.GONE
-                buttonLayout.visibility = View.GONE
-            } else {
-                resultLayout.visibility = View.GONE
-            }
+//            if (userInfo.role == 2 || userInfo.role == 0) {
+//                resultEt.visibility = View.VISIBLE
+//                buttonLayout.visibility = View.VISIBLE
+//            } else if (userInfo.role == 3) {
+//                resultLayout.visibility = View.GONE
+//                buttonLayout.visibility = View.GONE
+//            } else {
+//                resultLayout.visibility = View.GONE
+//            }
         }
 
         if (TextUtils.isEmpty(contradiction.comment)) {
             // 可以处理
-            if (userInfo.role == 3 || userInfo.role == 0) {
-                commentEt.visibility = View.VISIBLE
-                commentButLayout.visibility = View.VISIBLE
-            } else {
-                commentTv.visibility = View.VISIBLE
-                commentTv.text = "暂无"
-            }
+//            if (userInfo.role == 3 || userInfo.role == 0) {
+//                commentEt.visibility = View.VISIBLE
+//                commentButLayout.visibility = View.VISIBLE
+//            } else {
+//                commentTv.visibility = View.VISIBLE
+//                commentTv.text = "暂无"
+//            }
         } else {
             commentTv.visibility = View.VISIBLE
             commentTv.text = contradiction.comment
         }
 
-        if (userInfo.role != 1) {
-            uploadLayout.visibility = View.VISIBLE
-
-            getInfoByObjectId(contradiction.uploader, object : UserInfoUtils.IResult {
-                override fun onReslt(userInfo: UserInfo?) {
-                    uploaderTv.text = if (userInfo == null) "上报人: 未知" else "上报人: " + userInfo.nickName
-                    uploadphoneTv.text = if (userInfo == null) "" else "电话: " + userInfo.mobilePhoneNumber
-                }
-            })
-        }
+//        if (userInfo.role != 1) {
+//            uploadLayout.visibility = View.VISIBLE
+//
+//            getInfoByObjectId(contradiction.uploader, object : UserInfoUtils.IResult {
+//                override fun onReslt(userInfo: UserInfo?) {
+//                    uploaderTv.text = if (userInfo == null) "上报人: 未知" else "上报人: " + userInfo.nickName
+//                    uploadphoneTv.text = if (userInfo == null) "" else "电话: " + userInfo.mobilePhoneNumber
+//                }
+//            })
+//        }
 
         getImags()
     }

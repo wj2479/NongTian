@@ -9,10 +9,14 @@ import android.util.Log
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
-import com.qdhc.ny.*
+import com.qdhc.ny.LoginActivity
+import com.qdhc.ny.Main3Activity
+import com.qdhc.ny.MainActivity
+import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.Project
 import com.qdhc.ny.common.ProjectData
+import com.qdhc.ny.entity.Role
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.net.Rx.RxRestClient
@@ -196,11 +200,9 @@ class StartActivity : BaseActivity() {
 
         CrashReport.setUserId(user.userName)
 
-        when (user.role) {
-            1 -> startActivity(Intent(mContext, MainActivity::class.java))
-            2 -> startActivity(Intent(mContext, Main2Activity::class.java))
-            3 -> startActivity(Intent(mContext, Main3Activity::class.java))
-            4 -> startActivity(Intent(mContext, Main4Activity::class.java))
+        when (user.role.code) {
+            Role.TYPE_USER -> startActivity(Intent(mContext, MainActivity::class.java))
+            Role.TYPE_MANAGER -> startActivity(Intent(mContext, Main3Activity::class.java))
         }
     }
 

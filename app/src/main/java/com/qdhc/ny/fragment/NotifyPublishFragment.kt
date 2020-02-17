@@ -2,28 +2,31 @@ package com.qdhc.ny.fragment
 
 
 import android.content.Intent
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.R
 import com.qdhc.ny.activity.NotifyDetailActivity
 import com.qdhc.ny.adapter.NotifyAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.Notify
+import com.qdhc.ny.entity.Notify
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
+import com.sj.core.net.Rx.RxRestClient
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_sign_in_sear.*
+import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 import android.support.v7.widget.LinearLayoutManager as LinearLayoutManager1
 
 
 /**
- * A simple [Fragment] subclass.
+ * 发布出去的通知
  */
 class NotifyPublishFragment : BaseFragment() {
 
@@ -74,29 +77,42 @@ class NotifyPublishFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        datas.clear()
-        getData()
+        getPublishNotify(userInfo.id)
     }
 
     /**
      *  获取通知
      */
-    fun getData() {
-        val categoryBmobQuery = BmobQuery<Notify>()
-        categoryBmobQuery.addWhereEqualTo("publish", userInfo.id)
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(
-                object : FindListener<Notify>() {
-                    override fun done(list: List<Notify>?, e: BmobException?) {
-                        if (e == null) {
-                            Log.e("通知列表-----》", list?.toString())
-                            datas.addAll(list!!)
-                            mAdapter.notifyDataSetChanged()
-                        } else {
-                            Log.e("异常-----》", e.toString())
-                        }
-                    }
-                })
+    fun getPublishNotify(uid: Int) {
+        var params: HashMap<String, Any> = HashMap()
+        params["uid"] = uid
+        RxRestClient.create()
+                .url("notify/getPublishNotify")
+                .params(params)
+                .build()
+                .get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result ->
+                            var json = JSONObject(result)
+                            if (json.getInt("code") == 1000) {
+                                var result = json.getJSONArray("result")
+                                datas.clear()
+                                for (index in 0 until result.length()) {
+                                    var jobj = result.getJSONObject(index)
+                                    var data = gson.fromJson(jobj.toString(), Notify::class.java)
+                                    datas.add(data)
+                                }
+                                mAdapter.notifyDataSetChanged()
+                            } else {
+                                Log.e("TAG", "请求发布失败:" + result)
+                            }
+
+                        },
+                        { throwable ->
+                            throwable.printStackTrace()
+                        })
     }
 
 }

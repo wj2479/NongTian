@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qdhc.ny.R;
-import com.qdhc.ny.bmob.Notify;
+import com.qdhc.ny.entity.Notify;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class NotifyAdapter extends BaseQuickAdapter<Notify, BaseViewHolder> {
         //标题
         helper.setText(R.id.tv_title, item.getContent());
         //内容
-        helper.setText(R.id.tv_time, item.getCreatedAt().substring(0, 10));
+        helper.setText(R.id.tv_time, item.getCreateTime());
 
     }
 

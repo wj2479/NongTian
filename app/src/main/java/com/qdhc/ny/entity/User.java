@@ -49,7 +49,7 @@ public class User implements Serializable {
     /**
      * 角色类型
      */
-    private int role;
+    private Role role;
 
     /**
      * 年龄
@@ -92,7 +92,6 @@ public class User implements Serializable {
         this.userName = userName;
     }
 
-
     public String getNickName() {
         return nickName;
     }
@@ -125,11 +124,11 @@ public class User implements Serializable {
         this.area = area;
     }
 
-    public int getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

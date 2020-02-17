@@ -4,13 +4,9 @@ import android.annotation.SuppressLint
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.adapter.ProjectWithReportAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bmob.Project
@@ -93,25 +89,7 @@ class ReportListFragment(areaId: Int, villageId: String, isShowTitle: Boolean) :
 
     //获取数据
     fun getProjectData() {
-        val categoryBmobQuery = BmobQuery<Project>()
-        categoryBmobQuery.addWhereEqualTo("area", areaId)
-        if (userInfo.role == 1) {
-        } else {
-            categoryBmobQuery.addWhereEqualTo("village", villageId)
-        }
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(
-                object : FindListener<Project>() {
-                    override fun done(list: List<Project>?, e: BmobException?) {
-                        if (e == null) {
-                            Log.e("工程列表结果-----》", list?.size.toString())
-                            projectList.addAll(list!!)
-                            mAdapter.notifyDataSetChanged()
-                        } else {
-                            Log.e("异常-----》", e.toString())
-                        }
-                    }
-                })
+
     }
 
 }

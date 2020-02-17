@@ -1,7 +1,6 @@
 package com.qdhc.ny.activity
 
 import android.content.Intent
-import android.view.View
 import com.baoyz.actionsheet.ActionSheet
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
@@ -24,10 +23,10 @@ class ReportAllListActivity : BaseActivity(), ActionSheet.ActionSheetListener {
     override fun initView() {
 
         val user = intent.getSerializableExtra("user") as User
-        if (user.role == 1) {
-            title_tv_right.visibility = View.VISIBLE
-            title_tv_right.text = "添加  "
-        }
+//        if (user.role == 1) {
+//            title_tv_right.visibility = View.VISIBLE
+//            title_tv_right.text = "添加  "
+//        }
 
         title_tv_title.text = "工程质量"
         project = intent.getSerializableExtra("project") as Project

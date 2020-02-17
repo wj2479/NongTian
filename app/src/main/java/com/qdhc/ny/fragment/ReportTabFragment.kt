@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import android.view.View
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.common.ProjectData
 import kotlinx.android.synthetic.main.fragment_project_tab.*
 
 
@@ -40,13 +39,7 @@ class ReportTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
         val mFragments = ArrayList<Fragment>()
 
         var mTitleList = ArrayList<String>()
-        ProjectData.getInstance().villages.forEach { village ->
-            if (village.areaId == areaId) {
-                mTabLayout.addTab(mTabLayout.newTab().setText(village.name))
-                mFragments.add(ReportListFragment(areaId, village.objectId, false))
-                mTitleList.add(village.name)
-            }
-        }
+
         var mTitles = arrayOfNulls<String>(mTitleList.size)
         mTitleList.toArray(mTitles)
 

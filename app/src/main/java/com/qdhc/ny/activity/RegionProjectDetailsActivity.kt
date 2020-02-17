@@ -1,12 +1,12 @@
 package com.qdhc.ny.activity
 
-import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.RegionProjectAdapter
 import com.qdhc.ny.base.BaseActivity
+import com.qdhc.ny.common.ProjectLevel
 import com.qdhc.ny.entity.Project
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_region_project_details.*
@@ -33,6 +33,10 @@ class RegionProjectDetailsActivity : BaseActivity() {
     override fun initData() {
         if (intent.hasExtra("subProjects")) {
             projectList = intent.getSerializableExtra("subProjects") as ArrayList<Project>
+            if (projectList.size > 0) {
+                var level = ProjectLevel.getEnumType(projectList.get(0).level)
+                tv_district.text = level.desc + "进度详情"
+            }
         } else {
             projectList = ArrayList<Project>()
         }
@@ -53,10 +57,10 @@ class RegionProjectDetailsActivity : BaseActivity() {
                 return@setSwipeItemClickListener
             }
 
-            var project = projectList.get(position)
-            var intent = Intent(this, RegionProjectListActivity::class.java)
-            intent.putExtra("regionProject", project)
-            startActivity(intent)
+//            var project = projectList.get(position)
+//            var intent = Intent(this, RegionProjectListActivity::class.java)
+//            intent.putExtra("regionProject", project)
+//            startActivity(intent)
         }
 
         mAdapter = RegionProjectAdapter(this, projectList)

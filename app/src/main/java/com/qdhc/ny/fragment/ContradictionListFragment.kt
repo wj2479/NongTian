@@ -5,13 +5,9 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.activity.AddProjectActivity
 import com.qdhc.ny.activity.ProjectInfoActivity
 import com.qdhc.ny.adapter.ProjectWithReportAndScheduleAdapter
@@ -66,11 +62,11 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
 
     override fun initData() {
         userInfo = SharedPreferencesUtils.loadLogin(context)
-        if (userInfo.role == 4) {
-            addIv.visibility = View.VISIBLE
-        } else {
-            addIv.visibility = View.GONE
-        }
+//        if (userInfo.role == 4) {
+//            addIv.visibility = View.VISIBLE
+//        } else {
+//            addIv.visibility = View.GONE
+//        }
         initRefresh()
     }
 
@@ -112,39 +108,9 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
 
     //获取数据
     fun getProjectData() {
-        val categoryBmobQuery = BmobQuery<Project>()
 
-        when (userInfo.role) { // 监理
-            1 -> {
-                categoryBmobQuery.addWhereEqualTo("area", areaId)
-            }
-            2 -> categoryBmobQuery.addWhereEqualTo("area", areaId)           // 区县
-            3 -> {                                                      //市局
-            }
-            4 -> {                      // 乡镇
-                categoryBmobQuery.addWhereEqualTo("area", areaId)
-                categoryBmobQuery.addWhereEqualTo("village", villageId)
-            }
-        }
 
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(object : FindListener<Project>() {
-            override fun done(list: List<Project>?, e: BmobException?) {
-                if (e == null) {
-                    Log.e("工程列表结果-----》", list?.toString())
-                    projectList.clear()
-                    projectList.addAll(list!!)
 
-                    maxCount = projectList.size
-                    count = 0
-                    projectList.forEach { project ->
-                        getSchedule(project)
-                    }
-                } else {
-                    Log.e("异常-----》", e.toString())
-                }
-            }
-        })
     }
 
     /**

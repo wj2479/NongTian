@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.common.ProjectData
+import com.qdhc.ny.entity.Role
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.BaseUtil
 import com.qdhc.ny.utils.SharedPreferencesUtils
@@ -158,11 +159,9 @@ class LoginActivity : BaseActivity() {
 
         CrashReport.setUserId(user.userName)
 
-        when (user.role) {
-            1 -> startActivity(Intent(mContext, MainActivity::class.java))
-            2 -> startActivity(Intent(mContext, Main2Activity::class.java))
-            3 -> startActivity(Intent(mContext, Main3Activity::class.java))
-            4 -> startActivity(Intent(mContext, Main4Activity::class.java))
+        when (user.role.code) {
+            Role.TYPE_USER -> startActivity(Intent(mContext, MainActivity::class.java))
+            Role.TYPE_MANAGER -> startActivity(Intent(mContext, Main3Activity::class.java))
         }
 
     }

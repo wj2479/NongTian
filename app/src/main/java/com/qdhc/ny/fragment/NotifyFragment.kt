@@ -8,7 +8,7 @@ import com.qdhc.ny.R
 import com.qdhc.ny.activity.NotifyPublishActivity
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.Notice
+import com.qdhc.ny.entity.Role
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import kotlinx.android.synthetic.main.fragment_notify.*
@@ -22,7 +22,6 @@ class NotifyFragment : BaseFragment() {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
     lateinit var user: User
-    var datas = ArrayList<Notice>()
 
     val mFragments = ArrayList<Fragment>()
     lateinit var mTitles: Array<String>
@@ -34,32 +33,18 @@ class NotifyFragment : BaseFragment() {
     override fun initView() {
 
         user = SharedPreferencesUtils.loadLogin(context)
-        when (user.role) {
-            1 -> {
+        when (user.role.code) {
+            Role.TYPE_USER -> {
                 mTitles = arrayOf("我收到的")
                 mTabLayout.visibility = View.GONE
                 mFragments.add(NotifyReceivedFragment())
             }
-            4 -> {
+            Role.TYPE_MANAGER -> {
                 title_tv_right.setText("发布通知")
                 title_tv_right.visibility = View.VISIBLE
 
                 mTitles = arrayOf("我收到的", "我发出的")
                 mFragments.add(NotifyReceivedFragment())
-                mFragments.add(NotifyPublishFragment())
-            }
-            2 -> {
-                title_tv_right.setText("发布通知")
-                title_tv_right.visibility = View.VISIBLE
-                mTitles = arrayOf("我收到的", "我发出的")
-                mFragments.add(NotifyReceivedFragment())
-                mFragments.add(NotifyPublishFragment())
-            }
-            3 -> {
-                title_tv_right.setText("发布通知")
-                title_tv_right.visibility = View.VISIBLE
-                mTitles = arrayOf("我发出的")
-                mTabLayout.visibility = View.GONE
                 mFragments.add(NotifyPublishFragment())
             }
         }

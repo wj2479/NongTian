@@ -1,13 +1,12 @@
 package com.qdhc.ny.adapter;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qdhc.ny.R;
-import com.qdhc.ny.bmob.Notify;
+import com.qdhc.ny.entity.Notify;
 
 import java.util.List;
 
@@ -28,11 +27,11 @@ public class NotifyReceivedAdapter extends BaseQuickAdapter<Notify, BaseViewHold
         //标题
         helper.setText(R.id.tv_title, item.getContent());
         //时间
-        helper.setText(R.id.tv_time, item.getCreatedAt().substring(0, 10));
+        helper.setText(R.id.tv_time, item.getCreateTime());
         //状态
-        helper.setText(R.id.tv_status, item.isRead() ? "已读" : "未读");
+//        helper.setText(R.id.tv_status, item.isRead() ? "已读" : "未读");
         // 颜色
-        helper.setTextColor(R.id.tv_status, item.isRead() ? Color.parseColor("#8c8c8c") : Color.parseColor("#aae84e40"));
+//        helper.setTextColor(R.id.tv_status, item.isRead() ? Color.parseColor("#8c8c8c") : Color.parseColor("#aae84e40"));
 
     }
 

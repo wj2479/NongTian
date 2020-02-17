@@ -65,7 +65,7 @@ public class ContradictionAdapter extends BaseQuickAdapter<Contradiction, BaseVi
 
         Log.e("TAG", new Gson().toJson(item.getUploader()));
 
-        if (ProjectData.getInstance().getUserInfo().getRole() == 1) {
+        if (ProjectData.getInstance().getUserInfo().getRole().getCode() == 10) {
             helper.setVisible(R.id.tv_upload, false);
         } else {
             helper.setVisible(R.id.tv_upload, true);

@@ -23,7 +23,6 @@ import com.xw.repo.BubbleSeekBar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_contradiction_info.bt_comment
-import kotlinx.android.synthetic.main.activity_contradiction_info.commentButLayout
 import kotlinx.android.synthetic.main.activity_contradiction_info.descriptionTv
 import kotlinx.android.synthetic.main.activity_contradiction_info.projectTv
 import kotlinx.android.synthetic.main.activity_contradiction_info.rlv
@@ -159,9 +158,9 @@ class ProjectInfoActivity : BaseActivity() {
         checkBtnShow(project.process)
         scheduleTv.text = project.process.toString() + "%"
 
-        if (userInfo.role > 1) {
-            commentButLayout.visibility = View.GONE
-        }
+//        if (userInfo.role > 1) {
+//            commentButLayout.visibility = View.GONE
+//        }
 
         getProjectTarget(project.id)
         initCreateProcess()

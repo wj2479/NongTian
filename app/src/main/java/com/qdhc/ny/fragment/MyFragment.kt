@@ -2,7 +2,6 @@ package com.qdhc.ny.fragment
 
 import android.app.Activity
 import android.content.Intent
-import android.view.View
 import cn.bmob.v3.BmobUser
 import com.qdhc.ny.LoginActivity
 import com.qdhc.ny.R
@@ -27,9 +26,9 @@ class MyFragment : BaseFragment() {
         tv_name.text = userInfo.nickName
 
         versionTv.text = BaseUtil.getAppVersionName(context)
-        if (userInfo.role == 0) {
-            ll_usermanager.visibility = View.VISIBLE
-        }
+//        if (userInfo.role == 0) {
+//            ll_usermanager.visibility = View.VISIBLE
+//        }
 
 //        if (userInfo.avatar != null) {
 //            ImageLoaderUtil.loadCorners(context, userInfo.avatar.url, iv_photo, -1, R.drawable.ic_defult_user)
@@ -70,17 +69,8 @@ class MyFragment : BaseFragment() {
 
     override fun initData() {
 
-        when (userInfo.role) {
-            0 -> tv_job.text = "管理员"
-            1 -> {
-                tv_job.text = "监理"
-            }
-            2 -> tv_job.text = "区县领导"
-            3 -> tv_job.text = "市领导"
-            4 -> {
-                tv_job.text = "乡镇领导"
-            }
-        }
+        tv_job.text = userInfo.role.desc
+
     }
 
     override fun lazyLoad() {

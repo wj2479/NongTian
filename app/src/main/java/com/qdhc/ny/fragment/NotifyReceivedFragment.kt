@@ -1,29 +1,31 @@
 package com.qdhc.ny.fragment
 
 import android.content.Intent
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
-import cn.bmob.v3.listener.QueryListener
 import com.qdhc.ny.R
 import com.qdhc.ny.activity.NotifyDetailActivity
 import com.qdhc.ny.adapter.NotifyReceivedAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.Notify
 import com.qdhc.ny.bmob.NotifyReceiver
+import com.qdhc.ny.entity.Notify
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
+import com.sj.core.net.Rx.RxRestClient
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_sign_in_sear.*
+import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
 /**
- * A simple [Fragment] subclass.
+ * 接收到的通知
  */
 class NotifyReceivedFragment : BaseFragment() {
 
@@ -42,7 +44,6 @@ class NotifyReceivedFragment : BaseFragment() {
 
     override fun initData() {
         userInfo = SharedPreferencesUtils.loadLogin(context)
-
     }
 
     override fun lazyLoad() {
@@ -78,41 +79,37 @@ class NotifyReceivedFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        getData()
+        getReceivedNotify(userInfo.id)
     }
 
     /**
      *  获取通知
      */
-    fun getData() {
-        val categoryBmobQuery = BmobQuery<NotifyReceiver>()
-//        categoryBmobQuery.addWhereEqualTo("uid", userInfo.objectId)
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(
-                object : FindListener<NotifyReceiver>() {
-                    override fun done(list: List<NotifyReceiver>?, e: BmobException?) {
-                        if (e == null) {
-                            Log.e("通知列表-----》", list?.toString())
-                            list?.forEach { nr ->
-                                val categoryBmobQuery = BmobQuery<Notify>()
-                                categoryBmobQuery.getObject(nr.nid, object : QueryListener<Notify>() {
-                                    override fun done(notify: Notify, e: BmobException?) {
-                                        if (e == null) {
-                                            notify.isRead = nr.isRead
-                                            datas.clear()
-                                            datas.add(notify)
-                                            notifyReceivers.clear()
-                                            notifyReceivers.add(nr)
-                                            mAdapter.notifyDataSetChanged()
-                                        }
-                                    }
-                                })
+    fun getReceivedNotify(uid: Int) {
+        var params: HashMap<String, Any> = HashMap()
+        params["uid"] = uid
+        RxRestClient.create()
+                .url("notify/getPublishNotify")
+                .params(params)
+                .build()
+                .get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result ->
+                            var json = JSONObject(result)
+                            if (json.getInt("code") == 1000) {
+                                var jArray = json.getJSONArray("result")
+                                Log.e("TAG", "请求接收成功:" + jArray.toString())
+
+                            } else {
+                                Log.e("TAG", "请求接收失败:" + result)
                             }
-                        } else {
-                            Log.e("异常-----》", e.toString())
-                        }
-                    }
-                })
+
+                        },
+                        { throwable ->
+                            throwable.printStackTrace()
+                        })
     }
 
 }

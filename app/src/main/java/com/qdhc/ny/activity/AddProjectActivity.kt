@@ -1,6 +1,5 @@
 package com.qdhc.ny.activity
 
-import android.content.DialogInterface
 import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.util.Log
@@ -13,7 +12,6 @@ import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TagLabel
 import com.qdhc.ny.bmob.Project
-import com.qdhc.ny.common.ProjectData
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_add_project.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -44,20 +42,20 @@ class AddProjectActivity : BaseActivity() {
         managerTv.setOnClickListener {
             var builder = AlertDialog.Builder(this);
             builder.setTitle("请选择工程的负责人");
-            var items = arrayOfNulls<String>(ProjectData.getInstance().userInfos.size)
-
-            ProjectData.getInstance().userInfos.forEachIndexed { index, user -> items[index] = user.nickName }
-
-            // -1代表没有条目被选中
-            builder.setSingleChoiceItems(items, -1, object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    var user = ProjectData.getInstance().userInfos[which]
-                    managerTv.setText(user.nickName)
-                    managerTv.tag = user.objectId
-                    dialog?.dismiss()
-                }
-            });
-            builder.show()
+//            var items = arrayOfNulls<String>(ProjectData.getInstance().userInfos.size)
+//
+//            ProjectData.getInstance().userInfos.forEachIndexed { index, user -> items[index] = user.nickName }
+//
+//            // -1代表没有条目被选中
+//            builder.setSingleChoiceItems(items, -1, object : DialogInterface.OnClickListener {
+//                override fun onClick(dialog: DialogInterface?, which: Int) {
+//                    var user = ProjectData.getInstance().userInfos[which]
+//                    managerTv.setText(user.nickName)
+//                    managerTv.tag = user.objectId
+//                    dialog?.dismiss()
+//                }
+//            });
+//            builder.show()
         }
 
         label_me.setOnCheckChangedListener(object : LabelLayout.OnCheckChangeListener {

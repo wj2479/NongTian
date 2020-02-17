@@ -10,6 +10,7 @@ import com.qdhc.ny.bean.TabIconBean
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.fragment.MyFragment
+import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.fragment.ProjectInfoListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -47,7 +48,7 @@ class Main3Activity : BaseActivity() {
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
         fragmentList.add(ProjectInfoListFragment())
-        fragmentList.add(MyFragment())
+        fragmentList.add(NotifyFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)

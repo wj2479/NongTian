@@ -16,6 +16,7 @@ import com.qdhc.ny.activity.RegionProjectDetailsActivity
 import com.qdhc.ny.adapter.ProjectPageAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.common.ProjectData
+import com.qdhc.ny.common.ProjectLevel
 import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.eventbus.RegionEvent
@@ -23,6 +24,7 @@ import com.qdhc.ny.view.MyAxisValueFormatter
 import com.qdhc.ny.view.MyValueFormatter
 import com.qdhc.ny.view.XAxisValueFormatter
 import com.sj.core.net.Rx.RxRestClient
+import com.sj.core.utils.ToastUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_project_into_list.*
@@ -56,14 +58,17 @@ class ProjectInfoListFragment : BaseFragment() {
 //        initBarChart()
 //        setBarChartData(entryList)
 
-        tv_district.text = "区县进度表"
     }
 
     override fun initClick() {
         detailsIv.setOnClickListener {
-            var intent = Intent(context, RegionProjectDetailsActivity::class.java)
-            intent.putExtra("subProjects", subProjectList)
-            startActivity(intent)
+            if (project != null) {
+                var intent = Intent(context, RegionProjectDetailsActivity::class.java)
+                intent.putExtra("subProjects", subProjectList)
+                startActivity(intent)
+            } else {
+                ToastUtil.show(context, "您还没有项目")
+            }
         }
     }
 
@@ -98,6 +103,9 @@ class ProjectInfoListFragment : BaseFragment() {
                                 tv_title.text = project!!.name
                                 total_procss_tv.text = project!!.process.toString() + "%"
                                 Log.e("TAG", "请求成功:" + project.toString())
+
+                                var level = ProjectLevel.getEnumType(project!!.level + 1)
+                                tv_district.text = level.desc + "进度表"
                                 getSubProjects(project!!.id)
                             } else {
                                 Log.e("TAG", "请求失败:" + result)
@@ -137,7 +145,7 @@ class ProjectInfoListFragment : BaseFragment() {
                                     val jsonObject = jArray.getJSONObject(index)
                                     val project = gson.fromJson(jsonObject.toString(), Project::class.java)
                                     xTitles.add(project.area.name)
-                                    entryList.add(BarEntry(index.toFloat(),project. process.toFloat()))
+                                    entryList.add(BarEntry(index.toFloat(), project.process.toFloat()))
                                     subProjectList.add(project)
                                 }
 
@@ -158,11 +166,8 @@ class ProjectInfoListFragment : BaseFragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: RegionEvent) {
-        Log.e("下级结果onMessageEvent", ProjectData.getInstance().subRegion.toString())
-
         initBarChart()
     }
-
 
     var entryList = ArrayList<BarEntry>()
 

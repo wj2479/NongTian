@@ -1,6 +1,7 @@
 package com.qdhc.ny.bean;
 
 import com.qdhc.ny.bmob.UserInfo;
+import com.qdhc.ny.entity.User;
 
 /**
  * @Author wj
@@ -14,7 +15,7 @@ public class UserNode {
      */
     private boolean isSelected = false;
 
-    private UserInfo userInfo = null;
+    private User userInfo = null;
 
     public boolean isSelected() {
         return isSelected;
@@ -24,11 +25,11 @@ public class UserNode {
         isSelected = selected;
     }
 
-    public UserInfo getUserInfo() {
+    public User getUserInfo() {
         return userInfo;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
+    public void setUserInfo(UserInfo User) {
         this.userInfo = userInfo;
     }
 

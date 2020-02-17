@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qdhc.ny.R;
-import com.qdhc.ny.bean.UserNode;
-import com.qdhc.ny.bean.UserTreeNode;
+import com.qdhc.ny.entity.SelectUser;
+import com.qdhc.ny.entity.UserAreaTreeNode;
 import com.qdhc.ny.utils.TreeNodeHelper;
 
 import java.util.ArrayList;
@@ -24,16 +24,16 @@ import java.util.List;
  */
 public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHolder> {
     private LayoutInflater mInflater;
-    private UserTreeNode treeNode;
+    private UserAreaTreeNode treeNode;
     private Context context;
 
-    public OrgInfoAdapter(Context context, UserTreeNode treeNode) {
+    public OrgInfoAdapter(Context context, UserAreaTreeNode treeNode) {
         this.context = context;
         this.treeNode = treeNode;
         mInflater = LayoutInflater.from(context);
     }
 
-    public void setTreeNode(UserTreeNode treeNode) {
+    public void setTreeNode(UserAreaTreeNode treeNode) {
         this.treeNode = treeNode;
         notifyDataSetChanged();
     }
@@ -60,7 +60,7 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
         if (treeNode == null) {
             return 0;
         } else {
-            if (treeNode.getLevel() == 4) {
+            if (treeNode.getArea().getRegionLevel() == 4) {
                 return treeNode.getChilds().get(0).getUserInfos().size() + treeNode.getUserInfos().size();
             } else {
                 return treeNode.getChilds().size() + treeNode.getUserInfos().size();
@@ -78,20 +78,22 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        if (treeNode.getLevel() != 4) {
+        // 说明不是最底层结构
+        if (treeNode.getArea().getRegionLevel() != 4) {
+
             if (position < treeNode.getChilds().size()) {
-                final UserTreeNode childNode = treeNode.getChilds().get(position);
+                final UserAreaTreeNode childNode = treeNode.getChilds().get(position);
                 holder.checkBox.setChecked(childNode.isSelected());
 
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("CheckBox", "节点-->" + childNode.getName());
+                        Log.e("CheckBox", "节点-->" + childNode.getArea().getName());
                         boolean checked = holder.checkBox.isChecked();
                         selectNode(checked, childNode);
                     }
                 });
-                holder.nameTv.setText(childNode.getName());
+                holder.nameTv.setText(childNode.getArea().getName());
                 if (childNode.getChilds().size() > 0) {
                     holder.levelView.setVisibility(View.VISIBLE);
                     holder.levelView.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +114,7 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
                 holder.countTv.setText(new StringBuffer().append("(").append(count).append("人)"));
 
             } else {
-                final UserNode userNode = treeNode.getUserInfos().get(position - treeNode.getChilds().size());
+                final SelectUser userNode = treeNode.getUserInfos().get(position - treeNode.getChilds().size());
                 holder.checkBox.setChecked(userNode.isSelected());
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -120,21 +122,20 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
                         boolean checked = holder.checkBox.isChecked();
                         userNode.setSelected(checked);
                         if (mItemClickListener != null) {
-                            List<UserNode> children = new ArrayList<>();
+                            List<SelectUser> children = new ArrayList<>();
                             children.add(userNode);
                             mItemClickListener.onUserInfoSelectedChanged(children, checked);
                         }
                     }
                 });
-                holder.nameTv.setText(userNode.getUserInfo().getNickName());
+                holder.nameTv.setText(userNode.getNickName());
                 holder.countTv.setVisibility(View.INVISIBLE);
                 holder.levelView.setVisibility(View.INVISIBLE);
                 holder.photoIv.setVisibility(View.VISIBLE);
             }
         } else {
-
             if (position < treeNode.getUserInfos().size()) {
-                final UserNode userNode = treeNode.getUserInfos().get(position);
+                final SelectUser userNode = treeNode.getUserInfos().get(position);
                 holder.checkBox.setChecked(userNode.isSelected());
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -142,15 +143,15 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
                         boolean checked = holder.checkBox.isChecked();
                         userNode.setSelected(checked);
                         if (mItemClickListener != null) {
-                            List<UserNode> children = new ArrayList<>();
+                            List<SelectUser> children = new ArrayList<>();
                             children.add(userNode);
                             mItemClickListener.onUserInfoSelectedChanged(children, checked);
                         }
                     }
                 });
-                holder.nameTv.setText(userNode.getUserInfo().getNickName());
+                holder.nameTv.setText(userNode.getNickName());
             } else {
-                final UserNode userNode = treeNode.getChilds().get(0).getUserInfos().get(position - treeNode.getUserInfos().size());
+                final SelectUser userNode = treeNode.getChilds().get(0).getUserInfos().get(position - treeNode.getUserInfos().size());
                 holder.checkBox.setChecked(userNode.isSelected());
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -158,13 +159,13 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
                         boolean checked = holder.checkBox.isChecked();
                         userNode.setSelected(checked);
                         if (mItemClickListener != null) {
-                            List<UserNode> children = new ArrayList<>();
+                            List<SelectUser> children = new ArrayList<>();
                             children.add(userNode);
                             mItemClickListener.onUserInfoSelectedChanged(children, checked);
                         }
                     }
                 });
-                holder.nameTv.setText(userNode.getUserInfo().getNickName());
+                holder.nameTv.setText(userNode.getNickName());
             }
 
             holder.countTv.setVisibility(View.INVISIBLE);
@@ -173,15 +174,15 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
         }
     }
 
-    public void selectNode(boolean checked, UserTreeNode treeNode) {
+    public void selectNode(boolean checked, UserAreaTreeNode treeNode) {
         treeNode.setSelected(checked);
 
         selectChildren(treeNode, checked);
         selectParentIfNeed(treeNode, checked);
     }
 
-    private void selectChildren(UserTreeNode treeNode, boolean checked) {
-        List<UserNode> impactedChildren = TreeNodeHelper.selectNodeAndChild(treeNode, checked);
+    private void selectChildren(UserAreaTreeNode treeNode, boolean checked) {
+        List<SelectUser> impactedChildren = TreeNodeHelper.selectNodeAndChild(treeNode, checked);
         Log.e("selectChildren", "节点-->" + impactedChildren.size());
         if (impactedChildren.size() > 0) {
             if (mItemClickListener != null) {
@@ -191,7 +192,7 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
         }
     }
 
-    private void selectParentIfNeed(UserTreeNode treeNode, boolean checked) {
+    private void selectParentIfNeed(UserAreaTreeNode treeNode, boolean checked) {
 
     }
 
@@ -200,9 +201,9 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
     public interface OnItemClickListener {
         void onItemClick(int position, View v);
 
-        void onNodeClick(UserTreeNode treeNode);
+        void onNodeClick(UserAreaTreeNode treeNode);
 
-        void onUserInfoSelectedChanged(List<UserNode> userNodes, boolean isSelected);
+        void onUserInfoSelectedChanged(List<SelectUser> userNodes, boolean isSelected);
 
     }
 
