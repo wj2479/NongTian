@@ -12,7 +12,7 @@ import com.qdhc.ny.R
 import com.qdhc.ny.activity.ReportDetailsActivity
 import com.qdhc.ny.adapter.ReportAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.Report
+import com.qdhc.ny.entity.DailyReport
 import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.eventbus.ProjectEvent
@@ -37,7 +37,7 @@ class WeekMonthReportFragment(project: Project, type: Int) : BaseFragment() {
     /**
      * 项目的日报记录
      */
-    var reports = ArrayList<Report>()
+    var reports = ArrayList<DailyReport>()
 
     lateinit var mAdapter: ReportAdapter
 

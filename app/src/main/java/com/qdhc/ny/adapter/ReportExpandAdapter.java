@@ -9,9 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qdhc.ny.R;
-import com.qdhc.ny.bmob.Project;
-import com.qdhc.ny.bmob.Report;
 import com.qdhc.ny.common.Constant;
+import com.qdhc.ny.entity.Project;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -77,8 +76,7 @@ public class ReportExpandAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Report getChild(int groupPosition, int childPosition) {
-        Report report = null;
+    public Object getChild(int groupPosition, int childPosition) {
         switch (type) {
             case Constant.REPORT_TYPE_DAY:
 //                report = projects.get(groupPosition).getDayRreports().get(childPosition);
@@ -91,7 +89,7 @@ public class ReportExpandAdapter extends BaseExpandableListAdapter {
                 break;
             default:
         }
-        return report;
+        return null;
     }
 
     @Override
@@ -162,7 +160,6 @@ public class ReportExpandAdapter extends BaseExpandableListAdapter {
         } else {
             childViewHolder = (ChildViewHolder) convertView.getTag();
         }
-        Report report = null;
         Date date = null;
         Calendar calendar = Calendar.getInstance();
         calendar.setFirstDayOfWeek(Calendar.MONDAY);

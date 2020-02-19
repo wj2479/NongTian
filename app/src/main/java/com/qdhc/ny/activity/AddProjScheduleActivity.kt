@@ -2,15 +2,10 @@ package com.qdhc.ny.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Handler
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.Log
-import cn.bmob.v3.datatype.BmobFile
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.SaveListener
-import cn.bmob.v3.listener.UploadFileListener
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
@@ -18,16 +13,13 @@ import com.luck.picture.lib.entity.LocalMedia
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.GridImageAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.ContradictPic
-import com.qdhc.ny.bmob.ProjSchedule
-import com.qdhc.ny.bmob.Project
 import com.qdhc.ny.common.ProjectData
+import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
 import com.sj.core.utils.ToastUtil
 import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_add_project_schedule.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
-import java.io.File
 
 class AddProjScheduleActivity : BaseActivity() {
 
@@ -119,25 +111,6 @@ class AddProjScheduleActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            val projSchedule = ProjSchedule()
-            projSchedule.content = content
-            projSchedule.schedule = bubbleSeekbar.progress
-            projSchedule.pid = project.objectId
-            projSchedule.uid = userInfo.id.toString()
-
-            showDialog("正在更新进度...")
-
-            projSchedule.save(object : SaveListener<String>() {
-                override fun done(objectId: String?, e: BmobException?) {
-                    if (e == null) {
-                        projSchedule.objectId = objectId
-                        uploadImg(projSchedule)
-                    } else {
-                        showDialog("上报数据失败，请稍候再试...")
-                        dismissDialog()
-                    }
-                }
-            });
 
         }
 
@@ -188,7 +161,7 @@ class AddProjScheduleActivity : BaseActivity() {
 
         nameTv.setText(project.name)
 
-        initSchedule = project.schedule * 1.0f
+        initSchedule = project.process * 1.0f
 
         bubbleSeekbar.setProgress(initSchedule)
 
@@ -197,47 +170,5 @@ class AddProjScheduleActivity : BaseActivity() {
         project
     }
 
-    private fun uploadImg(projSchedule: ProjSchedule) {
-        if (selectList.size > 0) {
-            showDialog("正在上传...")
-            var localMedia = selectList.removeAt(0)
-
-            var file = File(localMedia.path)
-            if (file.exists()) {
-                var bmobFile = BmobFile(file)
-                bmobFile.uploadblock(object : UploadFileListener() {
-                    override fun done(e: BmobException?) {
-                        if (e == null) {
-                            var contradictPic = ContradictPic()
-                            contradictPic.contradict = projSchedule.objectId
-                            contradictPic.file = bmobFile
-                            contradictPic.save(object : SaveListener<String>() {
-                                override fun done(objectId: String?, e: BmobException?) {
-                                    if (e == null) {
-                                    } else {
-                                        ToastUtil.show(this@AddProjScheduleActivity, "文件保存失败：" + e.toString())
-                                    }
-                                    uploadImg(projSchedule)
-                                }
-                            });
-                        } else {
-                            ToastUtil.show(this@AddProjScheduleActivity, "文件上传失败：" + e.toString())
-                        }
-                    }
-                });
-            } else {
-                uploadImg(projSchedule)
-            }
-        } else {
-            showDialog("进度更新成功...")
-            Handler().postDelayed({
-                dismissDialogNow()
-                val data = Intent()
-                data.putExtra("schedule", projSchedule)
-                setResult(Activity.RESULT_OK, data)
-                finish()
-            }, 1500)
-        }
-    }
 
 }

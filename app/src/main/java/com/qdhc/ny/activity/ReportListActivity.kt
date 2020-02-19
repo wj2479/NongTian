@@ -3,20 +3,16 @@ package com.qdhc.ny.activity
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.ReportAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.Project
-import com.qdhc.ny.bmob.Report
-import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.common.Constant
+import com.qdhc.ny.entity.DailyReport
+import com.qdhc.ny.entity.Project
+import com.qdhc.ny.entity.User
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_notice.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -28,7 +24,7 @@ class ReportListActivity : BaseActivity() {
 
     lateinit var project: Project
 
-    lateinit var user: UserInfo
+    lateinit var user: User
 
     var type = 0
 
@@ -38,8 +34,8 @@ class ReportListActivity : BaseActivity() {
 
     override fun initView() {
 
-        user = intent.getSerializableExtra("user") as UserInfo
-        if (user.role == 1) {
+        user = intent.getSerializableExtra("user") as User
+        if (user.role.code == 1) {
             title_tv_right.visibility = View.VISIBLE
             title_tv_right.text = "添加  "
         }
@@ -75,7 +71,7 @@ class ReportListActivity : BaseActivity() {
     /**
      * 项目的日报记录
      */
-    var reports = ArrayList<Report>()
+    var reports = ArrayList<DailyReport>()
 
     lateinit var mAdapter: ReportAdapter
 
@@ -106,21 +102,6 @@ class ReportListActivity : BaseActivity() {
 
     //获取数据
     fun getData() {
-        val categoryBmobQuery = BmobQuery<Report>()
-        categoryBmobQuery.addWhereEqualTo("pid", project.objectId)
-        categoryBmobQuery.addWhereEqualTo("type", type)
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(
-                object : FindListener<Report>() {
-                    override fun done(list: List<Report>?, e: BmobException?) {
-                        if (e == null) {
-                            reports.clear()
-                            reports.addAll(list!!)
-                            mAdapter.notifyDataSetChanged()
-                        } else {
-                            Log.e("异常-----》", e.toString())
-                        }
-                    }
-                })
+
     }
 }

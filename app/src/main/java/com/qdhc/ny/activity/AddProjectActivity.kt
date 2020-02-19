@@ -1,17 +1,13 @@
 package com.qdhc.ny.activity
 
-import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.widget.EditText
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.SaveListener
 import com.lcodecore.ILabel
 import com.lcodecore.LabelLayout
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TagLabel
-import com.qdhc.ny.bmob.Project
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_add_project.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -105,28 +101,6 @@ class AddProjectActivity : BaseActivity() {
                 }
             }
 
-            var project = Project()
-            project.name = name
-            project.introduce = content
-            project.area = areaId
-            project.village = villageId
-            project.tags = sb.toString().trim()
-            project.manager = managerTv.tag.toString()
-
-            project.save(object : SaveListener<String>() {
-                override fun done(objectId: String?, e: BmobException?) {
-                    if (e == null) {
-                        showDialog("工程创建成功...")
-                        Handler().postDelayed({
-                            dismissDialogNow()
-                            finish()
-                        }, 1500)
-                    } else {
-                        showDialog("工程失败...")
-                        dismissDialog()
-                    }
-                }
-            })
 
         }
     }

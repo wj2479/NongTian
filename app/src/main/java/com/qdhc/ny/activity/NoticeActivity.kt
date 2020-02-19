@@ -9,7 +9,6 @@ import com.qdhc.ny.R
 import com.qdhc.ny.adapter.NoticeAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.Notice
-import com.qdhc.ny.common.ProjectData
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_notice.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -64,7 +63,6 @@ class NoticeActivity : BaseActivity() {
     }
 
     override fun initData() {
-        datas.addAll(ProjectData.getInstance().notices)
         initRefresh()
     }
 

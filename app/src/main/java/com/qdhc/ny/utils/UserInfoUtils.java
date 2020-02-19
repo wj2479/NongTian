@@ -3,11 +3,7 @@ package com.qdhc.ny.utils;
 import android.text.TextUtils;
 
 import com.qdhc.ny.base.BaseApplication;
-import com.qdhc.ny.bmob.UserInfo;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.QueryListener;
+import com.qdhc.ny.entity.User;
 
 /**
  * @Author wj
@@ -29,26 +25,26 @@ public class UserInfoUtils {
             return;
         }
 
-        UserInfo userInfo = BaseApplication.userInfoMap.get(objectId);
+        User userInfo = BaseApplication.userInfoMap.get(objectId);
         if (userInfo == null) {
-            BmobQuery bmobQuery = new BmobQuery<UserInfo>();
-            bmobQuery.getObject(objectId, new QueryListener<UserInfo>() {
-                @Override
-                public void done(UserInfo uInfo, BmobException e) {
-                    if (e == null) {
-                        runnable.onReslt(uInfo);
-                        BaseApplication.userInfoMap.put(objectId, uInfo);
-                    } else {
-                        runnable.onReslt(null);
-                    }
-                }
-            });
+//            BmobQuery bmobQuery = new BmobQuery<UserInfo>();
+//            bmobQuery.getObject(objectId, new QueryListener<UserInfo>() {
+//                @Override
+//                public void done(UserInfo uInfo, BmobException e) {
+//                    if (e == null) {
+//                        runnable.onReslt(uInfo);
+//                        BaseApplication.userInfoMap.put(objectId, uInfo);
+//                    } else {
+//                        runnable.onReslt(null);
+//                    }
+//                }
+//            });
         } else {
             runnable.onReslt(userInfo);
         }
     }
 
     public interface IResult {
-        void onReslt(UserInfo userInfo);
+        void onReslt(User userInfo);
     }
 }

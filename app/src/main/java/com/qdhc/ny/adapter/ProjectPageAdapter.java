@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qdhc.ny.R;
-import com.qdhc.ny.bmob.Project;
+import com.qdhc.ny.entity.Project;
 
 import java.util.List;
 

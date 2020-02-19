@@ -4,14 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import cn.bmob.v3.datatype.BmobFile
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.SaveListener
-import cn.bmob.v3.listener.UploadFileListener
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
@@ -23,14 +18,11 @@ import com.qdhc.ny.R
 import com.qdhc.ny.adapter.GridImageAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bean.ClientManagerInfo
-import com.qdhc.ny.bmob.ContradictPic
-import com.qdhc.ny.bmob.Contradiction
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.ToastUtil
 import com.vondear.rxui.view.dialog.RxDialogLoading
 import kotlinx.android.synthetic.main.fragment_upload.*
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -183,29 +175,6 @@ class UploadFragment : BaseFragment() {
 
             showDialog("正在上报数据...")
 
-            var contradiction = Contradiction()
-            contradiction.partyMan = partyName
-            contradiction.partyPhone = partyPhone
-            contradiction.district = district
-            contradiction.village = street
-            contradiction.from = fromSpinner.selectedItem.toString()
-            contradiction.type = typeSpinner.selectedItem.toString()
-            contradiction.level = levelSpinner.selectedItem.toString()
-            contradiction.numbers = numbers
-            contradiction.description = description
-
-            contradiction.save(object : SaveListener<String>() {
-                override fun done(objectId: String?, e: BmobException?) {
-                    if (e == null) {
-//                        ToastUtil.show(context, "数据添加成功：" + objectId)
-                        contradiction.objectId = objectId
-                        uploadImg(contradiction)
-                    } else {
-                        showDialog("上报数据失败，请稍候再试...")
-                        dismissDialog()
-                    }
-                }
-            });
         }
     }
 
@@ -263,49 +232,6 @@ class UploadFragment : BaseFragment() {
     override fun lazyLoad() {
     }
 
-    private fun uploadImg(contradiction: Contradiction) {
-        Log.i("xuancddd-----》", selectList.size.toString())
-        if (selectList.size > 0) {
-            showDialog("正在上传现场照片...")
-            var localMedia = selectList.removeAt(0)
-
-            var file = File(localMedia.path)
-            if (file.exists()) {
-                var bmobFile = BmobFile(file)
-                bmobFile.uploadblock(object : UploadFileListener() {
-                    override fun done(e: BmobException?) {
-                        if (e == null) {
-                            var contradictPic = ContradictPic()
-                            contradictPic.contradict = contradiction.objectId
-                            contradictPic.file = bmobFile
-                            contradictPic.save(object : SaveListener<String>() {
-                                override fun done(objectId: String?, e: BmobException?) {
-                                    if (e == null) {
-                                    } else {
-                                        ToastUtil.show(context, "文件保存失败：" + e.toString())
-                                    }
-                                    uploadImg(contradiction)
-                                }
-                            });
-                        } else {
-                            Log.e("TAG", "失败：" + e)
-                            ToastUtil.show(context, "文件上传失败：" + e.toString())
-                            showDialog("上报数据失败...")
-                            dismissDialog()
-                        }
-                    }
-                });
-            } else {
-                uploadImg(contradiction)
-            }
-        } else {
-            showDialog("上报数据成功...")
-            Handler().postDelayed({
-                dismissDialogNow()
-                activity?.finish()
-            }, 1500)
-        }
-    }
 
     lateinit var locationClient: AMapLocationClient
     lateinit var locationOption: AMapLocationClientOption

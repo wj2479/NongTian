@@ -22,11 +22,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
 import android.widget.Toast
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
-import cn.bmob.v3.listener.QueryListener
-import cn.bmob.v3.listener.SaveListener
 import com.amap.api.location.*
 import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.model.LatLng
@@ -35,24 +30,22 @@ import com.flyco.tablayout.listener.OnTabSelectListener
 import com.google.gson.Gson
 import com.luck.picture.lib.permissions.RxPermissions
 import com.qdhc.ny.activity.CameraActivity
-import com.qdhc.ny.activity.NotifyDetailActivity
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.base.BaseApplication
 import com.qdhc.ny.bean.TabIconBean
-import com.qdhc.ny.bmob.*
+import com.qdhc.ny.bmob.Tracks
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.User
-import com.qdhc.ny.eventbus.ProjectEvent
 import com.qdhc.ny.fragment.JianliFragment
 import com.qdhc.ny.fragment.MyFragment
+import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.service.UpadateManager
 import com.sj.core.utils.SharedPreferencesUtil
 import com.sj.core.utils.ToastUtil
 import com.vondear.rxui.view.dialog.RxDialogSureCancel
 import kotlinx.android.synthetic.main.activity_main.*
-import org.greenrobot.eventbus.EventBus
 
 class MainActivity : BaseActivity() {
 
@@ -77,7 +70,6 @@ class MainActivity : BaseActivity() {
 
     override fun initData() {
         UpadateManager.checkVersion(this)
-//        getNotifyData()
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions()
         }
@@ -121,8 +113,6 @@ class MainActivity : BaseActivity() {
             R.mipmap.icon_notice_select,
             R.mipmap.icon_wode_select)
 
-    var projectList = ArrayList<Project>()
-
     override fun initView() {
         userInfo = ProjectData.getInstance().userInfo
 
@@ -131,7 +121,7 @@ class MainActivity : BaseActivity() {
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
         fragmentList.add(JianliFragment())
-        fragmentList.add(MyFragment())
+        fragmentList.add(NotifyFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)
@@ -170,68 +160,6 @@ class MainActivity : BaseActivity() {
         rxDialogSureCancel.show()
     }
 
-    /**
-     * 获取通知数据
-     */
-    fun getNotifyData() {
-        val categoryBmobQuery = BmobQuery<NotifyReceiver>()
-//        categoryBmobQuery.addWhereEqualTo("uid", userInfo.objectId)
-        categoryBmobQuery.addWhereEqualTo("isRead", false)
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.setLimit(1)
-        categoryBmobQuery.findObjects(
-                object : FindListener<NotifyReceiver>() {
-                    override fun done(list: List<NotifyReceiver>, e: BmobException?) {
-                        if (e == null) {
-                            if (list.size > 0) {
-                                var notifyReceiver = list[0]
-                                val categoryBmobQuery = BmobQuery<Notify>()
-                                categoryBmobQuery.getObject(notifyReceiver.nid, object : QueryListener<Notify>() {
-                                    override fun done(notify: Notify, e: BmobException?) {
-                                        initDialog(notify, notifyReceiver)
-                                    }
-                                })
-                            }
-                        } else {
-                            Log.e("异常-----》", e.toString())
-                        }
-                    }
-                })
-    }
-
-    /**
-     * 初始化通知的对话框
-     */
-    private fun initDialog(notify: Notify, notifyReceiver: NotifyReceiver) {
-        var sb = StringBuffer()
-        sb.append(notify.content.replace("\n", "<br>"))
-//        sb.append("<br>")
-//
-//        sb.append("<font color=\"#808080\">")
-//        sb.append("发布于: ")
-//        sb.append(notify.createdAt.substring(0, 10))
-//        sb.append("</font>")
-
-        var rxDialogSureCancel = RxDialogSureCancel(mContext)
-        rxDialogSureCancel.contentView.text = Html.fromHtml(sb.toString())
-        rxDialogSureCancel.contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.0f)
-        rxDialogSureCancel.contentView.gravity = Gravity.LEFT
-        rxDialogSureCancel.titleView.text = "您有新的通知"
-        rxDialogSureCancel.titleView.textSize = 16.0f
-        rxDialogSureCancel.setSure("知道了")
-        rxDialogSureCancel.sureView.setOnClickListener {
-            rxDialogSureCancel.cancel()
-        }
-        rxDialogSureCancel.setCancel("查看详情")
-        rxDialogSureCancel.cancelView.setOnClickListener {
-            rxDialogSureCancel.cancel()
-            var intent = Intent(this, NotifyDetailActivity::class.java)
-            intent.putExtra("notify", notify)
-            intent.putExtra("notifyReceiver", notifyReceiver)
-            startActivity(intent)
-        }
-        rxDialogSureCancel.show()
-    }
 
     var tab_position = 0
     override fun onRestart() {
@@ -364,102 +292,8 @@ class MainActivity : BaseActivity() {
         if (null != locationClient) {
             locationClient.disableBackgroundLocation(true)
         }
-//        getProjectData()
     }
 
-    // 记录请求的总次数
-    var maxCount = 0
-    var count = 0
-
-    //获取数据
-    fun getProjectData() {
-        val categoryBmobQuery = BmobQuery<Project>()
-//        categoryBmobQuery.addWhereEqualTo("manager", userInfo.objectId)
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(
-                object : FindListener<Project>() {
-                    override fun done(list: List<Project>?, e: BmobException?) {
-                        if (e == null) {
-                            projectList.clear()
-                            projectList.addAll(list!!)
-                            maxCount = projectList.size
-                            count = 0
-                            projectList.forEach { project ->
-                                getSchedule(project)
-//                                getReports(project)
-                            }
-                        } else {
-                            Log.e("异常-----》", e.toString())
-                        }
-                    }
-                })
-    }
-
-    /**
-     * 获取项目的进度
-     */
-    fun getSchedule(project: Project) {
-        val categoryBmobQuery = BmobQuery<ProjSchedule>()
-//        categoryBmobQuery.addWhereEqualTo("uid", userInfo.objectId)
-        categoryBmobQuery.addWhereEqualTo("pid", project.objectId)
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(object : FindListener<ProjSchedule>() {
-            override fun done(list: MutableList<ProjSchedule>?, e: BmobException?) {
-                if (e == null) {
-                    if (list != null && list.size > 0) {
-                        var progress = Math.max(project.schedule, list[0].schedule)
-                        project.schedule = progress
-                    }
-                }
-                // 每完成一次  计数+1
-                count++
-                verifyRequestOver()
-            }
-        })
-    }
-
-    /**
-     * 获取项目的日报 周报 月报
-     */
-    fun getReports(project: Project) {
-        val categoryBmobQuery = BmobQuery<Report>()
-//        categoryBmobQuery.addWhereEqualTo("uid", userInfo.objectId)
-        categoryBmobQuery.addWhereEqualTo("pid", project.objectId)
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(object : FindListener<Report>() {
-            override fun done(list: MutableList<Report>?, e: BmobException?) {
-                if (e == null) {
-                    var dayList = ArrayList<Report>()
-                    var weekList = ArrayList<Report>()
-                    var monthList = ArrayList<Report>()
-
-                    if (list != null) {
-                        list.forEach { report ->
-                            when (report.type) {
-                                1 -> dayList.add(report)
-                                2 -> weekList.add(report)
-                                3 -> monthList.add(report)
-                            }
-                        }
-//                        project.dayRreports = dayList
-//                        project.weekRreports = weekList
-//                        project.monthRreports = monthList
-                    }
-                }
-                // 每完成一次  计数+1
-                count++
-                verifyRequestOver()
-            }
-        })
-    }
-
-    fun verifyRequestOver() {
-        if (maxCount == count) {
-            ProjectData.getInstance().projects = projectList
-            Log.e("TAG", "结果--> " + projectList)
-            EventBus.getDefault().post(ProjectEvent())
-        }
-    }
 
     override fun onStop() {
         super.onStop()
@@ -584,16 +418,6 @@ class MainActivity : BaseActivity() {
                 }
                 tracks.remark = sb_temp.toString()     // 备注信息
 
-                tracks.save(object : SaveListener<String>() {
-                    override fun done(objectId: String?, e: BmobException?) {
-                        if (e == null) {
-                            lastUploadLocation = location
-                            Log.e("AMAP", "轨迹上传成功")
-                        } else {
-                            Log.e("AMAP", "轨迹上传失败:" + e.toString())
-                        }
-                    }
-                })
                 ProjectData.getInstance().location = location
             }
         }

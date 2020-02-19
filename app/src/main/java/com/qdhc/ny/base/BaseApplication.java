@@ -8,8 +8,8 @@ import android.os.Process;
 import android.support.multidex.MultiDexApplication;
 
 import com.qdhc.ny.BuildConfig;
-import com.qdhc.ny.bmob.UserInfo;
 import com.qdhc.ny.common.Constant;
+import com.qdhc.ny.entity.User;
 import com.sj.core.app.ProjectInit;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -27,7 +27,7 @@ import interfaces.heweather.com.interfacesmodule.view.HeConfig;
 public class BaseApplication extends MultiDexApplication {
     public static Typeface iconfont;
 
-    public static Map<String, UserInfo> userInfoMap = new HashMap<>();
+    public static Map<String, User> userInfoMap = new HashMap<>();
 
     public static Typeface getIconfont(Context context) {
         if (iconfont != null) {

@@ -32,7 +32,7 @@ public class Notify implements Serializable {
     /**
      * 是否删除
      */
-    private boolean isDel = false;
+    private boolean del = false;
 
     /**
      * 删除时间
@@ -42,7 +42,7 @@ public class Notify implements Serializable {
     /**
      * 是否撤销
      */
-    private boolean isCancel = false;
+    private boolean cancel = false;
 
     /**
      * 撤销时间
@@ -102,11 +102,19 @@ public class Notify implements Serializable {
     }
 
     public boolean isDel() {
-        return isDel;
+        return del;
     }
 
     public void setDel(boolean del) {
-        isDel = del;
+        this.del = del;
+    }
+
+    public boolean isCancel() {
+        return cancel;
+    }
+
+    public void setCancel(boolean cancel) {
+        this.cancel = cancel;
     }
 
     public String getDeleteTime() {
@@ -117,13 +125,6 @@ public class Notify implements Serializable {
         this.deleteTime = deleteTime;
     }
 
-    public boolean isCancel() {
-        return isCancel;
-    }
-
-    public void setCancel(boolean cancel) {
-        isCancel = cancel;
-    }
 
     public String getCancelTime() {
         return cancelTime;
@@ -172,9 +173,9 @@ public class Notify implements Serializable {
                 ", uid=" + uid +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", isDel=" + isDel +
+                ", del=" + del +
                 ", deleteTime='" + deleteTime + '\'' +
-                ", isCancel=" + isCancel +
+                ", cancel=" + cancel +
                 ", cancelTime='" + cancelTime + '\'' +
                 ", type=" + type +
                 ", receivers='" + receivers + '\'' +

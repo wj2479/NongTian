@@ -4,21 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 
 import com.qdhc.ny.bmob.AppUpdate;
-import com.qdhc.ny.utils.SystemUtils;
 import com.vondear.rxui.view.dialog.RxDialogSureCancel;
 
 import java.text.DecimalFormat;
-import java.util.List;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 
 /**
  * 版本更新管理类
@@ -27,26 +20,6 @@ import cn.bmob.v3.listener.FindListener;
 public class UpadateManager {
     public static void checkVersion(final Context ctx) {
 
-        BmobQuery<AppUpdate> categoryBmobQuery = new BmobQuery();
-        categoryBmobQuery.order("-versionCode");
-        categoryBmobQuery.setLimit(1);
-        categoryBmobQuery.findObjects(new FindListener<AppUpdate>() {
-            @Override
-            public void done(List<AppUpdate> list, BmobException e) {
-
-                if (e == null) {
-                    if (list != null && list.size() == 1) {
-                        AppUpdate appUpdate = list.get(0);
-                        if (appUpdate.getVersionCode() > SystemUtils.getAppVersionCode(ctx)) {
-                            initDialog(ctx, appUpdate);
-                            Log.e("TAG", "获取版本成功：" + appUpdate.toString());
-                        }
-                    }
-                } else {
-                    Log.e("TAG", "获取版本失败：" + e.toString());
-                }
-            }
-        });
     }
 
     /**

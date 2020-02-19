@@ -2,8 +2,7 @@ package com.qdhc.ny.common;
 
 import com.amap.api.location.AMapLocation;
 import com.qdhc.ny.bean.UserTreeNode;
-import com.qdhc.ny.bmob.Notice;
-import com.qdhc.ny.bmob.Project;
+import com.qdhc.ny.entity.Project;
 import com.qdhc.ny.entity.User;
 
 import java.util.ArrayList;
@@ -31,11 +30,6 @@ public class ProjectData {
      * 当前定位的位置
      */
     private AMapLocation location = null;
-
-    /**
-     * 公告列表
-     */
-    private List<Notice> notices = new ArrayList<>();
 
     /**
      * 地区，人员总节点
@@ -81,21 +75,10 @@ public class ProjectData {
         this.location = location;
     }
 
-    public List<Notice> getNotices() {
-        return notices;
-    }
-
-    public void setNotices(List<Notice> notices) {
-        this.notices = notices;
-    }
 
     public UserTreeNode getRootNode() {
         return rootNode;
     }
-
-
-
-
 
     int cut = 0;
 
@@ -106,7 +89,6 @@ public class ProjectData {
         cut = 0;
         userInfo = null;
         projects.clear();
-        notices.clear();
         rootNode.reset();
     }
 

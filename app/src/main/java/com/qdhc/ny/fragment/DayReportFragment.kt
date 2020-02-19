@@ -12,7 +12,7 @@ import com.qdhc.ny.R
 import com.qdhc.ny.activity.DailyReportDetailsActivity
 import com.qdhc.ny.adapter.DailyReportAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.DailyReport
+import com.qdhc.ny.entity.DailyReport
 import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils

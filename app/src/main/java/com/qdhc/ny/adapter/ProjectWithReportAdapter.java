@@ -10,8 +10,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qdhc.ny.R;
 import com.qdhc.ny.activity.ReportListActivity;
-import com.qdhc.ny.bmob.Project;
 import com.qdhc.ny.common.Constant;
+import com.qdhc.ny.entity.Project;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class ProjectWithReportAdapter extends BaseQuickAdapter<Project, BaseView
     protected void convert(final BaseViewHolder helper, final Project item) {
         helper.setText(R.id.tv_title, item.getName());
 
-        helper.setText(R.id.tv_introduce, item.getIntroduce());
+        helper.setText(R.id.tv_introduce, item.getInfo());
 //        helper.setText(R.id.tv_village, item.getVillage());
 //        helper.setText(R.id.tv_district, item.getDistrict());
 
@@ -48,7 +48,7 @@ public class ProjectWithReportAdapter extends BaseQuickAdapter<Project, BaseView
 //            helper.setVisible(R.id.tv_person, false);
 //        }
         helper.setText(R.id.tv_tags, TextUtils.isEmpty(item.getTags()) ? "无" : item.getTags());
-        helper.setText(R.id.tv_from, "创建时间: " + item.getCreatedAt().substring(0, 10));
+        helper.setText(R.id.tv_from, "创建时间: " + item.getCreateTime());
 
         helper.setOnClickListener(R.id.tv_dayReport, new View.OnClickListener() {
             @Override

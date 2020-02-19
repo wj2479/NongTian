@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.ProjectAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.Project
+import com.qdhc.ny.entity.Project
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_sign_in_sear.*
 

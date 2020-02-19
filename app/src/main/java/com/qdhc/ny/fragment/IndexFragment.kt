@@ -4,20 +4,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.R
 import com.qdhc.ny.activity.*
 import com.qdhc.ny.adapter.UltraPagerAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bean.IndexInfo
-import com.qdhc.ny.bmob.Banner
 import com.qdhc.ny.bmob.Notice
-import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.tmall.ultraviewpager.UltraViewPager
@@ -127,40 +121,7 @@ class IndexFragment : BaseFragment() {
     }
 
     fun getDatas() {
-        val categoryBmobQuery = BmobQuery<Banner>()
-        categoryBmobQuery.findObjects(
-                object : FindListener<Banner>() {
-                    override fun done(list: List<Banner>?, e: BmobException?) {
-                        if (e == null) {
-                            var bannerList = ArrayList<IndexInfo.BannerBean>()
 
-                            list?.forEach { it ->
-                                var banner = IndexInfo.BannerBean()
-                                banner.imgUrl = it.path.url
-                                bannerList.add(banner)
-                            }
-                            initImagePage(bannerList)
-                        } else {
-                            Log.i("异常-----》", e.toString())
-                        }
-                    }
-                })
-
-        var bmobQuery = BmobQuery<Notice>();
-        bmobQuery.order("-createdAt")
-
-        bmobQuery.findObjects(object : FindListener<Notice>() {
-            override fun done(list: MutableList<Notice>?, e: BmobException?) {
-                if (e == null) {
-                    list?.forEach { notice ->
-                        titleList.add(notice.title)
-                    }
-                    noticeInfos.addAll(list!!)
-                    ProjectData.getInstance().notices = list
-                    rxtext.setTextList(titleList)
-                }
-            }
-        })
     }
 
     private val titleList = ArrayList<String>()

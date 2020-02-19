@@ -4,19 +4,13 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
-import cn.bmob.v3.listener.UpdateListener
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.ContactsAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.UserInfo
-import com.sj.core.utils.ToastUtil
+import com.qdhc.ny.entity.User
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_sign_in_sear.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -26,7 +20,7 @@ class UserManagerActivity : BaseActivity() {
         return R.layout.activity_user_manager
     }
 
-    var datas = ArrayList<UserInfo>()
+    var datas = ArrayList<User>()
     lateinit var mAdapter: ContactsAdapter
     override fun initView() {
 
@@ -51,18 +45,6 @@ class UserManagerActivity : BaseActivity() {
             dialog.setMessage("确定要删除当前用户？")
             dialog.setPositiveButton("删除") { dialog, which ->
 
-                var user = datas.get(position)
-                user.delete(user.objectId, object : UpdateListener() {
-                    override fun done(e: BmobException?) {
-                        if (e == null) {
-                            ToastUtil.show(mContext, "用户删除成功");
-                            getData()
-                        } else {
-                            ToastUtil.show(mContext, "用户删除失败");
-                            Log.i("删除失败-----》", e.toString())
-                        }
-                    }
-                })
             }.setNegativeButton("取消", null)
             dialog.create().show()
         }
@@ -93,22 +75,6 @@ class UserManagerActivity : BaseActivity() {
 
     //获取数据
     fun getData() {
-        val categoryBmobQuery = BmobQuery<UserInfo>()
-        categoryBmobQuery.addWhereGreaterThan("role", 0)
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(
-                object : FindListener<UserInfo>() {
-                    override fun done(list: List<UserInfo>?, e: BmobException?) {
-                        if (e == null) {
-                            Log.i("结果-----》", list?.size.toString())
-                            datas.clear()
-                            datas.addAll(list!!)
-                            mAdapter.notifyDataSetChanged()
-                        } else {
-                            Log.i("异常-----》", e.toString())
-                        }
-                    }
-                })
     }
 
 

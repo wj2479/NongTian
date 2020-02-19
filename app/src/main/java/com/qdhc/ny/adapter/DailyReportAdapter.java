@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qdhc.ny.R;
-import com.qdhc.ny.bmob.DailyReport;
+import com.qdhc.ny.entity.DailyReport;
 
 import java.util.Calendar;
 import java.util.List;
@@ -38,12 +38,6 @@ public class DailyReportAdapter extends BaseQuickAdapter<DailyReport, BaseViewHo
 //                }
 //            }
 //        });
-        try {
-            String dayTime = item.getCreatedAt().substring(0, 10);
-            helper.setText(R.id.name_child_tv, dayTime);
-            helper.setVisible(R.id.name_child_tv, true);
-        } catch (Exception e) {
-        }
     }
 
 }

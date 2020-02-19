@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qdhc.ny.R;
-import com.qdhc.ny.bmob.Project;
+import com.qdhc.ny.entity.Project;
 import com.qdhc.ny.view.CircleProgressBar;
 
 import java.util.List;
@@ -28,8 +28,8 @@ public class ProjectWithScheduleAdapter extends BaseQuickAdapter<Project, BaseVi
         helper.setText(R.id.tv_title, item.getName());
 
         CircleProgressBar circleBar = helper.getView(R.id.circleProgressBar);
-        circleBar.update(item.getSchedule(), item.getSchedule() + "%");
-        helper.setText(R.id.tv_introduce, item.getIntroduce());
+        circleBar.update(item.getProcess(), item.getProcess() + "%");
+        helper.setText(R.id.tv_introduce, item.getInfo());
 //        helper.setText(R.id.tv_village, item.getVillage());
 //        helper.setText(R.id.tv_district, item.getDistrict());
 
@@ -48,7 +48,7 @@ public class ProjectWithScheduleAdapter extends BaseQuickAdapter<Project, BaseVi
 //            helper.setVisible(R.id.tv_person, false);
 //        }
 
-        helper.setText(R.id.tv_from, "创建时间: " + item.getCreatedAt().substring(0, 10));
+        helper.setText(R.id.tv_from, "创建时间: " + item.getCreateTime());
 
     }
 

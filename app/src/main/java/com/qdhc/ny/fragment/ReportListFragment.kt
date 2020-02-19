@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.qdhc.ny.adapter.ProjectWithReportAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.Project
+import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration

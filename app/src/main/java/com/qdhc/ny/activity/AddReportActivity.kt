@@ -1,12 +1,10 @@
 package com.qdhc.ny.activity
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Build
-import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
@@ -14,10 +12,6 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import cn.bmob.v3.datatype.BmobFile
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.SaveListener
-import cn.bmob.v3.listener.UploadFileListener
 import com.amap.api.location.AMapLocation
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureMimeType
@@ -25,10 +19,8 @@ import com.luck.picture.lib.entity.LocalMedia
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.GridImageAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.ContradictPic
-import com.qdhc.ny.bmob.Project
-import com.qdhc.ny.bmob.Report
 import com.qdhc.ny.common.ProjectData
+import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_add_project_schedule.bt_add
@@ -36,7 +28,6 @@ import kotlinx.android.synthetic.main.activity_add_project_schedule.nameTv
 import kotlinx.android.synthetic.main.activity_add_project_schedule.rlv
 import kotlinx.android.synthetic.main.activity_add_report.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
-import java.io.File
 
 class AddReportActivity : BaseActivity() {
 
@@ -111,29 +102,6 @@ class AddReportActivity : BaseActivity() {
 
             showDialog("正在添加记录...")
 
-            var report = Report()
-            report.check = checkContent
-            report.method = methodContent
-            report.question = questionContent
-            report.worktoday = workContent
-            report.pid = project.objectId
-            report.type = type
-
-            if (mLocation != null) {
-                report.address = mLocation?.address
-                report.district = mLocation?.district
-                report.street = mLocation?.street
-            }
-
-            report.save(object : SaveListener<String>() {
-                override fun done(objectId: String?, e: BmobException?) {
-                    if (e == null) {
-                        uploadImg(objectId.toString())
-                    } else {
-                        ToastUtil.show(this@AddReportActivity, "添加失败")
-                    }
-                }
-            })
         }
     }
 
@@ -168,46 +136,6 @@ class AddReportActivity : BaseActivity() {
         nameTv.text = project.name
     }
 
-    private fun uploadImg(objectId: String) {
-        if (selectList.size > 0) {
-            showDialog("正在上传文件...")
-            var localMedia = selectList.removeAt(0)
-
-            var file = File(localMedia.path)
-            if (file.exists()) {
-                var bmobFile = BmobFile(file)
-                bmobFile.uploadblock(object : UploadFileListener() {
-                    override fun done(e: BmobException?) {
-                        if (e == null) {
-                            var contradictPic = ContradictPic()
-                            contradictPic.contradict = objectId
-                            contradictPic.file = bmobFile
-                            contradictPic.save(object : SaveListener<String>() {
-                                override fun done(objectId: String?, e: BmobException?) {
-                                    if (e == null) {
-                                    } else {
-                                        ToastUtil.show(this@AddReportActivity, "文件保存失败：" + e.toString())
-                                    }
-                                    uploadImg(objectId.toString())
-                                }
-                            });
-                        } else {
-                            ToastUtil.show(this@AddReportActivity, "文件上传失败：" + e.toString())
-                        }
-                    }
-                });
-            } else {
-                uploadImg(objectId)
-            }
-        } else {
-            showDialog("添加记录成功")
-            Handler().postDelayed({
-                dismissDialogNow()
-                setResult(Activity.RESULT_OK)
-                finish()
-            }, 1500)
-        }
-    }
 
 
     /**

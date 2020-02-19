@@ -10,7 +10,7 @@ import com.qdhc.ny.R
 import com.qdhc.ny.activity.UserAddActivity
 import com.qdhc.ny.adapter.ContactsAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.UserInfo
+import com.qdhc.ny.entity.User
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.fragment_contacts.*
 
@@ -46,7 +46,7 @@ class ContactsFragment() : BaseFragment() {
         }
     }
 
-    var datas = ArrayList<UserInfo>()
+    var datas = ArrayList<User>()
     lateinit var mAdapter: ContactsAdapter
 
     private fun initRefresh() {
