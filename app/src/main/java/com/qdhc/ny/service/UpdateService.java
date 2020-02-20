@@ -42,7 +42,7 @@ public class UpdateService extends Service {
      * 初始化下载器
      **/
     private void initDownManager(String urlPath) {
-        if (TextUtils.isEmpty(urlPath))
+        if (TextUtils.isEmpty(urlPath) || !urlPath.startsWith("http://") || !urlPath.startsWith("https://"))
             return;
         manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         receiver = new DownloadCompleteReceiver();

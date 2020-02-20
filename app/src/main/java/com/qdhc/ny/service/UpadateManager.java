@@ -4,22 +4,64 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 
-import com.qdhc.ny.bmob.AppUpdate;
+import com.google.gson.Gson;
+import com.qdhc.ny.entity.AppUpdate;
+import com.qdhc.ny.utils.SystemUtils;
+import com.sj.core.net.Rx.RxRestClient;
+import com.sj.core.utils.ToastUtil;
 import com.vondear.rxui.view.dialog.RxDialogSureCancel;
 
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
+import java.util.HashMap;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 版本更新管理类
  */
 
 public class UpadateManager {
-    public static void checkVersion(final Context ctx) {
 
+    public static void checkVersion(final Context ctx) {
+        HashMap<String, Object> params = new HashMap<>();
+
+        RxRestClient.create()
+                .url("app/getUpdateInfo")
+                .params(params)
+                .build()
+                .get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.e("TAG", "获取版本更新信息:" + s);
+                        JSONObject jsonObject = new JSONObject(s);
+                        if (jsonObject.getInt("code") == 1000) {
+                            JSONObject result = jsonObject.getJSONObject("result");
+                            AppUpdate data = new Gson().fromJson(result.toString(), AppUpdate.class);
+                            // 登录成功
+                            if (data.getVersionCode() > SystemUtils.getAppVersionCode(ctx)) {
+                                initDialog(ctx, data);
+                            }
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("TAG", "获取版本更新出错:" + throwable.toString());
+                    }
+                });
     }
 
     /**
@@ -60,8 +102,13 @@ public class UpadateManager {
         rxDialogSureCancel.getSureView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String url = appUpdate.getUrl();
+                if (TextUtils.isEmpty(url) || !url.startsWith("http://") || !url.startsWith("https://")) {
+                    ToastUtil.show(context, "下载地址信息错误");
+                    return;
+                }
                 Intent intent = new Intent(context, UpdateService.class);
-                intent.putExtra("url", appUpdate.getDownloadFile().getUrl());
+                intent.putExtra("url", url);
                 context.startService(intent);
                 rxDialogSureCancel.cancel();
             }

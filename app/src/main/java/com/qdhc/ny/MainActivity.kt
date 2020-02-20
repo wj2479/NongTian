@@ -34,7 +34,6 @@ import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.base.BaseApplication
 import com.qdhc.ny.bean.TabIconBean
-import com.qdhc.ny.bmob.Tracks
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.User
@@ -42,10 +41,17 @@ import com.qdhc.ny.fragment.JianliFragment
 import com.qdhc.ny.fragment.MyFragment
 import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.service.UpadateManager
+import com.sj.core.net.Rx.RxRestClient
 import com.sj.core.utils.SharedPreferencesUtil
 import com.sj.core.utils.ToastUtil
 import com.vondear.rxui.view.dialog.RxDialogSureCancel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
 class MainActivity : BaseActivity() {
 
@@ -356,7 +362,6 @@ class MainActivity : BaseActivity() {
      * 定位监听
      */
     var locationListener = AMapLocationListener { location ->
-
         if (null != location) {
             //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
             if (location.errorCode == 0) {
@@ -377,51 +382,79 @@ class MainActivity : BaseActivity() {
                     }
                 }
 
-                var tracks = Tracks()
-                tracks.deviceFacturer = Build.MANUFACTURER  // 设备厂商
-                tracks.deviceModel = Build.MODEL     // 设备型号
-                tracks.deviceVersion = Build.VERSION.RELEASE   // 系统版本
-
-                tracks.direction = location.bearing         // 运动方向
-                tracks.accuracy = location.accuracy         //精    度
-                tracks.lat = location.latitude              // 纬度
-                tracks.lng = location.longitude             // 经度
-                tracks.locationTime = location.time        // 定位时间
-                tracks.speed = location.speed               // 速度
-                tracks.uid = userInfo.id.toString()              // 上传人
-
-                var sb_temp = StringBuffer()
-                sb_temp.append("* WIFI开关：").append(if (location.locationQualityReport.isWifiAble) "开启" else "关闭").append("\n");
-
-                when (location.locationType) {
-                    AMapLocation.LOCATION_TYPE_GPS -> {
-                        sb_temp.append("* 定位类型：").append("GPS").append("\n");
-                        sb_temp.append("* GPS状态：").append(getGPSStatusString(location.locationQualityReport.gpsStatus)).append("\n");
-                        sb_temp.append("* GPS星数：").append(location.locationQualityReport.gpsSatellites).append("\n");
-                        tracks.locationType = "GPS"
-                    }
-                    AMapLocation.LOCATION_TYPE_CELL -> {
-                        tracks.locationType = "网络基站定位"
-                    }
-                    AMapLocation.LOCATION_TYPE_FIX_CACHE -> {
-                        tracks.locationType = "缓存定位"
-                    }
-                    AMapLocation.LOCATION_TYPE_LAST_LOCATION_CACHE -> {
-                        tracks.locationType = "最后位置缓存"
-                    }
-                    AMapLocation.LOCATION_TYPE_OFFLINE -> {
-                        tracks.locationType = "离线定位"
-                    }
-                    AMapLocation.LOCATION_TYPE_WIFI -> {
-                        tracks.locationType = "Wifi定位"
-                    }
-                }
-                tracks.remark = sb_temp.toString()     // 备注信息
+                uploadTrack(userInfo.id, location)
 
                 ProjectData.getInstance().location = location
             }
         }
     }
+
+    /**
+     * 上传用户轨迹
+     */
+    fun uploadTrack(uid: Int, location: AMapLocation) {
+        var params: HashMap<String, Any> = HashMap()
+        params["uid"] = uid
+        params["deviceFacturer"] = Build.MANUFACTURER  // 设备厂商
+        params["deviceModel"] = Build.MODEL     // 设备型号
+        params["deviceVersion"] = Build.VERSION.RELEASE   // 系统版本
+        params["direction"] = location.bearing         // 运动方向
+        params["accuracy"] = location.accuracy         //精    度
+        params["lat"] = location.latitude              // 纬度
+        params["lng"] = location.longitude             // 经度
+        params["locationTime"] = location.time        // 定位时间
+        params["speed"] = location.speed               // 速度
+
+        var sb_temp = StringBuffer()
+        sb_temp.append("* WIFI开关：").append(if (location.locationQualityReport.isWifiAble) "开启" else "关闭").append("\n");
+
+        when (location.locationType) {
+            AMapLocation.LOCATION_TYPE_GPS -> {
+                sb_temp.append("* 定位类型：").append("GPS").append("\n");
+                sb_temp.append("* GPS状态：").append(getGPSStatusString(location.locationQualityReport.gpsStatus)).append("\n");
+                sb_temp.append("* GPS星数：").append(location.locationQualityReport.gpsSatellites).append("\n");
+                params["locationType"] = "GPS"
+            }
+            AMapLocation.LOCATION_TYPE_CELL -> {
+                params["locationType"] = "网络基站定位"
+            }
+            AMapLocation.LOCATION_TYPE_FIX_CACHE -> {
+                params["locationType"] = "缓存定位"
+            }
+            AMapLocation.LOCATION_TYPE_LAST_LOCATION_CACHE -> {
+                params["locationType"] = "最后位置缓存"
+            }
+            AMapLocation.LOCATION_TYPE_OFFLINE -> {
+                params["locationType"] = "离线定位"
+            }
+            AMapLocation.LOCATION_TYPE_WIFI -> {
+                params["locationType"] = "Wifi定位"
+            }
+        }
+        params["remark"] = sb_temp.toString()     // 备注信息
+
+        RxRestClient.create()
+                .url("track/addTracks")
+                .params(params)
+                .build()
+                .get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result ->
+                            var json = JSONObject(result)
+                            if (json.getInt("code") == 1000) {
+                                Log.e("TAG", "轨迹上传成功:")
+                                lastUploadLocation = location
+                            } else {
+                                Log.e("TAG", "轨迹上传失败:" + result)
+                            }
+                        },
+                        { throwable ->
+                            throwable.printStackTrace()
+                        })
+    }
+
 
     override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
         return if (event!!.keyCode == KeyEvent.KEYCODE_BACK) {
