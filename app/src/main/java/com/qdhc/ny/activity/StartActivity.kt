@@ -1,20 +1,15 @@
 package com.qdhc.ny.activity
 
 import android.content.Intent
-import android.os.Environment
 import android.os.Handler
 import android.os.Message
 import android.text.TextUtils
 import android.util.Log
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.LoginActivity
 import com.qdhc.ny.Main3Activity
 import com.qdhc.ny.MainActivity
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.Project
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.Role
 import com.qdhc.ny.entity.User
@@ -26,8 +21,6 @@ import com.tencent.bugly.crashreport.CrashReport
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
-import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,108 +49,108 @@ class StartActivity : BaseActivity() {
     var map = TreeMap<String, Int>();
     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    fun getData() {
-        val categoryBmobQuery = BmobQuery<Project>()
-//        categoryBmobQuery.addWhereEqualTo("role", 1)
-//        categoryBmobQuery.addWhereEqualTo("city", "hARs111J")
-        categoryBmobQuery.setLimit(500)
-        categoryBmobQuery.findObjects(object : FindListener<Project>() {
-            override fun done(list: List<Project>?, e: BmobException?) {
-                if (e == null) {
-                    if (list != null) {
-
-                        var ss = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "data.txt";
-
-                        var file = File(ss)
-                        if (file.exists()) {
-                            file.delete()
-                        }
-
-                        file.createNewFile()
-
-                        var fos = FileOutputStream(file)
-
-                        var title = "objectid,pname\n"
-                        fos.write(title.toByteArray())
-
-                        list.forEach { user ->
-
-                            var data = user.objectId + "," + user.name + "\n"
-                            fos.write(data.toByteArray())
-                            fos.flush()
-                            Log.e("TAG", data)
-
-//                            val categoryBmobQuery = BmobQuery<DailyReport>()
-//                            categoryBmobQuery.addWhereEqualTo("uid", user.objectId);
-//                            var createdAtStart = "2019-11-01 00:00:00";
-//                            var createdAtDateStart = sdf.parse(createdAtStart);
-//                            var bmobCreatedAtDateStart = BmobDate(createdAtDateStart);
+//    fun getData() {
+//        val categoryBmobQuery = BmobQuery<Project>()
+////        categoryBmobQuery.addWhereEqualTo("role", 1)
+////        categoryBmobQuery.addWhereEqualTo("city", "hARs111J")
+//        categoryBmobQuery.setLimit(500)
+//        categoryBmobQuery.findObjects(object : FindListener<Project>() {
+//            override fun done(list: List<Project>?, e: BmobException?) {
+//                if (e == null) {
+//                    if (list != null) {
 //
-//                            var createdAtEnd = "2020-01-01 00:00:00";
-//                            var createdAtDateEnd = sdf.parse(createdAtEnd);
-//                            var bmobCreatedAtDateEnd = BmobDate(createdAtDateEnd);
+//                        var ss = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "data.txt";
 //
-//                            categoryBmobQuery.addWhereGreaterThanOrEqualTo("createdAt", bmobCreatedAtDateStart);
-//                            categoryBmobQuery.addWhereLessThanOrEqualTo("createdAt", bmobCreatedAtDateEnd);
+//                        var file = File(ss)
+//                        if (file.exists()) {
+//                            file.delete()
+//                        }
 //
-//                            categoryBmobQuery.findObjects(object : FindListener<DailyReport>() {
-//                                override fun done(list: MutableList<DailyReport>?, e: BmobException?) {
-//                                    if (e == null) {
-//                                        if (list != null) {
-//                                            list.forEach { report ->
-//                                                val categoryBmobQuery = BmobQuery<ContradictPic>()
-//                                                categoryBmobQuery.addWhereEqualTo("contradict", report.objectId)
-//                                                categoryBmobQuery.count(ContradictPic::class.java, object : CountListener() {
-//                                                    override fun done(count: Int?, e: BmobException?) {
-//                                                        if (e == null && count != null) {
-////                                                            Log.e("TAG", user.objectId + " " + user.nickName + " " + report.objectId + "  " + report.createdAt.substring(0, 10) + " 计数:" + count.toString())
-//                                                            var key = user.nickName + "," + report.createdAt.substring(0, 10)
+//                        file.createNewFile()
 //
-//                                                            if (map.containsKey(key)) {
-//                                                                map.put(key, count + map.get(key)!!)
-//                                                            } else {
-//                                                                map.put(key, count)
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                })
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            })
-                        }
-                        fos.close()
-                    }
-                }
-            }
-        })
-
-//        Handler().postDelayed({
-//            var ss = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "data.txt";
+//                        var fos = FileOutputStream(file)
 //
-//            var file = File(ss)
-//            if (file.exists()) {
-//                file.delete()
+//                        var title = "objectid,pname\n"
+//                        fos.write(title.toByteArray())
+//
+//                        list.forEach { user ->
+//
+//                            var data = user.objectId + "," + user.name + "\n"
+//                            fos.write(data.toByteArray())
+//                            fos.flush()
+//                            Log.e("TAG", data)
+//
+////                            val categoryBmobQuery = BmobQuery<DailyReport>()
+////                            categoryBmobQuery.addWhereEqualTo("uid", user.objectId);
+////                            var createdAtStart = "2019-11-01 00:00:00";
+////                            var createdAtDateStart = sdf.parse(createdAtStart);
+////                            var bmobCreatedAtDateStart = BmobDate(createdAtDateStart);
+////
+////                            var createdAtEnd = "2020-01-01 00:00:00";
+////                            var createdAtDateEnd = sdf.parse(createdAtEnd);
+////                            var bmobCreatedAtDateEnd = BmobDate(createdAtDateEnd);
+////
+////                            categoryBmobQuery.addWhereGreaterThanOrEqualTo("createdAt", bmobCreatedAtDateStart);
+////                            categoryBmobQuery.addWhereLessThanOrEqualTo("createdAt", bmobCreatedAtDateEnd);
+////
+////                            categoryBmobQuery.findObjects(object : FindListener<DailyReport>() {
+////                                override fun done(list: MutableList<DailyReport>?, e: BmobException?) {
+////                                    if (e == null) {
+////                                        if (list != null) {
+////                                            list.forEach { report ->
+////                                                val categoryBmobQuery = BmobQuery<ContradictPic>()
+////                                                categoryBmobQuery.addWhereEqualTo("contradict", report.objectId)
+////                                                categoryBmobQuery.count(ContradictPic::class.java, object : CountListener() {
+////                                                    override fun done(count: Int?, e: BmobException?) {
+////                                                        if (e == null && count != null) {
+//////                                                            Log.e("TAG", user.objectId + " " + user.nickName + " " + report.objectId + "  " + report.createdAt.substring(0, 10) + " 计数:" + count.toString())
+////                                                            var key = user.nickName + "," + report.createdAt.substring(0, 10)
+////
+////                                                            if (map.containsKey(key)) {
+////                                                                map.put(key, count + map.get(key)!!)
+////                                                            } else {
+////                                                                map.put(key, count)
+////                                                            }
+////                                                        }
+////                                                    }
+////                                                })
+////                                            }
+////                                        }
+////                                    }
+////                                }
+////                            })
+//                        }
+//                        fos.close()
+//                    }
+//                }
 //            }
+//        })
 //
-//            file.createNewFile()
-//
-//            var fos = FileOutputStream(file)
-//
-//            var title = "name,date,count\n"
-//            fos.write(title.toByteArray())
-//
-//            map.entries.forEach { entry ->
-//                var data = entry.key + "," + entry.value.toString() + "\n"
-//                fos.write(data.toByteArray())
-//                fos.flush()
-//                Log.e("TAG", data)
-//            }
-//            fos.close()
-//
-//        }, 5000)
-    }
+////        Handler().postDelayed({
+////            var ss = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "data.txt";
+////
+////            var file = File(ss)
+////            if (file.exists()) {
+////                file.delete()
+////            }
+////
+////            file.createNewFile()
+////
+////            var fos = FileOutputStream(file)
+////
+////            var title = "name,date,count\n"
+////            fos.write(title.toByteArray())
+////
+////            map.entries.forEach { entry ->
+////                var data = entry.key + "," + entry.value.toString() + "\n"
+////                fos.write(data.toByteArray())
+////                fos.flush()
+////                Log.e("TAG", data)
+////            }
+////            fos.close()
+////
+////        }, 5000)
+//    }
 
 
     fun loginByUserName(username: String, password: String) {
@@ -201,8 +194,8 @@ class StartActivity : BaseActivity() {
         CrashReport.setUserId(user.userName)
 
         when (user.role.code) {
-            Role.TYPE_USER -> startActivity(Intent(mContext, MainActivity::class.java))
-            Role.TYPE_MANAGER -> startActivity(Intent(mContext, Main3Activity::class.java))
+            Role.CODE.SUPERVISOR.value -> startActivity(Intent(mContext, MainActivity::class.java)) // 监理角色
+            else -> startActivity(Intent(mContext, Main3Activity::class.java))
         }
     }
 

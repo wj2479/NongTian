@@ -6,8 +6,7 @@ import android.view.View
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.Notice
-import com.qdhc.ny.bmob.UserInfo
+import com.qdhc.ny.entity.User
 import com.qdhc.ny.fragment.NotifyPublishFragment
 import com.qdhc.ny.fragment.NotifyReceivedFragment
 import kotlinx.android.synthetic.main.fragment_project_tab.*
@@ -21,8 +20,8 @@ import kotlinx.android.synthetic.main.layout_title_theme.*
 class NotifyActivity : BaseActivity() {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
-    lateinit var user: UserInfo
-    var datas = ArrayList<Notice>()
+    lateinit var user: User
+//    var datas = ArrayList<Notice>()
 
     val mFragments = ArrayList<Fragment>()
     lateinit var mTitles: Array<String>
@@ -32,9 +31,9 @@ class NotifyActivity : BaseActivity() {
     }
 
     override fun initView() {
-        user = intent.getSerializableExtra("user") as UserInfo
+        user = intent.getSerializableExtra("user") as User
 
-        when (user.role) {
+        when (user.role.code) {
             1 -> {
                 title_tv_title.text = "我收到的通知"
                 mTitles = arrayOf("我收到的")

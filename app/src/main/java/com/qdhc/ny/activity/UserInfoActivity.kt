@@ -2,23 +2,17 @@ package com.qdhc.ny.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Handler
-import cn.bmob.v3.datatype.BmobFile
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.UpdateListener
-import cn.bmob.v3.listener.UploadFileListener
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.common.Constant
+import com.qdhc.ny.entity.User
 import com.sj.core.utils.ImageLoaderUtil
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_user_info.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
-import java.io.File
 
 /**
  * 个人信息修改
@@ -26,18 +20,18 @@ import java.io.File
  * @date 2018/8/19
  */
 class UserInfoActivity : BaseActivity() {
-    lateinit var user: UserInfo
+    lateinit var user: User
     override fun intiLayout(): Int {
         return (R.layout.activity_user_info)
     }
 
     override fun initData() {
-        user = intent.getSerializableExtra("user") as UserInfo
+        user = intent.getSerializableExtra("user") as User
         edt_nickname.setText(user.nickName)
         //头像
-        if (user.avatar != null) {
-            ImageLoaderUtil.loadCorners(mContext, user.avatar.url, iv_photo, -1, R.drawable.ic_defult_user)
-        }
+//        if (user.avatar != null) {
+//            ImageLoaderUtil.loadCorners(mContext, user.avatar.url, iv_photo, -1, R.drawable.ic_defult_user)
+//        }
     }
 
     override fun initClick() {
@@ -121,45 +115,8 @@ class UserInfoActivity : BaseActivity() {
 
     private fun upUser(path: String, nickName: String) {
         user.nickName = nickName
-        if (path != null) {
-            var pathFile = File(path)
-            if (pathFile.exists()) {
-                var bmobFile = BmobFile(pathFile)
-                bmobFile.uploadblock(object : UploadFileListener() {
-                    override fun done(e: BmobException?) {
-                        if (e == null) {
-                            user.avatar = bmobFile
-                            update()
-                        } else {
-                            ToastUtil.show(this@UserInfoActivity, "保存失败：" + e.toString())
-                        }
-                    }
-                });
-            } else {
-                update()
-            }
-        } else {
-            update()
-        }
     }
 
-    fun update() {
-        user.update(object : UpdateListener() {
-            override fun done(e: BmobException?) {
-                if (e == null) {
-                    showDialog("保存成功...")
-//                    SharedPreferencesUtils.saveLogin(this@UserInfoActivity, user)
-                    Handler().postDelayed({
-                        dismissDialogNow()
-                        setResult(Activity.RESULT_OK)
-                        finish()
-                    }, 1500)
-                } else {
-                    ToastUtil.show(this@UserInfoActivity, "保存失败：" + e.toString())
-                }
-            }
-        })
-    }
 
 
     override fun initView() {

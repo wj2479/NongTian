@@ -17,7 +17,7 @@ public class Constant {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static final String SYS_ROOT = "http://192.168.0.42:8088/"; //线上版本地址
+    public static final String SYS_ROOT = "http://192.168.1.163:8088/"; //线上版本地址
 
     public static final String ExternalStorageDirectory =
             Environment.getExternalStorageDirectory().getAbsolutePath() + "/";

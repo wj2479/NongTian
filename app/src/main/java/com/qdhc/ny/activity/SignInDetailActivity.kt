@@ -3,13 +3,9 @@ package com.qdhc.ny.activity
 import android.os.Bundle
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapOptions
-import com.amap.api.maps.CameraUpdateFactory
-import com.amap.api.maps.model.CameraPosition
-import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MyLocationStyle
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.Sign
 import kotlinx.android.synthetic.main.activity_sign_in_detail.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
 
@@ -39,18 +35,18 @@ class SignInDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         mapView.onCreate(savedInstanceState)
 
-        var sign = intent.getSerializableExtra("sign") as Sign
+        var sign = intent.getSerializableExtra("sign")
 
-        tv_address_abbreviation.text = sign.address
-        tv_location_type.text = sign.createdAt
-        edt_content.text = sign.content
+//        tv_address_abbreviation.text = sign.address
+//        tv_location_type.text = sign.createdAt
+//        edt_content.text = sign.content
         aMap = mapView.map
 
         initMap()
 
-        var cameraUpdate = CameraUpdateFactory
-                .newCameraPosition(CameraPosition(LatLng(sign.lat, sign.lng), 16f, 0f, 0f))
-        aMap.moveCamera(cameraUpdate)
+//        var cameraUpdate = CameraUpdateFactory
+//                .newCameraPosition(CameraPosition(LatLng(sign.lat, sign.lng), 16f, 0f, 0f))
+//        aMap.moveCamera(cameraUpdate)
     }
 
     override fun initData() {

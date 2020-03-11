@@ -34,12 +34,12 @@ class NotifyFragment : BaseFragment() {
 
         user = SharedPreferencesUtils.loadLogin(context)
         when (user.role.code) {
-            Role.TYPE_USER -> {
+            Role.CODE.SUPERVISOR.value -> {
                 mTitles = arrayOf("我收到的")
                 mTabLayout.visibility = View.GONE
                 mFragments.add(NotifyReceivedFragment())
             }
-            Role.TYPE_MANAGER -> {
+            else -> {
                 title_tv_right.setText("发布通知")
                 title_tv_right.visibility = View.VISIBLE
 

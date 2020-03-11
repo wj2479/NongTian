@@ -1,9 +1,5 @@
 package com.qdhc.ny.activity
 
-import android.os.Handler
-import cn.bmob.v3.BmobUser
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.UpdateListener
 import com.qdhc.ny.base.BaseActivity
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_update_pwd.*
@@ -42,20 +38,6 @@ class UpdatePwdActivity : BaseActivity() {
 
             showDialog("正在修改密码...")
             //
-            BmobUser.updateCurrentUserPassword(oldPwd, newPwd, object : UpdateListener() {
-                override fun done(e: BmobException?) {
-                    if (e == null) {
-                        showDialog("修改密码成功..")
-                        Handler().postDelayed({
-                            dismissDialogNow()
-                            finish()
-                        }, 1500)
-                    } else {
-                        showDialog("修改密码失败...")
-                        dismissDialog()
-                    }
-                }
-            })
 
         }
     }

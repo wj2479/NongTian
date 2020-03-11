@@ -1,5 +1,6 @@
 package com.qdhc.ny.activity
 
+import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -41,6 +42,11 @@ class RegionProjectDetailsActivity : BaseActivity() {
             projectList = ArrayList<Project>()
         }
 
+        if (intent.hasExtra("project")) {
+            var project = intent.getSerializableExtra("project") as Project
+            tv_title.text = project.name
+        }
+
         Log.e("传递数据-----》", "数据" + projectList.size)
 
         initRefresh()
@@ -57,10 +63,10 @@ class RegionProjectDetailsActivity : BaseActivity() {
                 return@setSwipeItemClickListener
             }
 
-//            var project = projectList.get(position)
-//            var intent = Intent(this, RegionProjectListActivity::class.java)
-//            intent.putExtra("regionProject", project)
-//            startActivity(intent)
+            var project = projectList.get(position)
+            var intent = Intent(this, RegionProjectListActivity::class.java)
+            intent.putExtra("regionProject", project)
+            startActivity(intent)
         }
 
         mAdapter = RegionProjectAdapter(this, projectList)

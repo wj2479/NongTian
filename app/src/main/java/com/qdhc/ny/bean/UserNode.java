@@ -1,6 +1,5 @@
 package com.qdhc.ny.bean;
 
-import com.qdhc.ny.bmob.UserInfo;
 import com.qdhc.ny.entity.User;
 
 /**
@@ -29,7 +28,7 @@ public class UserNode {
         return userInfo;
     }
 
-    public void setUserInfo(UserInfo User) {
+    public void setUserInfo(User User) {
         this.userInfo = userInfo;
     }
 

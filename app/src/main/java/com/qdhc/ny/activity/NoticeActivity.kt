@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.NoticeAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.Notice
+import com.qdhc.ny.entity.Notify
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_notice.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.layout_title_theme.*
  */
 class NoticeActivity : BaseActivity() {
 
-    var datas = ArrayList<Notice>()
+    var datas = ArrayList<Notify>()
     override fun intiLayout(): Int {
         return R.layout.activity_notice
     }
@@ -51,8 +51,8 @@ class NoticeActivity : BaseActivity() {
         // 加载更多的监听
         smrw.setLoadMoreListener {
         }
-        mAdapter = NoticeAdapter(this, datas)
-        smrw.adapter = mAdapter
+//        mAdapter = NoticeAdapter(this, datas)
+//        smrw.adapter = mAdapter
 
         val emptyView = layoutInflater.inflate(com.qdhc.ny.R.layout.common_empty, null)
         emptyView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,

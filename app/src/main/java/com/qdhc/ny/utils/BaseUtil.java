@@ -268,6 +268,20 @@ public class BaseUtil {
         }
     }
 
+    /**
+     * 返回2011-10-15
+     *
+     * @param date 2011-10-15 10:10:10形式
+     * @return 2011-10-15
+     */
+    public static String shortDate(String date) {
+        if (date.indexOf(" ") > -1) {
+            return date.substring(0,date.indexOf(" ") );
+        } else {
+            return date;
+        }
+    }
+
     public static int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");

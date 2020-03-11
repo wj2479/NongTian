@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qdhc.ny.R;
-import com.qdhc.ny.bmob.UserInfo;
+import com.qdhc.ny.entity.User;
 
 import java.util.ArrayList;
 
@@ -17,16 +17,16 @@ import java.util.ArrayList;
  * 通讯录
  */
 
-public class AchievementAdapter extends BaseQuickAdapter<UserInfo, BaseViewHolder> {
+public class AchievementAdapter extends BaseQuickAdapter<User, BaseViewHolder> {
     Activity mContext;
 
-    public AchievementAdapter(Activity mContext, @Nullable ArrayList<UserInfo> data) {
+    public AchievementAdapter(Activity mContext, @Nullable ArrayList<User> data) {
         super(R.layout.item_achievement_ranking, data);
         this.mContext = mContext;
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, UserInfo item) {
+    protected void convert(BaseViewHolder helper, User item) {
         TextView tvNo = helper.getView(R.id.tv_no);
 
 

@@ -142,49 +142,6 @@ class JianliFragment : BaseFragment() {
     val mHandler = Handler()
 
     override fun lazyLoad() {
-//        mHandler.postDelayed(object : Runnable {
-//            override fun run() {
-//                if (ProjectData.getInstance().location != null) {
-//                    HeWeather.getWeatherForecast(context, ProjectData.getInstance().location.city, object : HeWeather.OnResultWeatherForecastBeanListener {
-//                        override fun onSuccess(forcast: Forecast?) {
-//                            Log.e("TAG", "天气：" + Gson().toJson(forcast))
-//
-//                            if (Code.OK.getCode().equals(forcast?.getStatus())) {
-//                                //此时返回数据
-//                                if (forcast?.daily_forecast != null && forcast.daily_forecast.size > 0) {
-//                                    var base = forcast.daily_forecast.get(0)
-//                                    weatherTv.text = base.tmp_min + " - " + base.tmp_max + "℃"
-//                                    weatherInfoTv.text = ProjectData.getInstance().location.district + "    " + base.cond_txt_d + "    \t" + base.wind_dir + "  \t" + base.wind_sc + "级"
-//                                }
-//                            } else {
-//                                //在此查看返回数据失败的原因
-//                            }
-//
-//                        }
-//
-//                        override fun onError(e: Throwable?) {
-//                            Log.e("TAG", "天气异常：" + e.toString())
-//                        }
-//                    })
-//
-//                    HeWeather.getWeatherNow(context, ProjectData.getInstance().location.city, object : HeWeather.OnResultWeatherNowBeanListener {
-//                        override fun onSuccess(now: Now?) {
-//                            if (Code.OK.getCode().equals(now?.getStatus())) {
-//                                //此时返回数据
-//                                tempTv.text = now?.now?.tmp + "℃"
-//                            } else {
-//                                //在此查看返回数据失败的原因
-//                            }
-//                        }
-//
-//                        override fun onError(e: Throwable?) {
-//                        }
-//                    })
-//                } else {
-//                    mHandler.postDelayed(this, 800)
-//                }
-//            }
-//        }, 800)
     }
 
     /**

@@ -8,8 +8,6 @@ import android.os.Message
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.View
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.SaveListener
 import com.amap.api.location.AMapLocation
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapOptions
@@ -26,7 +24,6 @@ import com.qdhc.ny.R
 import com.qdhc.ny.adapter.GridImageAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bean.ClientManagerInfo
-import com.qdhc.ny.bmob.Sign
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
@@ -179,23 +176,6 @@ class SignInFragment : BaseFragment() {
                 if (content.isNotEmpty()) {
                     rxDialogLoading.show()
 
-                    var sign = Sign()
-                    sign.address = mLocation?.address
-                    sign.content = content
-                    sign.lat = mLocation!!.latitude
-                    sign.lng = mLocation!!.longitude
-
-                    sign.save(object : SaveListener<String>() {
-                        override fun done(objectId: String?, e: BmobException?) {
-                            if (e == null) {
-                                ToastUtil.show(context, "签到成功")
-                                rxDialogLoading.dismiss()
-                                activity!!.finish()
-                            } else {
-                                ToastUtil.show(context, "签到失败：" + e.toString())
-                            }
-                        }
-                    })
 
                 } else {
                     ToastUtil.show(activity, "请输入签到内容")

@@ -11,7 +11,6 @@ import com.qdhc.ny.activity.*
 import com.qdhc.ny.adapter.UltraPagerAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bean.IndexInfo
-import com.qdhc.ny.bmob.Notice
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.tmall.ultraviewpager.UltraViewPager
@@ -135,14 +134,13 @@ class IndexFragment : BaseFragment() {
         rxtext.stopAutoScroll()
     }
 
-    var noticeInfos = ArrayList<Notice>()
 
     private fun initRXText() {
         rxtext.setText(13f, 5, ContextCompat.getColor(activity!!, R.color.hui))//设置属性
         rxtext.setTextStillTime(5000)//设置停留时长间隔
         rxtext.setAnimTime(500)//设置进入和退出的时间间隔
         rxtext.setOnItemClickListener({
-            startActivity(Intent(activity, NoticeDetailActivity::class.java).putExtra("notice", noticeInfos[it]))
+//            startActivity(Intent(activity, NoticeDetailActivity::class.java).putExtra("notice", noticeInfos[it]))
         })
     }
 }

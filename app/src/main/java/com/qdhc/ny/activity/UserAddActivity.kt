@@ -1,11 +1,7 @@
 package com.qdhc.ny.activity
 
-import android.util.Log
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.SaveListener
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.UserInfo
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_user_add.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -55,25 +51,7 @@ class UserAddActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            var user = UserInfo()
-            user.username = userName
-            user.setPassword(password)
-            user.nickName = nickName
-            user.mobilePhoneNumber = phone
-            user.areaId = intent.getIntExtra("area", 0)
-            user.district = intent.getStringExtra("village")
-            user.role = 1
-            user.signUp(object : SaveListener<UserInfo>() {
-                override fun done(user: UserInfo?, e: BmobException?) {
-                    if (e == null) {
-                        ToastUtil.show(mContext, "新用户创建成功");
-                        finish()
-                    } else {
-                        ToastUtil.show(mContext, "新用户创建失败");
-                        Log.e("TAG", "创建失败:" + e.toString())
-                    }
-                }
-            })
+
         }
     }
 

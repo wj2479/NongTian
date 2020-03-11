@@ -6,7 +6,6 @@ import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.entity.Project
-import com.qdhc.ny.entity.User
 import com.qdhc.ny.fragment.ReportFragment
 import kotlinx.android.synthetic.main.layout_title_theme.*
 
@@ -22,7 +21,7 @@ class ReportAllListActivity : BaseActivity(), ActionSheet.ActionSheetListener {
 
     override fun initView() {
 
-        val user = intent.getSerializableExtra("user") as User
+//        val user = intent.getSerializableExtra("user") as User
 //        if (user.role == 1) {
 //            title_tv_right.visibility = View.VISIBLE
 //            title_tv_right.text = "添加  "

@@ -16,8 +16,6 @@ import com.tencent.bugly.crashreport.CrashReport;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.bmob.v3.Bmob;
-import interfaces.heweather.com.interfacesmodule.view.HeConfig;
 
 
 /**
@@ -65,13 +63,8 @@ public class BaseApplication extends MultiDexApplication {
 
         }).start();
 
-        Bmob.initialize(this, "5f221eb7f4e0909d78eb5650d207fb86");
-
         // 腾讯bugly初始化
         CrashReport.initCrashReport(getApplicationContext(), "acadddbef3", BuildConfig.DEBUG);
-
-        HeConfig.init("HE1603110949591229", "e61e27000f6d422bbb0f2974957819a2");
-        HeConfig.switchToFreeServerNode();
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

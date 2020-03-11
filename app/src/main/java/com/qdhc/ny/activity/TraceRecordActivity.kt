@@ -5,10 +5,6 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.datatype.BmobDate
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.model.*
@@ -19,11 +15,10 @@ import com.amap.api.trace.TraceOverlay
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.SignListInfo
-import com.qdhc.ny.bmob.Tracks
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.dialog.RxDialogWheelYearMonthDay
+import com.qdhc.ny.entity.Track
 import com.qdhc.ny.entity.User
-import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_trace_record.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
 import java.text.SimpleDateFormat
@@ -46,7 +41,7 @@ class TraceRecordActivity : BaseActivity(), TraceListener {
     /**
      * 原始的数据
      */
-    var originalTraceList = ArrayList<Tracks>()
+    var originalTraceList = ArrayList<Track>()
 
     override fun intiLayout(): Int {
         return R.layout.activity_trace_record
@@ -86,7 +81,7 @@ class TraceRecordActivity : BaseActivity(), TraceListener {
                     + mRxDialogWheelYearMonthDay.selectorDay)
             tv_date.text = date_txt
 
-            getPoints(userInfo.id.toString(), date_txt)
+//            getPoints(userInfo.id.toString(), date_txt)
             mRxDialogWheelYearMonthDay.cancel()
         }
         mRxDialogWheelYearMonthDay.cancleView.setOnClickListener(
@@ -121,59 +116,59 @@ class TraceRecordActivity : BaseActivity(), TraceListener {
         title_tv_title.text = userInfo.nickName + "的运动轨迹"
 
 //        Log.e("TAG", "日期--> " + date)
-        getPoints(userInfo.id.toString(), date)
+//        getPoints(userInfo.id.toString(), date)
     }
 
     /**
      * 根据用户ID  日期获取 轨迹点记录
      */
-    fun getPoints(objectId: String, date: String) {
-        var createdAtStart = date + " 00:00:00";
-        var createdAtDateStart = sdf.parse(createdAtStart);
-        var bmobCreatedAtDateStart = BmobDate(createdAtDateStart);
-
-        var createdAtEnd = date + " 23:59:59";
-        var createdAtDateEnd = sdf.parse(createdAtEnd);
-        var bmobCreatedAtDateEnd = BmobDate(createdAtDateEnd);
-
-        var bmobQuery = BmobQuery<Tracks>();
-        bmobQuery.addWhereGreaterThanOrEqualTo("createdAt", bmobCreatedAtDateStart);
-        bmobQuery.addWhereLessThanOrEqualTo("createdAt", bmobCreatedAtDateEnd);
-        bmobQuery.addWhereEqualTo("uid", objectId)
-        bmobQuery.order("locationTime")
-//        bmobQuery.order("createdAt")
-
-        bmobQuery.findObjects(object : FindListener<Tracks>() {
-            override fun done(list: MutableList<Tracks>?, e: BmobException?) {
-                if (e == null) {
-                    Log.e("TAG", "轨迹--> " + list?.size.toString())
-                    if (list?.size == 0) {
-                        ToastUtil.show(this@TraceRecordActivity, "当天没有运动轨迹")
-                        clearTracksOnMap()
-                        cameraToMyLocation()
-                    } else {
-                        originalTraceList.clear()
-                        originalTraceList.addAll(list!!)
-                        mTraceList.clear()
-                        list?.forEach { track ->
-                            var traceLocation = TraceLocation()
-                            traceLocation.bearing = track.direction
-                            traceLocation.latitude = track.lat
-                            traceLocation.longitude = track.lng
-                            traceLocation.speed = track.speed
-                            traceLocation.time = track.locationTime
-                            mTraceList.add(traceLocation)
-                        }
-                        // 使用轨迹纠偏功能
-                        mTraceClient.queryProcessedTrace(System.currentTimeMillis().toInt(), mTraceList, LBSTraceClient.TYPE_AMAP, this@TraceRecordActivity)
-
-//                        drawTrackOnMap(list!!)
-//                        getSignLocationList(userInfo.objectId, date)
-                    }
-                }
-            }
-        })
-    }
+//    fun getPoints(objectId: String, date: String) {
+//        var createdAtStart = date + " 00:00:00";
+//        var createdAtDateStart = sdf.parse(createdAtStart);
+//        var bmobCreatedAtDateStart = BmobDate(createdAtDateStart);
+//
+//        var createdAtEnd = date + " 23:59:59";
+//        var createdAtDateEnd = sdf.parse(createdAtEnd);
+//        var bmobCreatedAtDateEnd = BmobDate(createdAtDateEnd);
+//
+//        var bmobQuery = BmobQuery<Tracks>();
+//        bmobQuery.addWhereGreaterThanOrEqualTo("createdAt", bmobCreatedAtDateStart);
+//        bmobQuery.addWhereLessThanOrEqualTo("createdAt", bmobCreatedAtDateEnd);
+//        bmobQuery.addWhereEqualTo("uid", objectId)
+//        bmobQuery.order("locationTime")
+////        bmobQuery.order("createdAt")
+//
+//        bmobQuery.findObjects(object : FindListener<Tracks>() {
+//            override fun done(list: MutableList<Tracks>?, e: BmobException?) {
+//                if (e == null) {
+//                    Log.e("TAG", "轨迹--> " + list?.size.toString())
+//                    if (list?.size == 0) {
+//                        ToastUtil.show(this@TraceRecordActivity, "当天没有运动轨迹")
+//                        clearTracksOnMap()
+//                        cameraToMyLocation()
+//                    } else {
+//                        originalTraceList.clear()
+//                        originalTraceList.addAll(list!!)
+//                        mTraceList.clear()
+//                        list?.forEach { track ->
+//                            var traceLocation = TraceLocation()
+//                            traceLocation.bearing = track.direction
+//                            traceLocation.latitude = track.lat
+//                            traceLocation.longitude = track.lng
+//                            traceLocation.speed = track.speed
+//                            traceLocation.time = track.locationTime
+//                            mTraceList.add(traceLocation)
+//                        }
+//                        // 使用轨迹纠偏功能
+//                        mTraceClient.queryProcessedTrace(System.currentTimeMillis().toInt(), mTraceList, LBSTraceClient.TYPE_AMAP, this@TraceRecordActivity)
+//
+////                        drawTrackOnMap(list!!)
+////                        getSignLocationList(userInfo.objectId, date)
+//                    }
+//                }
+//            }
+//        })
+//    }
 
     /**
      * 转移视角到定位的位置
@@ -222,123 +217,123 @@ class TraceRecordActivity : BaseActivity(), TraceListener {
     private var endMarkers = LinkedList<Marker>()
     val boundsBuilder = LatLngBounds.Builder()
 
-    private fun drawTrackOnMap(points: List<Tracks>) {
-        clearTracksOnMap()
-        val polylineOptions = PolylineOptions()
-        //  original.clear()
-        //  original.addAll(points)
-        polylineOptions.width(20f)
-        polylineOptions.customTexture = BitmapDescriptorFactory
-                .fromAsset("icon_road_green_arrow.png")
-        polylineOptions.isUseTexture = true
-        //       自己划线前清空一下
-        Log.e(" points.size:", " points.size:" + points.size)
-
-        points.forEachIndexed { index, it ->
-            var traceLocation = TraceLocation(it.lat, it.lng, it.speed, it.direction, it.locationTime + 1)
-            mTraceList.add(traceLocation)
-
-            //自己划线
-            val latLng = LatLng(it.lat, it.lng)
-
-            polylineOptions.add(latLng)
-            boundsBuilder.include(latLng)
-            val markerOptions = MarkerOptions()
-                    .position(latLng)
-                    .title("时间：" + points[index].createdAt)
-                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                            .decodeResource(resources, R.drawable.ic_analysis_worker_ing)))
-            endMarkers.add(mAMap.addMarker(markerOptions))
-        }
-        val polyline = mAMap.addPolyline(polylineOptions)
-        polylines.add(polyline)
-        //移动到可视范围
-        mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 16))
-        if (points.isNotEmpty()) {
-            // 起点
-            val p = points[0]
-            val latLng = LatLng(p.lat, p.lng)
-            val markerOptions = MarkerOptions()
-                    .position(latLng)
-                    .title("时间：" + points[0].createdAt)
-                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                            .decodeResource(resources, R.drawable.ic_analysis_worker_start)))
-            endMarkers.add(mAMap.addMarker(markerOptions))
-        }
-        if (points.size > 1) {
-            // 终点
-            val p = points[points.size - 1]
-            val latLng = LatLng(p.lat, p.lng)
-            val markerOptions = MarkerOptions()
-                    .position(latLng)
-                    .title("时间：" + points[points.size - 1].createdAt)
-                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                            .decodeResource(resources, R.drawable.ic_analysis_worker_stop)))
-            endMarkers.add(mAMap.addMarker(markerOptions))
-        }
-    }
+//    private fun drawTrackOnMap(points: List<Tracks>) {
+//        clearTracksOnMap()
+//        val polylineOptions = PolylineOptions()
+//        //  original.clear()
+//        //  original.addAll(points)
+//        polylineOptions.width(20f)
+//        polylineOptions.customTexture = BitmapDescriptorFactory
+//                .fromAsset("icon_road_green_arrow.png")
+//        polylineOptions.isUseTexture = true
+//        //       自己划线前清空一下
+//        Log.e(" points.size:", " points.size:" + points.size)
+//
+//        points.forEachIndexed { index, it ->
+//            var traceLocation = TraceLocation(it.lat, it.lng, it.speed, it.direction, it.locationTime + 1)
+//            mTraceList.add(traceLocation)
+//
+//            //自己划线
+//            val latLng = LatLng(it.lat, it.lng)
+//
+//            polylineOptions.add(latLng)
+//            boundsBuilder.include(latLng)
+//            val markerOptions = MarkerOptions()
+//                    .position(latLng)
+//                    .title("时间：" + points[index].createdAt)
+//                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                            .decodeResource(resources, R.drawable.ic_analysis_worker_ing)))
+//            endMarkers.add(mAMap.addMarker(markerOptions))
+//        }
+//        val polyline = mAMap.addPolyline(polylineOptions)
+//        polylines.add(polyline)
+//        //移动到可视范围
+//        mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 16))
+//        if (points.isNotEmpty()) {
+//            // 起点
+//            val p = points[0]
+//            val latLng = LatLng(p.lat, p.lng)
+//            val markerOptions = MarkerOptions()
+//                    .position(latLng)
+//                    .title("时间：" + points[0].createdAt)
+//                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                            .decodeResource(resources, R.drawable.ic_analysis_worker_start)))
+//            endMarkers.add(mAMap.addMarker(markerOptions))
+//        }
+//        if (points.size > 1) {
+//            // 终点
+//            val p = points[points.size - 1]
+//            val latLng = LatLng(p.lat, p.lng)
+//            val markerOptions = MarkerOptions()
+//                    .position(latLng)
+//                    .title("时间：" + points[points.size - 1].createdAt)
+//                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                            .decodeResource(resources, R.drawable.ic_analysis_worker_stop)))
+//            endMarkers.add(mAMap.addMarker(markerOptions))
+//        }
+//    }
 
     /**
      * 绘制纠偏之后的轨迹
      */
-    private fun drawTracksOnMap(points: List<LatLng>) {
-        clearTracksOnMap()
-        val polylineOptions = PolylineOptions()
-        //  original.clear()
-        //  original.addAll(points)
-        polylineOptions.width(20f)
-        polylineOptions.customTexture = BitmapDescriptorFactory
-                .fromAsset("icon_road_green_arrow.png")
-        polylineOptions.isUseTexture = true
-        //       自己划线前清空一下
-        Log.e(" points.size:", " points.size:" + points.size)
-
-        points.forEachIndexed { index, latLng ->
-            //自己划线
-            polylineOptions.add(latLng)
-            boundsBuilder.include(latLng)
-
-            if (index > 0 && index % 10 == 0) {    // 每个10个点显示一次
-                val markerOptions = MarkerOptions()
-                        .position(latLng)
-//                    .title("时间：" + points[index].createdAt)
-                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                .decodeResource(resources, R.drawable.ic_analysis_worker_ing)))
-                endMarkers.add(mAMap.addMarker(markerOptions))
-            } else {
-                val markerOptions = MarkerOptions()
-                        .position(latLng)
-//                    .title("时间：" + points[index].createdAt)
-                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                .decodeResource(resources, R.drawable.awqe)))  // 添加一个透明的icon
-                endMarkers.add(mAMap.addMarker(markerOptions))
-            }
-        }
-        val polyline = mAMap.addPolyline(polylineOptions)
-        polylines.add(polyline)
-        //移动到可视范围
-        mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 16))
-        if (points.isNotEmpty()) {
-            // 起点
-            val latLng = points[0]
-            val markerOptions = MarkerOptions()
-                    .position(latLng)
-                    .title("时间：" + originalTraceList.get(0).createdAt)
-                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                            .decodeResource(resources, R.drawable.ic_analysis_worker_start)))
-            endMarkers.add(mAMap.addMarker(markerOptions))
-        }
-        if (points.size > 1) {
-            // 终点
-            val latLng = points[points.size - 1]
-            val markerOptions = MarkerOptions()
-                    .position(latLng)
-                    .title("时间：" + originalTraceList[originalTraceList.size - 1].createdAt)
-                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                            .decodeResource(resources, R.drawable.ic_analysis_worker_stop)))
-            endMarkers.add(mAMap.addMarker(markerOptions))
-        }
-    }
+//    private fun drawTracksOnMap(points: List<LatLng>) {
+//        clearTracksOnMap()
+//        val polylineOptions = PolylineOptions()
+//        //  original.clear()
+//        //  original.addAll(points)
+//        polylineOptions.width(20f)
+//        polylineOptions.customTexture = BitmapDescriptorFactory
+//                .fromAsset("icon_road_green_arrow.png")
+//        polylineOptions.isUseTexture = true
+//        //       自己划线前清空一下
+//        Log.e(" points.size:", " points.size:" + points.size)
+//
+//        points.forEachIndexed { index, latLng ->
+//            //自己划线
+//            polylineOptions.add(latLng)
+//            boundsBuilder.include(latLng)
+//
+//            if (index > 0 && index % 10 == 0) {    // 每个10个点显示一次
+//                val markerOptions = MarkerOptions()
+//                        .position(latLng)
+////                    .title("时间：" + points[index].createdAt)
+//                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                                .decodeResource(resources, R.drawable.ic_analysis_worker_ing)))
+//                endMarkers.add(mAMap.addMarker(markerOptions))
+//            } else {
+//                val markerOptions = MarkerOptions()
+//                        .position(latLng)
+////                    .title("时间：" + points[index].createdAt)
+//                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                                .decodeResource(resources, R.drawable.awqe)))  // 添加一个透明的icon
+//                endMarkers.add(mAMap.addMarker(markerOptions))
+//            }
+//        }
+//        val polyline = mAMap.addPolyline(polylineOptions)
+//        polylines.add(polyline)
+//        //移动到可视范围
+//        mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 16))
+//        if (points.isNotEmpty()) {
+//            // 起点
+//            val latLng = points[0]
+//            val markerOptions = MarkerOptions()
+//                    .position(latLng)
+//                    .title("时间：" + originalTraceList.get(0).createdAt)
+//                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                            .decodeResource(resources, R.drawable.ic_analysis_worker_start)))
+//            endMarkers.add(mAMap.addMarker(markerOptions))
+//        }
+//        if (points.size > 1) {
+//            // 终点
+//            val latLng = points[points.size - 1]
+//            val markerOptions = MarkerOptions()
+//                    .position(latLng)
+//                    .title("时间：" + originalTraceList[originalTraceList.size - 1].createdAt)
+//                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                            .decodeResource(resources, R.drawable.ic_analysis_worker_stop)))
+//            endMarkers.add(mAMap.addMarker(markerOptions))
+//        }
+//    }
 
 
     /**
@@ -376,7 +371,7 @@ class TraceRecordActivity : BaseActivity(), TraceListener {
      */
     override fun onRequestFailed(lineID: Int, errorInfo: String?) {
         Log.e("Trace", "onRequestFailed");
-        drawTrackOnMap(originalTraceList)
+//        drawTrackOnMap(originalTraceList)
     }
 
     /**
@@ -392,7 +387,7 @@ class TraceRecordActivity : BaseActivity(), TraceListener {
     override fun onFinished(lineID: Int, segments: MutableList<LatLng>?, distance: Int, waitingtime: Int) {
 
         Log.e("Trace", "onFinished:" + segments?.size + " === " + originalTraceList.size);
-        drawTracksOnMap(segments!!)
+//        drawTracksOnMap(segments!!)
     }
 
     /***

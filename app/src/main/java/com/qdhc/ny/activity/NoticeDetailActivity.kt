@@ -2,7 +2,7 @@ package com.qdhc.ny.activity
 
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bmob.Notice
+import com.qdhc.ny.entity.Notify
 import kotlinx.android.synthetic.main.activity_notice_detail.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
 
@@ -25,10 +25,10 @@ class NoticeDetailActivity : BaseActivity() {
     }
 
     override fun initData() {
-        var notice = intent.getSerializableExtra("notice") as Notice
+        var notice = intent.getSerializableExtra("notice") as Notify
 
         tv_title.text = notice.title
-        tv_time.text = notice.createdAt.substring(0,10)
+//        tv_time.text = notice.createdAt.substring(0,10)
         tv_content.text = notice.content
     }
 

@@ -64,6 +64,7 @@ class ProjectInfoListFragment : BaseFragment() {
         detailsIv.setOnClickListener {
             if (project != null) {
                 var intent = Intent(context, RegionProjectDetailsActivity::class.java)
+                intent.putExtra("project", project)
                 intent.putExtra("subProjects", subProjectList)
                 startActivity(intent)
             } else {

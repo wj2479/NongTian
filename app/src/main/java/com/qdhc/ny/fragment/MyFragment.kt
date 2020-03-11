@@ -2,7 +2,6 @@ package com.qdhc.ny.fragment
 
 import android.app.Activity
 import android.content.Intent
-import cn.bmob.v3.BmobUser
 import com.qdhc.ny.LoginActivity
 import com.qdhc.ny.R
 import com.qdhc.ny.activity.*
@@ -80,7 +79,6 @@ class MyFragment : BaseFragment() {
      * 退出
      */
     fun logOut() {
-        BmobUser.logOut();
         ProjectData.getInstance().release()
         startActivity(Intent(activity, LoginActivity::class.java))
         AcitityManagerUtil.getInstance().finishAllActivity()

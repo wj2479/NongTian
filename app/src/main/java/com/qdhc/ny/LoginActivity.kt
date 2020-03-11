@@ -160,8 +160,8 @@ class LoginActivity : BaseActivity() {
         CrashReport.setUserId(user.userName)
 
         when (user.role.code) {
-            Role.TYPE_USER -> startActivity(Intent(mContext, MainActivity::class.java))
-            Role.TYPE_MANAGER -> startActivity(Intent(mContext, Main3Activity::class.java))
+            Role.CODE.SUPERVISOR.value -> startActivity(Intent(mContext, MainActivity::class.java)) // 监理角色
+            else -> startActivity(Intent(mContext, Main3Activity::class.java))
         }
 
     }

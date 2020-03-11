@@ -365,6 +365,12 @@ class MainActivity : BaseActivity() {
         if (null != location) {
             //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
             if (location.errorCode == 0) {
+
+                Log.e("AMAP", "编码:" + location.cityCode + "  " + location.adCode)
+
+                getWeather(location.adCode)
+
+
                 if (location.accuracy > MAX_ACCURACY) {
                     Log.e("AMAP", "定位精度误差:" + location.accuracy + "米")
                     return@AMapLocationListener
@@ -453,6 +459,39 @@ class MainActivity : BaseActivity() {
                         { throwable ->
                             throwable.printStackTrace()
                         })
+    }
+
+    var isget = false
+
+    private fun getWeather(code: String) {
+
+        if (!isget) {
+            var params: HashMap<String, Any> = HashMap()
+            params["city"] = code
+            params["key"] = "eb11935d19133c09530dc67e63cb1393"
+            // 可选值：base/all
+            // base:返回实况天气
+            // all:返回预报天气
+            params["extensions"] = "all"
+
+            RxRestClient.create()
+                    .url("https://restapi.amap.com/v3/weather/weatherInfo")
+                    .params(params)
+                    .build()
+                    .get()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            { result ->
+                                Log.e("TAG", "天气:" + result)
+
+                            },
+                            { throwable ->
+                                throwable.printStackTrace()
+                            })
+            isget = true;
+        }
+
     }
 
 

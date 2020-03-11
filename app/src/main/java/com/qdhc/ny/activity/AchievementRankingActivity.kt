@@ -10,7 +10,7 @@ import com.qdhc.ny.R
 import com.qdhc.ny.adapter.AchievementAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.HttpResultList
-import com.qdhc.ny.bmob.UserInfo
+import com.qdhc.ny.entity.User
 import com.sj.core.net.RestClient
 import com.sj.core.net.callback.IRequest
 import com.sj.core.utils.GsonUtil
@@ -36,7 +36,7 @@ class AchievementRankingActivity : BaseActivity() {
         initRefresh()
     }
 
-    var datas = ArrayList<UserInfo>()
+    var datas = ArrayList<User>()
     lateinit var mAdapter: AchievementAdapter
     private fun initRefresh() {
         main_srl.setOnRefreshListener {
@@ -56,8 +56,8 @@ class AchievementRankingActivity : BaseActivity() {
         smrw.setLoadMoreListener {
             getDatas(false)
         }
-        mAdapter = AchievementAdapter(mContext, datas)
-        smrw.adapter = mAdapter
+//        mAdapter = AchievementAdapter(mContext, datas)
+//        smrw.adapter = mAdapter
 
 
     }
@@ -100,8 +100,8 @@ class AchievementRankingActivity : BaseActivity() {
 
                     }
                 }).success {
-                    var data = GsonUtil.getInstance().fromJson<HttpResultList<UserInfo>>(it,
-                            object : TypeToken<HttpResultList<UserInfo>>() {}.type)
+                    var data = GsonUtil.getInstance().fromJson<HttpResultList<User>>(it,
+                            object : TypeToken<HttpResultList<User>>() {}.type)
                     if (data.isSuccess) {
                         if (page == 1) {
                             datas.clear()
