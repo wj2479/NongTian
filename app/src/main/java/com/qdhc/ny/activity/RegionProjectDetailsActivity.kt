@@ -65,7 +65,7 @@ class RegionProjectDetailsActivity : BaseActivity() {
 
             var project = projectList.get(position)
             var intent = Intent(this, RegionProjectListActivity::class.java)
-            intent.putExtra("regionProject", project)
+            intent.putExtra("project", project)
             startActivity(intent)
         }
 

@@ -3,13 +3,10 @@ package com.qdhc.ny.fragment
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Handler
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
+import com.luck.picture.lib.permissions.RxPermissions
 import com.qdhc.ny.activity.CameraActivity
 import com.qdhc.ny.activity.ProjectInfoActivity
 import com.qdhc.ny.activity.UpdateDailyReportActivity
@@ -52,7 +49,11 @@ class JianliFragment : BaseFragment() {
     override fun initClick() {
         cameraIv.setOnClickListener {
             if (project != null) {
-                getPermissions()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions()
+                } else {
+                    startActivityForResult(Intent(activity!!, CameraActivity::class.java), 100);
+                }
             } else {
                 ToastUtil.show(context, "您还没有项目")
             }
@@ -139,8 +140,6 @@ class JianliFragment : BaseFragment() {
         super.onResume()
     }
 
-    val mHandler = Handler()
-
     override fun lazyLoad() {
     }
 
@@ -208,30 +207,6 @@ class JianliFragment : BaseFragment() {
                         })
     }
 
-    val GET_PERMISSION_REQUEST = 100; //权限申请自定义码
-
-    private fun getPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager
-                            .PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(context!!, Manifest.permission.RECORD_AUDIO) == PackageManager
-                            .PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(context!!, Manifest.permission.CAMERA) == PackageManager
-                            .PERMISSION_GRANTED) {
-                startActivityForResult(Intent(activity, CameraActivity::class.java), 100);
-            } else {
-                //不具有获取权限，需要进行权限申请
-                ActivityCompat.requestPermissions(activity!!, arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.CAMERA
-                ), GET_PERMISSION_REQUEST);
-            }
-        } else {
-            startActivityForResult(Intent(activity!!, CameraActivity::class.java), 100);
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("TAG", "onActivityResult--> " + resultCode)
@@ -247,36 +222,67 @@ class JianliFragment : BaseFragment() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == GET_PERMISSION_REQUEST) {
-            var size = 0;
-            if (grantResults.size >= 1) {
-                var writeResult = grantResults[0];
-                //读写内存权限
-                var writeGranted = writeResult == PackageManager.PERMISSION_GRANTED;//读写内存权限
-                if (!writeGranted) {
-                    size++;
+    /**
+     * 检查定位权限
+     */
+    private fun requestPermissions() {
+        var rxPermission = RxPermissions(activity!!)
+
+        rxPermission.requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.CAMERA
+        ).subscribe({ permission ->
+            if (permission.granted) {
+                // 用户已经同意该权限
+                Log.e("TAG", permission.name + " is granted.")
+                if (permission.name.equals(Manifest.permission.CAMERA)) {
+                    startActivityForResult(Intent(activity!!, CameraActivity::class.java), 100);
                 }
-                //录音权限
-                var recordPermissionResult = grantResults[1];
-                var recordPermissionGranted = recordPermissionResult == PackageManager.PERMISSION_GRANTED;
-                if (!recordPermissionGranted) {
-                    size++;
-                }
-                //相机权限
-                var cameraPermissionResult = grantResults[2];
-                var cameraPermissionGranted = cameraPermissionResult == PackageManager.PERMISSION_GRANTED;
-                if (!cameraPermissionGranted) {
-                    size++;
-                }
-                if (size == 0) {
-                    startActivityForResult(Intent(activity, CameraActivity::class.java), 100);
-                } else {
-                    Toast.makeText(activity, "请到设置-权限管理中开启", Toast.LENGTH_SHORT).show();
-                }
+            } else if (permission.shouldShowRequestPermissionRationale) {
+                // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框
+                ToastUtil.show(activity!!, "拒绝了该权限，没有选中『不再询问』")
+
+                Log.e("TAG", permission.name + " is denied. More info should be provided.")
+            } else {
+                // 用户拒绝了该权限，而且选中『不再询问』
+                ToastUtil.show(activity!!, "拒绝了该权限，而且选中『不再询问』")
+
+                Log.e("TAG", permission.name + " is denied.")
             }
+
+        })
+    }
+
+    var isget = false
+    private fun getWeather(code: String) {
+
+        if (!isget) {
+            var params: HashMap<String, Any> = HashMap()
+            params["city"] = code
+            params["key"] = "eb11935d19133c09530dc67e63cb1393"
+            // 可选值：base/all
+            // base:返回实况天气
+            // all:返回预报天气
+            params["extensions"] = "all"
+
+            RxRestClient.create()
+                    .url("https://restapi.amap.com/v3/weather/weatherInfo")
+                    .params(params)
+                    .build()
+                    .get()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            { result ->
+                                Log.e("TAG", "天气:" + result)
+
+                            },
+                            { throwable ->
+                                throwable.printStackTrace()
+                            })
+            isget = true;
         }
+
     }
 
 

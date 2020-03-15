@@ -15,6 +15,7 @@ import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TagLabel
 import com.qdhc.ny.entity.DailyReport
 import com.qdhc.ny.entity.Project
+import com.qdhc.ny.entity.Role
 import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.net.Rx.RxRestClient
@@ -158,9 +159,9 @@ class ProjectInfoActivity : BaseActivity() {
         checkBtnShow(project.process)
         scheduleTv.text = project.process.toString() + "%"
 
-//        if (userInfo.role > 1) {
-//            commentButLayout.visibility = View.GONE
-//        }
+        if (userInfo.role.code != Role.CODE.SUPERVISOR.value) {
+            commentButLayout.visibility = View.GONE
+        }
 
         getProjectTarget(project.id)
         initCreateProcess()

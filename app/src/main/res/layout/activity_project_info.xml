@@ -57,7 +57,8 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp_8">
+                    android:padding="@dimen/dp_8"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -83,7 +84,8 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp_8">
+                    android:padding="@dimen/dp_8"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"

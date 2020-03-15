@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.OrgInfoAdapter
@@ -50,12 +51,19 @@ class NotifyPublishActivity : BaseActivity() {
 
     var total = 0
 
+    lateinit var emptyView: View
+
     override fun intiLayout(): Int {
         return R.layout.activity_notify_publish
     }
 
     override fun initView() {
         title_tv_title.text = "发布通知"
+
+        emptyView = layoutInflater.inflate(R.layout.common_empty, null)
+        emptyView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT)
+        emptyView.findViewById<TextView>(R.id.tv_empty).text = "没有找到接收人"
     }
 
     override fun initClick() {
@@ -160,6 +168,7 @@ class NotifyPublishActivity : BaseActivity() {
                 .subscribe(
                         { result ->
                             var json = JSONObject(result)
+                            Log.e("Notify", "Result:" + result)
                             if (json.getInt("code") == 1000) {
                                 var jArray = json.getJSONArray("result")
                                 var nodeList = ArrayList<UserAreaTreeNode>()
@@ -171,11 +180,17 @@ class NotifyPublishActivity : BaseActivity() {
                                 treeNode.childs = nodeList
 
                                 total = TreeNodeHelper.getChildCount(treeNode)
+                                // 如果没有数据
+                                if (total == 0) {
+                                    contactLayout.removeAllViews()
+                                    contactLayout.addView(emptyView)
+                                }
+
                                 updateCountTv()
-                                Log.e("TAG", "成功:" + gson.toJson(treeNode))
+                                Log.e("Notify", "成功:" + gson.toJson(treeNode))
 
                             } else {
-                                Log.e("TAG", "失败:" + result)
+                                Log.e("Notify", "失败:" + result)
                             }
 
                         },
@@ -218,6 +233,7 @@ class NotifyPublishActivity : BaseActivity() {
             }
         })
         smrw.adapter = mAdapter
+
     }
 
     /**
@@ -273,6 +289,9 @@ class NotifyPublishActivity : BaseActivity() {
         }
     }
 
+    /**
+     * 更新选中条数的对话框
+     */
     fun updateCountTv() {
         var sb = StringBuilder()
         sb.append("已选择").append(TreeNodeHelper.getSelectedNodes(treeNode).size).append("人")

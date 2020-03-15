@@ -20,7 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="vertical"
             android:padding="@dimen/dp_8">
 
@@ -31,8 +31,82 @@
                 android:gravity="center"
                 android:text="高标准农田建设"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="@dimen/textsize_9" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/helloTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textsize_10"
+                        android:visibility="visible"></TextView>
+
+                    <TextView
+                        android:id="@+id/dateTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textsize_8"
+                        android:visibility="visible"></TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:minWidth="@dimen/dp_80"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tempTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="1"
+                        android:gravity="top|center_horizontal"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textsize_13"
+                        android:textStyle="bold"
+                        android:hint="--"
+                        android:textColorHint="@color/white"
+                        android:visibility="visible"></TextView>
+
+                    <TextView
+                        android:id="@+id/weatherTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textsize_6"
+                        android:visibility="visible"></TextView>
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -49,15 +123,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginBottom="@dimen/dp_4"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/dp_4">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_40"
-                    android:src="@mipmap/rectle_cornors_9"
-                    android:layout_marginLeft="@dimen/dp_8"></ImageView>
+                    android:layout_marginLeft="@dimen/dp_8"
+                    android:src="@mipmap/rectle_cornors_9"></ImageView>
 
                 <TextView
                     android:id="@+id/tv_district"
@@ -68,7 +142,7 @@
                     android:text="下级进度表"
                     android:textColor="@color/themecolor"
                     android:textSize="@dimen/textsize_8"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -120,16 +194,16 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
+            android:gravity="center"
             android:padding="@dimen/dp_12"
-            android:gravity="center">
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/detailsIv"
                 android:layout_width="@dimen/dp_250"
                 android:layout_height="@dimen/dp_65"
                 android:layout_gravity="center_horizontal"
-                android:src="@mipmap/project_details">
-            </ImageView>
+                android:src="@mipmap/project_details"></ImageView>
         </LinearLayout>
 
     </LinearLayout>

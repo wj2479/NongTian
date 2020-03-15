@@ -77,9 +77,11 @@ public class TreeNodeHelper {
 
         if (treeNode.getArea().getRegionLevel() == 4) {
             // 如果没有节点就代表是最后一层  将所有的监理取出来
-            for (SelectUser userInfo : treeNode.getChilds().get(0).getUserInfos()) {
-                if (userInfo.isSelected())
-                    selectedNodes.add(userInfo);
+            if (treeNode.getChilds() != null && treeNode.getChilds().size() > 0) {
+                for (SelectUser userInfo : treeNode.getChilds().get(0).getUserInfos()) {
+                    if (userInfo.isSelected())
+                        selectedNodes.add(userInfo);
+                }
             }
             return selectedNodes;
         }
@@ -113,7 +115,7 @@ public class TreeNodeHelper {
 
         if (treeNode.getArea().getRegionLevel() == 4) {
             // 如果没有节点就代表是最后一层  将所有的监理取出来
-            if (treeNode.getChilds().size() > 0) {
+            if (treeNode.getChilds() != null && treeNode.getChilds().size() > 0) {
                 for (SelectUser userInfo : treeNode.getChilds().get(0).getUserInfos()) {
                     userInfo.setSelected(select);
                     expandChildren.add(userInfo);

@@ -15,31 +15,33 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class RxBus {
     private Set<Object> subscribers;
+
     /**
      * 注册
      */
-    public synchronized void register(Object subscriber){
+    public synchronized void register(Object subscriber) {
         subscribers.add(subscriber);
     }
+
     /**
      * 取消注册
      */
-    public synchronized void unRegister(Object subscriber){
+    public synchronized void unRegister(Object subscriber) {
         subscribers.remove(subscriber);
     }
 
-
-
     private static volatile RxBus instance;
-    private RxBus(){
+
+    private RxBus() {
         //读写分离的集合
-        subscribers=new CopyOnWriteArraySet<>();
+        subscribers = new CopyOnWriteArraySet<>();
     }
-    public static synchronized RxBus getInstance(){
-        if(instance==null){
-            synchronized (RxBus.class){
-                if(instance==null){
-                    instance=new RxBus();
+
+    public static synchronized RxBus getInstance() {
+        if (instance == null) {
+            synchronized (RxBus.class) {
+                if (instance == null) {
+                    instance = new RxBus();
                 }
             }
         }
@@ -48,9 +50,8 @@ public class RxBus {
 
     /**
      * 把处理过程包装起来
-     *
      */
-    public void chainProcess(Function function){
+    public void chainProcess(Function function) {
         Observable.just("")
                 .subscribeOn(Schedulers.io())
                 .map(function)//在这里进行网络访问
@@ -59,7 +60,7 @@ public class RxBus {
                     @Override
                     public void accept(Object data) throws Exception {
                         //data会传送到总线上
-                        if(data==null){
+                        if (data == null) {
                             return;
                         }
                         send(data);//把数据送到P层
@@ -67,11 +68,12 @@ public class RxBus {
                 });
 
     }
-    public void send(Object data){
-        for(Object subscriber:subscribers){
+
+    public void send(Object data) {
+        for (Object subscriber : subscribers) {
             //扫描注解,将数据发送到注册的对象标记方法的位置
             //subscriber表示层
-            callMethodByAnnotion(subscriber,data);
+            callMethodByAnnotion(subscriber, data);
         }
     }
 
@@ -82,7 +84,7 @@ public class RxBus {
     private void callMethodByAnnotion(Object target, Object data) {
         //1.得到presenter中写的所有的方法
         Method[] methodArray = target.getClass().getDeclaredMethods();
-        for(int i=0;i<methodArray.length;i++){
+        for (int i = 0; i < methodArray.length; i++) {
             try {
                 if (methodArray[i].getAnnotation(RegisterRxBus.class) != null) {
                     //如果哪个方法上用了我们写的注解
@@ -93,7 +95,7 @@ public class RxBus {
                         methodArray[i].invoke(target, new Object[]{data});
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

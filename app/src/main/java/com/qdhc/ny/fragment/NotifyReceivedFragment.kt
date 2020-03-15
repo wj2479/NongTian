@@ -63,7 +63,7 @@ class NotifyReceivedFragment : BaseFragment() {
 
         // RecyclerView Item点击监听。
         smrw.setSwipeItemClickListener { itemView, position ->
-            if (notifyReceivers.size < position) {
+            if (notifyReceivers.size <= position) {
                 return@setSwipeItemClickListener
             }
             var notifyReceiver = notifyReceivers[position]

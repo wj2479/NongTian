@@ -59,6 +59,9 @@ class NotifyPublishFragment : BaseFragment() {
 
         // RecyclerView Item点击监听。
         smrw.setSwipeItemClickListener { itemView, position ->
+            if (datas.size <= position) {
+                return@setSwipeItemClickListener
+            }
             var notify = datas[position]
             var intent = Intent(context, NotifyDetailActivity::class.java)
             intent.putExtra("notify", notify)

@@ -6,8 +6,6 @@ import java.io.Serializable;
  * 用户角色对象
  */
 public class Role implements Serializable {
-
-
     /**
      * 角色级别
      */

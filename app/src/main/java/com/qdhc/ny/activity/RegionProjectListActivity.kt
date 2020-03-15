@@ -14,6 +14,7 @@ import com.qdhc.ny.entity.Project
 import com.sj.core.net.Rx.RxRestClient
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_region_project_list.*
 import kotlinx.android.synthetic.main.activity_sign_in_sear.smrw
@@ -42,13 +43,16 @@ class RegionProjectListActivity : BaseActivity() {
     }
 
     override fun initData() {
-        if (intent.hasExtra("regionProject")) {
-            project = intent.getSerializableExtra("regionProject") as Project
+        if (intent.hasExtra("project")) {
+            project = intent.getSerializableExtra("project") as Project
 
             tv_title.text = project.name + "工程列表"
 
-            getSubProjects(project.id)
-
+            if (intent.hasExtra("subProject")) {
+                projectList = intent.getSerializableExtra("subProject") as ArrayList<Project>
+            } else {
+                getSubProjects(project.id)
+            }
             initRefresh()
         }
     }
@@ -65,9 +69,7 @@ class RegionProjectListActivity : BaseActivity() {
             }
 //
             var project = projectList.get(position)
-            var intent = Intent(this, ProjectInfoActivity::class.java)
-            intent.putExtra("project", project)
-            startActivity(intent)
+            getClickSubProjects(project)
         }
 
         mAdapter = ProjectAdapter(this, projectList)
@@ -80,6 +82,9 @@ class RegionProjectListActivity : BaseActivity() {
         mAdapter.emptyView = emptyView
     }
 
+    /**
+     * 获取项目的子项目
+     */
     fun getSubProjects(pid: Int) {
         var params: HashMap<String, Any> = HashMap()
         params["pid"] = pid
@@ -111,6 +116,57 @@ class RegionProjectListActivity : BaseActivity() {
                         { throwable ->
                             throwable.printStackTrace()
                         })
+    }
+
+    fun getClickSubProjects(project: Project) {
+        getSubProjects(project.id, object : Consumer<String> {
+            override fun accept(result: String?) {
+                var json = JSONObject(result)
+                if (json.getInt("code") == 1000) {
+                    var jArray = json.getJSONArray("result")
+                    Log.e("TAG", "请求22成功:" + jArray.toString())
+                    var subProjectList = ArrayList<Project>()
+                    for (index in 0 until jArray.length()) {
+                        val jsonObject = jArray.getJSONObject(index)
+                        val project = gson.fromJson(jsonObject.toString(), Project::class.java)
+                        subProjectList.add(project)
+                    }
+
+                    var intent = Intent()
+                    intent.putExtra("project", project)
+                    if (subProjectList.size == 0) {
+                        intent.setClass(this@RegionProjectListActivity, ProjectInfoActivity::class.java)
+                    } else {
+                        intent.setClass(this@RegionProjectListActivity, RegionProjectListActivity::class.java)
+                        intent.putExtra("subProject", subProjectList)
+                    }
+                    startActivity(intent)
+                } else {
+                    Log.e("TAG", "请求22失败:" + result)
+                }
+            }
+        }, object : Consumer<Throwable> {
+            override fun accept(t: Throwable?) {
+                t?.printStackTrace()
+            }
+        })
+    }
+
+
+    /**
+     * 获取项目的子项目
+     */
+    fun getSubProjects(pid: Int, onNext: Consumer<String>, onError: Consumer<Throwable>) {
+        var params: HashMap<String, Any> = HashMap()
+        params["pid"] = pid
+        RxRestClient.create()
+                .url("project/getSubProjectsByParentId")
+                .params(params)
+                .build()
+                .get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onNext, onError)
     }
 
 

@@ -8,20 +8,16 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.text.Html
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
-import android.widget.Toast
 import com.amap.api.location.*
 import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.model.LatLng
@@ -29,10 +25,8 @@ import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.google.gson.Gson
 import com.luck.picture.lib.permissions.RxPermissions
-import com.qdhc.ny.activity.CameraActivity
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.base.BaseApplication
 import com.qdhc.ny.bean.TabIconBean
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.common.ProjectData
@@ -75,12 +69,17 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initData() {
+
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         UpadateManager.checkVersion(this)
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions()
         }
     }
 
+    /**
+     * 检查定位权限
+     */
     private fun requestPermissions() {
         var rxPermission = RxPermissions(this)
 
@@ -92,19 +91,20 @@ class MainActivity : BaseActivity() {
         ).subscribe({ permission ->
             if (permission.granted) {
                 // 用户已经同意该权限
-                Log.d("", permission.name + " is granted.")
+                Log.e("TAG", permission.name + " is granted.")
                 if (permission.name.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+//                    initLocation()
                 }
             } else if (permission.shouldShowRequestPermissionRationale) {
                 // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框
                 ToastUtil.show(mContext, "拒绝了该权限，没有选中『不再询问』")
 
-                Log.d("", permission.name + " is denied. More info should be provided.")
+                Log.e("TAG", permission.name + " is denied. More info should be provided.")
             } else {
                 // 用户拒绝了该权限，而且选中『不再询问』
                 ToastUtil.show(mContext, "拒绝了该权限，而且选中『不再询问』")
 
-                Log.d("", permission.name + " is denied.")
+                Log.e("TAG", permission.name + " is denied.")
             }
 
         })
@@ -139,12 +139,8 @@ class MainActivity : BaseActivity() {
         if (SharedPreferencesUtil.get(mContext, Constant.NOTICE) != "true") {
             initDialog()
         }
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        initLocation()
-        locationClient.disableBackgroundLocation(true)
-        if (Build.VERSION.SDK_INT >= 26) {
-            locationClient.enableBackgroundLocation(2001, buildNotification())
-        }
+
+
     }
 
     private fun initDialog() {
@@ -233,92 +229,29 @@ class MainActivity : BaseActivity() {
         vp.setNoScroll(true)
     }
 
-    /**
-     * 获取权限
-     */
-    private fun getPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager
-                            .PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager
-                            .PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager
-                            .PERMISSION_GRANTED) {
-                startActivityForResult(Intent(this, CameraActivity::class.java), 100);
-            } else {
-                //不具有获取权限，需要进行权限申请
-                ActivityCompat.requestPermissions(this, arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.CAMERA
-                ), GET_PERMISSION_REQUEST);
-            }
-        } else {
-            startActivityForResult(Intent(this, CameraActivity::class.java), 100);
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == GET_PERMISSION_REQUEST) {
-            var size = 0;
-            if (grantResults.size >= 1) {
-                var writeResult = grantResults[0];
-                //读写内存权限
-                var writeGranted = writeResult == PackageManager.PERMISSION_GRANTED;//读写内存权限
-                if (!writeGranted) {
-                    size++;
-                }
-                //录音权限
-                var recordPermissionResult = grantResults[1];
-                var recordPermissionGranted = recordPermissionResult == PackageManager.PERMISSION_GRANTED;
-                if (!recordPermissionGranted) {
-                    size++;
-                }
-                //相机权限
-                var cameraPermissionResult = grantResults[2];
-                var cameraPermissionGranted = cameraPermissionResult == PackageManager.PERMISSION_GRANTED;
-                if (!cameraPermissionGranted) {
-                    size++;
-                }
-                if (size == 0) {
-                    startActivityForResult(Intent(this, CameraActivity::class.java), 100);
-                } else {
-                    Toast.makeText(this, "请到设置-权限管理中开启", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-
-
     override fun onResume() {
         super.onResume()
-        locationClient.startLocation()
-        //切入前台后关闭后台定位功能
-        if (null != locationClient) {
-            locationClient.disableBackgroundLocation(true)
-        }
     }
-
 
     override fun onStop() {
         super.onStop()
-        val isBackground = (application as BaseApplication).isBackground
-        //如果app已经切入到后台，启动后台定位功能
-//        Log.e("location_main",""+isBackground)
-//        if (isBackground) {
-//            if (null != locationClient) {
-//                Log.e("location_main1","11111111")
-//                locationClient.enableBackgroundLocation(2001, buildNotification())
-//            }
+//        val isBackground = (application as BaseApplication).isBackground
+//        //如果app已经切入到后台，启动后台定位功能
+////        Log.e("location_main",""+isBackground)
+////        if (isBackground) {
+////            if (null != locationClient) {
+////                Log.e("location_main1","11111111")
+////                locationClient.enableBackgroundLocation(2001, buildNotification())
+////            }
+////        }
+//        if (Build.VERSION.SDK_INT >= 26) {
+//            locationClient.enableBackgroundLocation(2001, buildNotification())
 //        }
-        if (Build.VERSION.SDK_INT >= 26) {
-            locationClient.enableBackgroundLocation(2001, buildNotification())
-        }
     }
 
     lateinit var locationClient: AMapLocationClient
     lateinit var locationOption: AMapLocationClientOption
+    fun isLocationClientInited() = ::locationClient.isInitialized
 
     fun initLocation() {
         //初始化client
@@ -328,7 +261,8 @@ class MainActivity : BaseActivity() {
         locationClient.setLocationOption(locationOption)
         // 设置定位监听
         locationClient.setLocationListener(locationListener)
-        startLocation()
+        // 启动定位
+        locationClient.startLocation()
     }
 
     /**
@@ -366,10 +300,7 @@ class MainActivity : BaseActivity() {
             //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
             if (location.errorCode == 0) {
 
-                Log.e("AMAP", "编码:" + location.cityCode + "  " + location.adCode)
-
-                getWeather(location.adCode)
-
+                Log.e("AMAP", "定位:" + location.address)
 
                 if (location.accuracy > MAX_ACCURACY) {
                     Log.e("AMAP", "定位精度误差:" + location.accuracy + "米")
@@ -388,7 +319,7 @@ class MainActivity : BaseActivity() {
                     }
                 }
 
-                uploadTrack(userInfo.id, location)
+//                uploadTrack(userInfo.id, location)
 
                 ProjectData.getInstance().location = location
             }
@@ -461,40 +392,6 @@ class MainActivity : BaseActivity() {
                         })
     }
 
-    var isget = false
-
-    private fun getWeather(code: String) {
-
-        if (!isget) {
-            var params: HashMap<String, Any> = HashMap()
-            params["city"] = code
-            params["key"] = "eb11935d19133c09530dc67e63cb1393"
-            // 可选值：base/all
-            // base:返回实况天气
-            // all:返回预报天气
-            params["extensions"] = "all"
-
-            RxRestClient.create()
-                    .url("https://restapi.amap.com/v3/weather/weatherInfo")
-                    .params(params)
-                    .build()
-                    .get()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { result ->
-                                Log.e("TAG", "天气:" + result)
-
-                            },
-                            { throwable ->
-                                throwable.printStackTrace()
-                            })
-            isget = true;
-        }
-
-    }
-
-
     override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
         return if (event!!.keyCode == KeyEvent.KEYCODE_BACK) {
 //            var intent =  Intent()
@@ -505,7 +402,6 @@ class MainActivity : BaseActivity() {
         } else {
             super.dispatchKeyEvent(event)
         }
-
     }
 
     /**
@@ -530,20 +426,6 @@ class MainActivity : BaseActivity() {
         return str;
     }
 
-
-    /**
-     * 开始定位
-     *
-     * @since 2.8.0
-     * @author hongming.wang
-     */
-    private fun startLocation() {
-        // 设置定位参数
-        locationClient.setLocationOption(locationOption)
-        // 启动定位
-        locationClient.startLocation()
-    }
-
     private val NOTIFICATION_CHANNEL_NAME = "BackgroundLocation"
     lateinit var notificationManager: NotificationManager
     var isCreateChannel = false
@@ -553,12 +435,11 @@ class MainActivity : BaseActivity() {
 
         var builder: NotificationCompat.Builder
         var notification: Notification
-        if (android.os.Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= 26) {
             //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
 //            if (null == notificationManager) {
 //                notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//
-//            }
+////            }
             var channelId = packageName
             if (!isCreateChannel) {
                 var notificationChannel = NotificationChannel(channelId,
@@ -574,27 +455,16 @@ class MainActivity : BaseActivity() {
             builder = NotificationCompat.Builder(applicationContext)
         }
         builder.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("工程监理系统")
+                .setContentTitle("高标农田系统")
                 .setContentText("正在后台运行")
                 .setWhen(System.currentTimeMillis())
 
-        if (android.os.Build.VERSION.SDK_INT >= 16) {
+        if (Build.VERSION.SDK_INT >= 16) {
             notification = builder.build()
         } else {
             return builder.build()
         }
         return notification
-    }
-
-    /**
-     * 停止定位
-     *
-     * @since 2.8.0
-     * @author hongming.wang
-     */
-    private fun stopLocation() {
-        // 停止定位
-        locationClient.stopLocation()
     }
 
     /**
@@ -604,14 +474,14 @@ class MainActivity : BaseActivity() {
      * @author hongming.wang
      */
     private fun destroyLocation() {
-        if (null != locationClient) {
+        if (isLocationClientInited() && null != locationClient) {
             /**
              * 如果AMapLocationClient是在当前Activity实例化的，
              * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
              */
+            // 停止定位
+            locationClient.stopLocation()
             locationClient.onDestroy()
-//            locationClient = null
-//            locationOption = null
         }
     }
 

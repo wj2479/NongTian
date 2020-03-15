@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.qdhc.ny.R;
 import com.zyao89.view.zloading.ZLoadingDialog;
 import com.zyao89.view.zloading.Z_TYPE;
 
@@ -136,9 +137,9 @@ public abstract class BaseFragment extends Fragment {
         if (mDialog == null) {
             mDialog = new ZLoadingDialog(getContext());
             mDialog.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)//设置类型
-                    .setLoadingColor(Color.parseColor("#174c92"))//颜色
+                    .setLoadingColor(getResources().getColor(R.color.themecolor))//颜色
                     .setHintTextSize(16) // 设置字体大小 dp
-                    .setHintTextColor(Color.parseColor("#174c92"))  // 设置字体颜色
+                    .setHintTextColor(getResources().getColor(R.color.themecolor))  // 设置字体颜色
                     .setDurationTime(0.8) // 设置动画时间百分比 - 0.5倍
                     .setDialogBackgroundColor(Color.parseColor("#FFFFFF")) // 设置背景色，默认白色
                     .setCancelable(false);

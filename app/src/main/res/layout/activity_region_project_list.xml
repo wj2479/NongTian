@@ -37,7 +37,7 @@
                 android:gravity="center"
                 android:text="高标准农田建设"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="@dimen/textsize_9" />
 
         </RelativeLayout>
 

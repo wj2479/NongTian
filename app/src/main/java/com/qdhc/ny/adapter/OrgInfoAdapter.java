@@ -61,7 +61,11 @@ public class OrgInfoAdapter extends RecyclerView.Adapter<OrgInfoAdapter.ViewHold
             return 0;
         } else {
             if (treeNode.getArea().getRegionLevel() == 4) {
-                return treeNode.getChilds().get(0).getUserInfos().size() + treeNode.getUserInfos().size();
+                if (treeNode.getChilds().size() > 0) {
+                    return treeNode.getChilds().get(0).getUserInfos().size() + treeNode.getUserInfos().size();
+                } else {
+                    return treeNode.getUserInfos().size();
+                }
             } else {
                 return treeNode.getChilds().size() + treeNode.getUserInfos().size();
             }
