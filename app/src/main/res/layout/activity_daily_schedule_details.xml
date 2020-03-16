@@ -1,14 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_250"
         android:background="@mipmap/manager_back_ground"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/mLayout"
@@ -17,30 +16,38 @@
         android:orientation="vertical"
         android:padding="@dimen/dp_5">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:orientation="vertical"
             android:padding="@dimen/dp_8">
 
-            <ImageView
-                android:id="@+id/backIv"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/icon_back"></ImageView>
-
-            <TextView
-                android:id="@+id/tv_title"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="高标准农田建设"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textsize_9" />
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_8">
 
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/backIv"
+                    android:layout_width="@dimen/dp_16"
+                    android:layout_height="@dimen/dp_16"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/icon_back"></ImageView>
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="高标准农田建设"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/textsize_9" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/projectLayout"
@@ -72,24 +79,30 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_8"
                     android:layout_marginRight="@dimen/dp_8"
-                    android:text="进度详情"
+                    android:text="记录列表"
                     android:textColor="@color/themecolor"
                     android:textSize="@dimen/textsize_8"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
-            <include layout="@layout/header_region_project"></include>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_8"
+                android:background="@color/line_waw">
 
-            <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-                android:id="@+id/smrw"
+            </View>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rlv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/dp_4"
-                android:background="@drawable/corners_light_orange_bg" />
-
+                android:overScrollMode="never" />
         </LinearLayout>
 
     </LinearLayout>
+
 
 </RelativeLayout>

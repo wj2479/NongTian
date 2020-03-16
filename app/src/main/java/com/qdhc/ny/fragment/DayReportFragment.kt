@@ -2,14 +2,12 @@ package com.qdhc.ny.fragment
 
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.ViewGroup
 import android.widget.TextView
 import com.qdhc.ny.R
-import com.qdhc.ny.activity.DailyReportDetailsActivity
 import com.qdhc.ny.adapter.DailyReportAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.entity.DailyReport
@@ -57,9 +55,9 @@ class DayReportFragment(project: Project) : BaseFragment() {
         smrw.setSwipeItemClickListener { itemView, position ->
             if (reports.size > position) {
                 var report = reports[position]
-                var intent = Intent(context, DailyReportDetailsActivity::class.java)
-                intent.putExtra("report", report)
-                startActivity(intent)
+//                var intent = Intent(context, DailyReportDetailsActivity::class.java)
+//                intent.putExtra("report", report)
+//                startActivity(intent)
             }
         }
 

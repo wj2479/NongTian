@@ -26,8 +26,9 @@
 
             <ImageView
                 android:id="@+id/backIv"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:layout_centerVertical="true"
                 android:src="@mipmap/icon_back"></ImageView>
 
             <TextView

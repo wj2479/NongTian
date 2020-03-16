@@ -13,6 +13,7 @@
     <color name="backgroundColor">#f6f6f6</color>
     <color name="text_color_green">#4DC06B</color>
     <color name="text_color_orange">#FFB32F</color>
+    <color name="text_color_red">#F44336</color>
 
     <color name="hui">#808080</color>
     <color name="icon_color">#dbdbdb</color>

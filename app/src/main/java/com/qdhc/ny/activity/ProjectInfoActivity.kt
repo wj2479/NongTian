@@ -8,12 +8,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import com.lcodecore.ILabel
+import android.view.ViewGroup
+import android.widget.TextView
 import com.qdhc.ny.R
-import com.qdhc.ny.adapter.ProjectSchueduleAdapter
+import com.qdhc.ny.adapter.ProjectDaySchueduleAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.bean.TagLabel
-import com.qdhc.ny.entity.DailyReport
+import com.qdhc.ny.entity.DaySchedule
 import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.Role
 import com.qdhc.ny.entity.User
@@ -25,15 +25,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_contradiction_info.bt_comment
 import kotlinx.android.synthetic.main.activity_contradiction_info.descriptionTv
-import kotlinx.android.synthetic.main.activity_contradiction_info.projectTv
 import kotlinx.android.synthetic.main.activity_contradiction_info.rlv
 import kotlinx.android.synthetic.main.activity_project_info.*
-import kotlinx.android.synthetic.main.layout_title_theme.*
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
-
 
 /**
  * 工程详情
@@ -42,11 +39,14 @@ class ProjectInfoActivity : BaseActivity() {
 
     lateinit var project: Project
 
-    lateinit var adapter: ProjectSchueduleAdapter
+    lateinit var adapter: ProjectDaySchueduleAdapter
 
     lateinit var userInfo: User
 
-    var reportList = ArrayList<DailyReport>()
+    /**
+     * 每日汇总列表
+     */
+    var dailyScheduleList = ArrayList<DaySchedule>()
 
     var initSchedule = 0
 
@@ -55,22 +55,31 @@ class ProjectInfoActivity : BaseActivity() {
     }
 
     override fun initView() {
-        title_tv_title.text = "工程详情"
-
         rlv.layoutManager = LinearLayoutManager(this)
-        adapter = ProjectSchueduleAdapter(this, reportList)
+        adapter = ProjectDaySchueduleAdapter(this, dailyScheduleList)
         rlv.adapter = adapter
 
         adapter.setOnItemClickListener { adapter, v, position ->
-            var dailyReport = reportList[position]
-            var intent = Intent(this, DailyReportDetailsActivity::class.java)
-            intent.putExtra("report", dailyReport)
+            if (dailyScheduleList.size == 0)
+                return@setOnItemClickListener
+
+            var daySchedule = dailyScheduleList[position]
+            var intent = Intent(this, DailyScheduleDetailsActivity::class.java)
+            intent.putExtra("project", project)
+            intent.putExtra("daySchedule", daySchedule)
             startActivity(intent)
         }
+
+        val emptyView = layoutInflater.inflate(R.layout.common_empty, null)
+        emptyView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT)
+        emptyView.findViewById<TextView>(R.id.tv_empty).text = "暂无记录"
+
+        adapter.emptyView = emptyView
     }
 
     override fun initClick() {
-        title_iv_back.setOnClickListener { finish() }
+        backIv.setOnClickListener { finish() }
         bt_comment.setOnClickListener {
             var intent = Intent(this, UpdateDailyReportActivity::class.java)
             intent.putExtra("project", project)
@@ -129,43 +138,24 @@ class ProjectInfoActivity : BaseActivity() {
 
     override fun initData() {
         userInfo = SharedPreferencesUtils.loadLogin(this)
-
         project = intent.getSerializableExtra("project") as Project
 
-        projectTv.text = project.name
+        tv_title.text = project.name
         descriptionTv.text = project.info
-        areaTv.text = project.area.name
 
         initSchedule = project.process
 
-        if (null != project.tags) {
-            var split = project.tags.trim().split(",")
-
-            // 标签的数据
-            var labels = ArrayList<ILabel>()
-            split.forEach { text ->
-                if (!text.trim().isEmpty())
-                    labels.add(TagLabel(text, text))
-            }
-
-            if (labels.size == 0) {
-                labels.add(TagLabel("无标签", "无标签"))
-            }
-
-            label_me.setLabels(labels)
-        }
-
         // 检测是不是需要显示
         checkBtnShow(project.process)
-        scheduleTv.text = project.process.toString() + "%"
+        scheduleTv.text = project.process.toString()
 
         if (userInfo.role.code != Role.CODE.SUPERVISOR.value) {
             commentButLayout.visibility = View.GONE
         }
 
         getProjectTarget(project.id)
-        initCreateProcess()
-        getProjectDailyReports(project.id)
+//        getProjectDailyReports(project.id)
+        getProjectDailySchedule(project.id)
     }
 
     /**
@@ -188,9 +178,7 @@ class ProjectInfoActivity : BaseActivity() {
                             if (json.getInt("code") == 1000) {
                                 var target = json.getInt("result")
                                 if (target > 0 && target <= 100) {
-                                    targetTv.text = target.toString() + "%"
-                                } else {
-                                    targetTv.hint = "本月未设置"
+                                    targetTv.text = target.toString()
                                 }
                             }
                         },
@@ -219,10 +207,8 @@ class ProjectInfoActivity : BaseActivity() {
                             Log.e("TAG", "设置结果  " + result)
                             var json = JSONObject(result)
                             if (json.getInt("code") == 1000) {
-                                targetTv.text = target.toString() + "%"
+                                targetTv.text = target.toString()
                                 ToastUtil.show(this@ProjectInfoActivity, "本月目标进度设置成功")
-                            } else {
-
                             }
                             dismissDialogNow()
                         },
@@ -233,25 +219,15 @@ class ProjectInfoActivity : BaseActivity() {
                         })
     }
 
-    fun initCreateProcess() {
-        var dailyReport = DailyReport()
-        dailyReport.title = "工程创建"
-        dailyReport.content = "工程创建"
-        dailyReport.schedule = 0
-        dailyReport.pid = project.id
-        dailyReport.createTime = project.createTime
-        reportList.add(dailyReport)
-    }
-
     /**
-     * 获取项目的日报记录
+     * 获取项目的每日汇总数据
      */
-    fun getProjectDailyReports(pid: Int) {
+    fun getProjectDailySchedule(pid: Int) {
         // 获取当月目标进度
         var params: HashMap<String, Any> = HashMap()
         params["pid"] = pid
         RxRestClient.create()
-                .url("report/getDailyReports")
+                .url("report/getDailySchedule")
                 .params(params)
                 .build()
                 .get()
@@ -259,22 +235,20 @@ class ProjectInfoActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { result ->
-                            Log.e("TAG", "日报结果  " + result)
+                            Log.e("TAG", "每日汇总结果  " + result)
                             var json = JSONObject(result)
                             if (json.getInt("code") == 1000) {
                                 var result = json.getJSONArray("result")
-                                reportList.clear()
+                                dailyScheduleList.clear()
                                 for (index in 0 until result.length()) {
                                     var jobj = result.getJSONObject(index)
-                                    var dReport = gson.fromJson<DailyReport>(jobj.toString(), DailyReport::class.java)
-
-                                    reportList.add(dReport)
+                                    var dSchedule = gson.fromJson<DaySchedule>(jobj.toString(), DaySchedule::class.java)
+                                    dailyScheduleList.add(dSchedule)
                                 }
                             }
                             adapter.notifyDataSetChanged()
                         },
                         { throwable ->
-                            adapter.notifyDataSetChanged()
                             throwable.printStackTrace()
                         })
     }
@@ -285,11 +259,11 @@ class ProjectInfoActivity : BaseActivity() {
             if (data != null) {
                 val schedule = data.getIntExtra("schedule", project.process)
                 project.process = schedule
-                scheduleTv.text = project.process.toString() + "%"
+                scheduleTv.text = project.process.toString()
                 checkBtnShow(schedule)
 
                 // 重新请求日志数据
-                getProjectDailyReports(project.id)
+                getProjectDailySchedule(project.id)
             }
         }
     }

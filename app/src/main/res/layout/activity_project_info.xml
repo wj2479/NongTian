@@ -1,12 +1,218 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_title_theme"></include>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_250"
+        android:background="@mipmap/manager_back_ground"
+        android:orientation="vertical"></LinearLayout>
 
-    <View style="@style/line_vertical"></View>
+    <LinearLayout
+        android:id="@+id/mLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_8">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_8">
+
+                <ImageView
+                    android:id="@+id/backIv"
+                    android:layout_width="@dimen/dp_16"
+                    android:layout_height="@dimen/dp_16"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/icon_back"></ImageView>
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="高标准农田建设"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/textsize_9" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/descriptionTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp_6"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textsize_8"
+                        android:visibility="visible"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="当前"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/textsize_6"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_2"
+                            android:layout_marginRight="@dimen/dp_2"
+                            android:gravity="center_horizontal"
+                            android:text="/"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/textsize_6"></TextView>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="月目标"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/textsize_6"></TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/scheduleTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/textsize_9"
+                            android:textStyle="bold"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_2"
+                            android:layout_marginRight="@dimen/dp_2"
+                            android:gravity="center_horizontal"
+                            android:text="/"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/textsize_6"></TextView>
+
+                        <TextView
+                            android:id="@+id/targetTv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text=""
+                            android:hint="--"
+                            android:textColorHint="@color/white"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/textsize_9"
+                            android:textStyle="bold"></TextView>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/projectLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/corners_bb_bg"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginBottom="@dimen/dp_4"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginLeft="@dimen/dp_8"
+                    android:src="@mipmap/rectle_cornors_9"></ImageView>
+
+                <TextView
+                    android:id="@+id/tv_district"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:text="每日汇总"
+                    android:textColor="@color/themecolor"
+                    android:textSize="@dimen/textsize_8"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_8"
+                android:background="@color/line_waw">
+
+            </View>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rlv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,195 +220,8 @@
         android:background="@color/backgroundColor"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingTop="@dimen/dp_4">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp_8">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="工程名称"
-                        android:textSize="@dimen/textsize_8"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/projectTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:paddingRight="@dimen/dp_4" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp_8"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="工程标签"
-                        android:textSize="@dimen/textsize_8"
-                        android:textStyle="bold" />
-
-                    <com.lcodecore.LabelLayout
-                        android:id="@+id/label_me"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_8"
-                        android:layout_marginRight="4dp"
-                        app:label_checkboxLayout="@layout/checkbox_label_single" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp_8"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="所属区域"
-                        android:textSize="@dimen/textsize_8"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/areaTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:paddingRight="@dimen/dp_4" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:padding="@dimen/dp_8">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp_8"
-                        android:text="工程简介"
-                        android:textSize="@dimen/textsize_8"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/descriptionTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:gravity="left|top"
-                        android:minHeight="48dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp_8">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="本月目标进度"
-                        android:textSize="@dimen/textsize_8"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/targetTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:paddingRight="@dimen/dp_4" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp_8">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="当前进度"
-                        android:textSize="@dimen/textsize_8"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/scheduleTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:paddingRight="@dimen/dp_4" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/photoLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:padding="@dimen/dp_8"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp_8"
-                        android:text="工程进度详情"
-                        android:textSize="@dimen/textsize_8"
-                        android:textStyle="bold" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rlv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:overScrollMode="never" />
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
+        android:paddingTop="@dimen/dp_4"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/commentButLayout"
@@ -217,20 +236,20 @@
             <Button
                 android:id="@+id/bt_report"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="@dimen/dp_45"
+                android:layout_marginRight="@dimen/dp_4"
+                android:layout_weight="1"
                 android:background="@drawable/bg_themecolor_solid2"
                 android:text="质量列表"
-                android:layout_marginRight="@dimen/dp_4"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textsize_8" />
 
             <Button
                 android:id="@+id/bt_comment"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="@dimen/dp_45"
                 android:layout_marginLeft="@dimen/dp_4"
+                android:layout_weight="1"
                 android:background="@drawable/bg_themecolor_solid2"
                 android:text="新增进度"
                 android:textColor="@color/white"
@@ -239,4 +258,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

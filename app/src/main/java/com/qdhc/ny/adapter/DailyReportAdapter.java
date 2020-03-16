@@ -2,6 +2,7 @@ package com.qdhc.ny.adapter;
 
 import android.app.Activity;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -32,12 +33,43 @@ public class DailyReportAdapter extends BaseQuickAdapter<DailyReport, BaseViewHo
 
 //        UserInfoUtils.getInfoByObjectId(item.getUid(), new UserInfoUtils.IResult() {
 //            @Override
-//            public void onReslt(UserInfo userInfo) {
+//            public void onReslt(User userInfo) {
 //                if (userInfo != null) {
 //                    helper.setText(R.id.name_child_tv, userInfo.getNickName());
 //                }
 //            }
 //        });
+
+        switch (item.getCheck()) {
+            case 0:
+                helper.setBackgroundRes(R.id.iv_icon, R.color.themecolor);
+                helper.setTextColor(R.id.name_child_tv, mContext.getResources().getColor(R.color.black));
+                helper.setTextColor(R.id.id_child_tv, mContext.getResources().getColor(R.color.black));
+                break;
+            case 1:
+                helper.setBackgroundRes(R.id.iv_icon, R.color.text_color_orange);
+                helper.setTextColor(R.id.name_child_tv, mContext.getResources().getColor(R.color.text_color_orange));
+                helper.setTextColor(R.id.id_child_tv, mContext.getResources().getColor(R.color.text_color_orange));
+                break;
+            case 2:
+                helper.setBackgroundRes(R.id.iv_icon, R.color.text_color_red);
+                helper.setTextColor(R.id.name_child_tv, mContext.getResources().getColor(R.color.text_color_red));
+                helper.setTextColor(R.id.id_child_tv, mContext.getResources().getColor(R.color.text_color_red));
+                break;
+        }
+
+        try {
+            String time = "";
+            if (TextUtils.isEmpty(item.getUpdateTime())) {
+                time = item.getCreateTime();
+            } else {
+                time = item.getUpdateTime();
+            }
+            helper.setText(R.id.name_child_tv, time.substring(11, 16));
+            helper.setVisible(R.id.name_child_tv, true);
+        } catch (Exception e) {
+        }
+
     }
 
 }

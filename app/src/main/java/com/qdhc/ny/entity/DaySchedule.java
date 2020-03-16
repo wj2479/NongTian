@@ -1,14 +1,16 @@
 package com.qdhc.ny.entity;
 
+import java.io.Serializable;
+
 /**
  * 日报汇总对象，记录每天日报的结果
  */
-public class DaySchedule {
+public class DaySchedule implements Serializable {
 
     /**
      * 日期
      */
-    private String date;
+    private String date = "";
 
     /**
      * 当前日期的最新进度
@@ -18,7 +20,7 @@ public class DaySchedule {
     /**
      * 最后一条媒体数据
      */
-    private Media lastMedia;
+    private Media lastMedia = null;
 
     /**
      * 更新时间

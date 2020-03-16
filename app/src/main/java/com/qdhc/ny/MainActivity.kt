@@ -93,7 +93,7 @@ class MainActivity : BaseActivity() {
                 // 用户已经同意该权限
                 Log.e("TAG", permission.name + " is granted.")
                 if (permission.name.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
-//                    initLocation()
+                    initLocation()
                 }
             } else if (permission.shouldShowRequestPermissionRationale) {
                 // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框
@@ -319,7 +319,7 @@ class MainActivity : BaseActivity() {
                     }
                 }
 
-//                uploadTrack(userInfo.id, location)
+                uploadTrack(userInfo.id, location)
 
                 ProjectData.getInstance().location = location
             }
@@ -341,6 +341,7 @@ class MainActivity : BaseActivity() {
         params["lng"] = location.longitude             // 经度
         params["locationTime"] = location.time        // 定位时间
         params["speed"] = location.speed               // 速度
+        params["address"] = location.address           // 地址
 
         var sb_temp = StringBuffer()
         sb_temp.append("* WIFI开关：").append(if (location.locationQualityReport.isWifiAble) "开启" else "关闭").append("\n");

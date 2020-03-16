@@ -3,6 +3,7 @@ package com.qdhc.ny.activity
 import android.content.Intent
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import com.luck.picture.lib.PictureSelector
@@ -12,6 +13,7 @@ import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.entity.DailyReport
 import com.qdhc.ny.entity.Media
 import com.qdhc.ny.utils.SharedPreferencesUtils
+import com.qdhc.ny.utils.UserInfoUtils
 import kotlinx.android.synthetic.main.activity_daily_report_details.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
 
@@ -59,23 +61,44 @@ class DailyReportDetailsActivity : BaseActivity() {
         Log.e("TAG", "日志数据--> " + gson.toJson(report))
 
         nameTv.text = report.title
-        locationTv.text = report.address
-        timeTv.text = report.createTime
+        if (TextUtils.isEmpty(report.address)) {
+            locationTv.text = "未知"
+        } else {
+            locationTv.text = report.address
+        }
+
+        if (TextUtils.isEmpty(report.updateTime)) {
+            timeTv.text = report.createTime
+        } else {
+            timeTv.text = report.updateTime
+        }
         contentTv.text = report.content
 
         when (report.check) {
-            0 -> checkTv.text = "合格"
-            1 -> checkTv.text = "一般"
-            2 -> checkTv.text = "不合格"
+            0 -> {
+                checkTv.text = "合格"
+            }
+            1 -> {
+                checkTv.text = "一般"
+                checkTv.setTextColor(getResources().getColor(R.color.text_color_orange))
+            }
+            2 -> {
+                checkTv.text = "不合格"
+                checkTv.setTextColor(getResources().getColor(R.color.text_color_red))
+            }
         }
 
         var userInfo = SharedPreferencesUtils.loadLogin(this)
 
-        if (userInfo.id.equals(report.uid)) {
+        if (userInfo.id == report.uid) {
             personLayout.visibility = View.GONE
             locationLayout.visibility = View.GONE
         } else {
-
+            UserInfoUtils.getInfoByObjectId(report.uid, UserInfoUtils.IResult() { user ->
+                if (user != null) {
+                    personTv.setText(user.getNickName());
+                }
+            });
         }
 
         if (report.mediaList.size > 0) {

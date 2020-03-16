@@ -25,7 +25,7 @@ import java.util.Map;
 public class BaseApplication extends MultiDexApplication {
     public static Typeface iconfont;
 
-    public static Map<String, User> userInfoMap = new HashMap<>();
+    public static Map<Integer, User> userInfoMap = new HashMap<>();
 
     public static Typeface getIconfont(Context context) {
         if (iconfont != null) {

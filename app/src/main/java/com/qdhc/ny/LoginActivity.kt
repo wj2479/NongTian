@@ -53,7 +53,6 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initClick() {
-
         logoIv.setOnClickListener {
             //            showSingleAlertDialog()
         }

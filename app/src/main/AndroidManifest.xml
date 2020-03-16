@@ -19,6 +19,7 @@
         <activity android:name=".activity.SignInListActivity" />
         <activity android:name=".activity.ReportDetailsActivity" />
         <activity android:name=".activity.DailyReportDetailsActivity" />
+        <activity android:name=".activity.DailyScheduleDetailsActivity" />
         <activity android:name=".activity.ReportListActivity" />
         <activity android:name=".activity.ReportAllListActivity" />
         <activity android:name=".activity.CameraActivity" />
