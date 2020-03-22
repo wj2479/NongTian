@@ -102,7 +102,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/textsize_6"
+                        android:textSize="@dimen/textsize_8"
                         android:visibility="visible"></TextView>
                 </LinearLayout>
 

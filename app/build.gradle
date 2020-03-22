@@ -9,8 +9,8 @@ android {
         applicationId "com.qdhc.ny"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 20
-        versionName "1.2.0"
+        versionCode 21
+        versionName "1.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -104,7 +104,8 @@ dependencies {
     implementation 'com.lcodecorex:labellayout:1.0.1'
     // 仿Iphone对话框
     implementation 'com.baoyz.actionsheet:library:1.1.7'
-
+    // 仿微信九宫格
+    implementation 'com.jaeger.ninegridimageview:library:1.1.1'
     // 版本更新框架
 //    implementation 'com.github.xuexiangjys:XUpdate:1.1.0'
 //    implementation 'com.zhy:okhttputils:2.6.2'

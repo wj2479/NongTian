@@ -17,6 +17,9 @@
 
     <color name="hui">#808080</color>
     <color name="icon_color">#dbdbdb</color>
-    <color name="black">#333333</color>
+    <color name="myblack">#333333</color>
     <color name="white">#ffffff</color>
+
+    <color name="color_69">#999999</color>
+    <color name="color_f0">#F0F0F0</color>
 </resources>

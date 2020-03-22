@@ -42,6 +42,7 @@ import com.vondear.rxui.view.dialog.RxDialogSureCancel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -97,13 +98,17 @@ class MainActivity : BaseActivity() {
                 }
             } else if (permission.shouldShowRequestPermissionRationale) {
                 // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框
-                ToastUtil.show(mContext, "拒绝了该权限，没有选中『不再询问』")
-
+                if (permission.name.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    ToastUtil.show(mContext, "您必须开启定位功能才能继续使用本程序")
+                    finish()
+                }
                 Log.e("TAG", permission.name + " is denied. More info should be provided.")
             } else {
                 // 用户拒绝了该权限，而且选中『不再询问』
-                ToastUtil.show(mContext, "拒绝了该权限，而且选中『不再询问』")
-
+                if (permission.name.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    ToastUtil.show(mContext, "您必须开启定位功能才能继续使用本程序")
+                    finish()
+                }
                 Log.e("TAG", permission.name + " is denied.")
             }
 
@@ -139,8 +144,6 @@ class MainActivity : BaseActivity() {
         if (SharedPreferencesUtil.get(mContext, Constant.NOTICE) != "true") {
             initDialog()
         }
-
-
     }
 
     private fun initDialog() {
@@ -292,6 +295,8 @@ class MainActivity : BaseActivity() {
         return mOption
     }
 
+    var isFirstLocation = true;
+
     /**
      * 定位监听
      */
@@ -299,7 +304,6 @@ class MainActivity : BaseActivity() {
         if (null != location) {
             //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
             if (location.errorCode == 0) {
-
                 Log.e("AMAP", "定位:" + location.address)
 
                 if (location.accuracy > MAX_ACCURACY) {
@@ -318,9 +322,12 @@ class MainActivity : BaseActivity() {
                         return@AMapLocationListener
                     }
                 }
-
                 uploadTrack(userInfo.id, location)
 
+                if (isFirstLocation) {
+                    EventBus.getDefault().post(location)
+                    isFirstLocation = false
+                }
                 ProjectData.getInstance().location = location
             }
         }

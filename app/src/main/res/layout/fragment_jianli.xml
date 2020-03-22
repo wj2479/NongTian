@@ -6,12 +6,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_250"
         android:background="@mipmap/jianli_top_back"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
-
         android:id="@+id/mLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,79 +29,79 @@
                 android:gravity="center"
                 android:text="高标准农田建设"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="@dimen/textsize_9" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/dp_8">
-
-                <TextView
-                    android:id="@+id/helloTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="2"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center_vertical"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
-                    android:visibility="visible"></TextView>
-
-                <TextView
-                    android:id="@+id/dateTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="bottom"
-                    android:gravity="center_vertical"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:visibility="visible"></TextView>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/weatherInfoTv"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_below="@+id/cameraIv"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dp_8"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text=""
-                android:textSize="16sp"
-                android:visibility="gone"></TextView>
+                android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="@dimen/dp_8"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/tempTv"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_8"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:text=""
-                    android:textSize="28sp"
-                    android:textStyle="bold"></TextView>
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/weatherTv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text=""
-                    android:textSize="16sp"></TextView>
+                    <TextView
+                        android:id="@+id/helloTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textsize_10"
+                        android:visibility="visible"></TextView>
 
+                    <TextView
+                        android:id="@+id/dateTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textsize_8"
+                        android:visibility="visible"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:minWidth="@dimen/dp_80"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tempTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:hint="--"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="@dimen/textsize_13"
+                        android:textStyle="bold"
+                        android:visibility="visible"></TextView>
+
+                    <TextView
+                        android:id="@+id/weatherTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/textsize_8"></TextView>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
@@ -122,9 +119,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginBottom="@dimen/dp_4"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/dp_4">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -159,8 +156,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginTop="@dimen/dp_8">
+                android:layout_marginTop="@dimen/dp_8"
+                android:gravity="center_vertical">
 
                 <ImageView
                     android:layout_width="48dp"
@@ -184,27 +181,27 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="@dimen/dp_8"
                 android:layout_marginLeft="@dimen/dp_4"
-                android:layout_marginRight="@dimen/dp_4">
+                android:layout_marginRight="@dimen/dp_4"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:layout_weight="2"
+                android:gravity="center_vertical">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_margin="@dimen/dp_8"
+                    android:layout_weight="1"
                     android:background="@drawable/corners_light_green_bg"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:orientation="vertical"
-                        android:gravity="center_vertical"
+                        android:layout_marginBottom="@dimen/dp_8"
                         android:layout_weight="1"
-                        android:layout_marginBottom="@dimen/dp_8">
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/progressTv"
@@ -213,15 +210,15 @@
                             android:layout_marginRight="@dimen/dp_8"
                             android:gravity="center"
                             android:text="- -"
-                            android:textSize="@dimen/textsize_15"
-                            android:textColor="@color/text_color_green" />
+                            android:textColor="@color/text_color_green"
+                            android:textSize="@dimen/textsize_15" />
 
                         <TextView
                             android:id="@+id/tv_all_sort"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/dp_8"
                             android:layout_marginTop="@dimen/dp_2"
+                            android:layout_marginRight="@dimen/dp_8"
                             android:gravity="center"
                             android:text="当前进度"
                             android:textSize="@dimen/textsize_6" />
@@ -239,16 +236,16 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_margin="@dimen/dp_8"
+                    android:layout_weight="1"
                     android:background="@drawable/corners_light_orange_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_marginBottom="@dimen/dp_8"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="@dimen/dp_8">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/order_city_tv"
@@ -257,14 +254,14 @@
                             android:layout_marginRight="@dimen/dp_8"
                             android:gravity="center"
                             android:text="- -"
-                            android:textSize="@dimen/textsize_15"
-                            android:textColor="@color/text_color_orange" />
+                            android:textColor="@color/text_color_orange"
+                            android:textSize="@dimen/textsize_15" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/dp_8"
                             android:layout_marginTop="@dimen/dp_2"
+                            android:layout_marginRight="@dimen/dp_8"
                             android:gravity="center"
                             android:text="本市排名"
                             android:textSize="@dimen/textsize_6" />
@@ -320,8 +317,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:padding="@dimen/dp_12"
-            android:gravity="center">
+            android:gravity="center"
+            android:padding="@dimen/dp_12">
 
             <ImageView
                 android:id="@+id/cameraIv"

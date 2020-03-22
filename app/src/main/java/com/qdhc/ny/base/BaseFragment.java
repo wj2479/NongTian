@@ -129,7 +129,6 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-
     /**
      * 显示对话框
      */

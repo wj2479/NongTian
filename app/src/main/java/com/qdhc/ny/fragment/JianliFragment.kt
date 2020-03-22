@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import com.amap.api.location.AMapLocation
 import com.luck.picture.lib.permissions.RxPermissions
 import com.qdhc.ny.activity.CameraActivity
 import com.qdhc.ny.activity.ProjectInfoActivity
@@ -14,6 +15,7 @@ import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.Area
+import com.qdhc.ny.entity.LiveWeather
 import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
 import com.sj.core.net.Rx.RxRestClient
@@ -21,6 +23,8 @@ import com.sj.core.utils.ToastUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_jianli.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -74,9 +78,6 @@ class JianliFragment : BaseFragment() {
         val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日")
         val str1 = arrayOf("", "日", "一", "二", "三", "四", "五", "六")
         dateTv.text = "今天是 " + simpleDateFormat.format(Date()) + "\t星期" + str1[calendar.get(Calendar.DAY_OF_WEEK)]
-
-//        tv_all_sort.text = "18"
-//        tv_sort.text = "80%"
 
         var cityName = getAreaLevelName(userInfo.area, Constant.AREA_LEVEL_CITY)
         tv_title.text = cityName + "高标准农田建设"
@@ -210,7 +211,6 @@ class JianliFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("TAG", "onActivityResult--> " + resultCode)
-
         if (resultCode == 101 || resultCode == 102) {
             val intent = Intent(data)
             intent.setClass(activity, UpdateDailyReportActivity::class.java);
@@ -241,49 +241,50 @@ class JianliFragment : BaseFragment() {
             } else if (permission.shouldShowRequestPermissionRationale) {
                 // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框
                 ToastUtil.show(activity!!, "拒绝了该权限，没有选中『不再询问』")
-
                 Log.e("TAG", permission.name + " is denied. More info should be provided.")
             } else {
                 // 用户拒绝了该权限，而且选中『不再询问』
                 ToastUtil.show(activity!!, "拒绝了该权限，而且选中『不再询问』")
-
                 Log.e("TAG", permission.name + " is denied.")
             }
 
         })
     }
 
-    var isget = false
-    private fun getWeather(code: String) {
-
-        if (!isget) {
-            var params: HashMap<String, Any> = HashMap()
-            params["city"] = code
-            params["key"] = "eb11935d19133c09530dc67e63cb1393"
-            // 可选值：base/all
-            // base:返回实况天气
-            // all:返回预报天气
-            params["extensions"] = "all"
-
-            RxRestClient.create()
-                    .url("https://restapi.amap.com/v3/weather/weatherInfo")
-                    .params(params)
-                    .build()
-                    .get()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { result ->
-                                Log.e("TAG", "天气:" + result)
-
-                            },
-                            { throwable ->
-                                throwable.printStackTrace()
-                            })
-            isget = true;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(location: AMapLocation) {
+        Log.e("TAG", "定位事件")
+        if (null != location) {
+            getWeather(location.adCode)
         }
-
     }
 
+    private fun getWeather(code: String) {
+        var params: HashMap<String, Any> = HashMap()
+        params["city"] = code
+        params["key"] = "eb11935d19133c09530dc67e63cb1393"
+        // 可选值：base/all
+        // base:返回实况天气
+        // all:返回预报天气
+        params["extensions"] = "base"
+
+        RxRestClient.create()
+                .url("https://restapi.amap.com/v3/weather/weatherInfo")
+                .params(params)
+                .build()
+                .get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result ->
+                            Log.e("TAG", "天气:" + result)
+                            var weather = gson.fromJson(result, LiveWeather::class.java)
+                            tempTv.text = weather.lives[0].temperature + "℃"
+                            weatherTv.text = weather.lives[0].weather
+                        },
+                        { throwable ->
+                            throwable.printStackTrace()
+                        })
+    }
 
 }

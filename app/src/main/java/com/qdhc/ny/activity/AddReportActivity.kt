@@ -136,8 +136,6 @@ class AddReportActivity : BaseActivity() {
         nameTv.text = project.name
     }
 
-
-
     /**
      * 获取权限
      */

@@ -11,18 +11,43 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:label,android:theme">
-        <activity android:name=".activity.RegionProjectListActivity"></activity>
-        <activity android:name=".activity.RegionProjectDetailsActivity" />
-        <activity android:name=".activity.UpdateDailyReportActivity" />
-        <activity android:name=".activity.NotifyPublishActivity" />
-        <activity android:name=".activity.AddProjectActivity" />
-        <activity android:name=".activity.SignInListActivity" />
-        <activity android:name=".activity.ReportDetailsActivity" />
-        <activity android:name=".activity.DailyReportDetailsActivity" />
-        <activity android:name=".activity.DailyScheduleDetailsActivity" />
-        <activity android:name=".activity.ReportListActivity" />
-        <activity android:name=".activity.ReportAllListActivity" />
-        <activity android:name=".activity.CameraActivity" />
+        <activity
+            android:name=".activity.RegionProjectListActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.RegionProjectDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UpdateDailyReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.NotifyPublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddProjectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SignInListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ReportDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DailyReportDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.DailyScheduleDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ReportListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ReportAllListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CameraActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ProjectScheduleInfoActivity"
             android:launchMode="singleTask"
@@ -31,8 +56,12 @@
             android:name=".activity.ProjectInfoActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.UserAddActivity" />
-        <activity android:name=".activity.UserManagerActivity" />
+        <activity
+            android:name=".activity.UserAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UserManagerActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.ImageActivity" />
         <activity
             android:name=".activity.ContradictionInfoActivity"
@@ -46,7 +75,9 @@
             android:name=".activity.AddReportActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ShoppingActivity" />
+        <activity
+            android:name=".activity.ShoppingActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -71,7 +102,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" /> <!-- 高德地图 -->
-        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.StartActivity"

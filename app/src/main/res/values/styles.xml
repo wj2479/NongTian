@@ -1,7 +1,6 @@
 <resources>
 
     <style name="activity_theme" parent="Theme.AppCompat.Light">
-        <item name="android:windowBackground">@drawable/im_start</item>
         <item name="android:windowDisablePreview">true</item>
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/themecolor</item>

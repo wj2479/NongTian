@@ -19,6 +19,7 @@ import com.qdhc.ny.entity.User
 import com.qdhc.ny.fragment.MyFragment
 import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.fragment.ProjectInfoListFragment
+import com.qdhc.ny.fragment.ToDoListFragment
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
@@ -81,9 +82,11 @@ class Main3Activity : BaseActivity() {
     //UI
     private val mTabEntities = ArrayList<CustomTabEntity>()
     private val mIconUnselectIds = intArrayOf(R.drawable.ic_list,
+            R.drawable.ic_to_do_list,
             R.mipmap.icon_notice,
             R.mipmap.icon_wode)
     private val mIconSelectIds = intArrayOf(R.drawable.ic_list_select,
+            R.drawable.ic_to_do_list_select,
             R.mipmap.icon_notice_select,
             R.mipmap.icon_wode_select)
 
@@ -93,6 +96,7 @@ class Main3Activity : BaseActivity() {
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
         fragmentList.add(ProjectInfoListFragment())
+        fragmentList.add(ToDoListFragment())
         fragmentList.add(NotifyFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter

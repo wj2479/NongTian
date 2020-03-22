@@ -38,6 +38,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_project_into_list.*
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
@@ -129,6 +130,8 @@ class ProjectInfoListFragment : BaseFragment() {
                                     intent.putExtra("project", project)
                                     startActivity(intent)
                                 }
+
+                                EventBus.getDefault().post(project)
 
                                 var level = ProjectLevel.getEnumType(project!!.level + 1)
                                 tv_district.text = level.desc + "进度表"
@@ -337,13 +340,13 @@ class ProjectInfoListFragment : BaseFragment() {
         mChart.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (event?.action == MotionEvent.ACTION_UP) {
-                    Log.e("TAG", "抬起:" + System.currentTimeMillis())
+//                    Log.e("TAG", "抬起:" + System.currentTimeMillis())
                     isTouchUp = true
                     if (isDownSelect) {
                         getClickSubProjects(selectProject!!)
                     }
                 } else if (event?.action == MotionEvent.ACTION_DOWN) {
-                    Log.e("TAG", "按下:" + System.currentTimeMillis())
+//                    Log.e("TAG", "按下:" + System.currentTimeMillis())
                     isTouchUp = false
                     isDownSelect = false
                 }
@@ -363,7 +366,7 @@ class ProjectInfoListFragment : BaseFragment() {
                 var json = JSONObject(result)
                 if (json.getInt("code") == 1000) {
                     var jArray = json.getJSONArray("result")
-                    Log.e("TAG", "请求22成功:" + jArray.toString())
+                    Log.e("getClickSubProjects", "请求成功:" + jArray.toString())
                     var subProjectList = ArrayList<Project>()
                     for (index in 0 until jArray.length()) {
                         val jsonObject = jArray.getJSONObject(index)
@@ -381,7 +384,7 @@ class ProjectInfoListFragment : BaseFragment() {
                     }
                     startActivity(intent)
                 } else {
-                    Log.e("TAG", "请求22失败:" + result)
+                    Log.e("getClickSubProjects", "请求22失败:" + result)
                 }
             }
         }, object : Consumer<Throwable> {

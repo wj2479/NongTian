@@ -197,4 +197,5 @@ public class DailyReport implements Serializable {
                 ", updateTime='" + updateTime + '\'' +
                 '}';
     }
+
 }

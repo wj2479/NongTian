@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.layout_title_theme.*
 
 class ContradictionInfoActivity : BaseActivity() {
 
-
     lateinit var adapter: ImageAdapter
 
     lateinit var userInfo: User
@@ -75,7 +74,6 @@ class ContradictionInfoActivity : BaseActivity() {
         userInfo = ProjectData.getInstance().userInfo
 
     }
-
 
     fun getImags() {
 

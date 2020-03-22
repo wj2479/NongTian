@@ -27,6 +27,11 @@ public class ProjectData {
     private List<Project> projects = new ArrayList<>();
 
     /**
+     * 当前用户关注的日志ID列表
+     */
+    private List<Integer> focusReportIdList = new ArrayList<>();
+
+    /**
      * 当前定位的位置
      */
     private AMapLocation location = null;
@@ -75,18 +80,18 @@ public class ProjectData {
         this.location = location;
     }
 
-
-    public UserTreeNode getRootNode() {
-        return rootNode;
+    public List<Integer> getFocusReportIdList() {
+        return focusReportIdList;
     }
 
-    int cut = 0;
+    public void setFocusReportIdList(List<Integer> focusReportIdList) {
+        this.focusReportIdList = focusReportIdList;
+    }
 
     /**
      * 释放内存资源
      */
     public void release() {
-        cut = 0;
         userInfo = null;
         projects.clear();
         rootNode.reset();

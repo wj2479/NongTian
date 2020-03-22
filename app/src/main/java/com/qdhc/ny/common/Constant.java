@@ -1,7 +1,5 @@
 package com.qdhc.ny.common;
 
-import android.os.Environment;
-
 import java.text.SimpleDateFormat;
 
 /**
@@ -17,13 +15,9 @@ public class Constant {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    //    public static final String SYS_ROOT = "http://192.168.31.210:8088/"; //线上版本地址
-//    public static final String SYS_ROOT = "http://192.168.1.163:8088/"; //线上版本地址
+    //    public static final String SYS_ROOT = "http://192.168.31.210:8088/"; //测试版本地址
+//    public static final String SYS_ROOT = "http://192.168.1.163:8088/"; //测试版本地址
     public static final String SYS_ROOT = "http://39.99.168.20:8088/"; //线上版本地址
-
-    public static final String ExternalStorageDirectory =
-            Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
-
 
     public static final int REPORT_TYPE_DAY = 1;
     public static final int REPORT_TYPE_WEEK = 2;
@@ -56,28 +50,31 @@ public class Constant {
     }
 
 
-    public interface viewType{
+    public interface viewType {
         int typeBanner = 1;         //轮播图
         int typeGv = 2;             //九宫格
         int typeTitle = 3;          //标题
         int typeList = 4;           //list
         int typeNews = 5;           //新闻
         int typeMarquee = 6;        //跑马灯
-        int typePlus = 7 ;          //不规则视图
+        int typePlus = 7;          //不规则视图
         int typeSticky = 8;         //指示器
         int typeFooter = 9;         //底部
         int typeGvSecond = 10;      //九宫格
     }
 
-    public class status{
-        public static final int success=200;
-        public static final int error=-1;
+    public class status {
+        public static final int success = 200;
+        public static final int error = -1;
     }
 
-    /**-------------------------------------记事本----------------------------------------------**/
+    /**
+     * -------------------------------------记事本----------------------------------------------
+     **/
     public static String DAY_OF_WEEK = "day_of_week";
     public static String ADD_NEW_OLD = "add_new_old";
-    public interface NOTE_TYPE{
+
+    public interface NOTE_TYPE {
         int add_new = 1;
         int add_old = 2;
     }
@@ -97,6 +94,7 @@ public class Constant {
     public static long AUTO_NOTIFY_INTERVAL_TIME = 60 * 60 * 1000;
     public static int AUTO_NOTIFY_NOTIFICATION_ID = 0;
     public static int MAXSELECTNUM = 9;
+
     public interface MODE_OF_NEW_ACT {
         int MODE_EDIT = 5;
         int MODE_CREATE = 6;
@@ -122,7 +120,7 @@ public class Constant {
     }
 
 
-    public interface LikeType{
+    public interface LikeType {
         int TYPE_ZHI_HU = 101;
         int TYPE_GIRL = 105;
         int TYPE_WE_CHAT = 106;
@@ -130,7 +128,7 @@ public class Constant {
     }
 
 
-    public interface DetailKeys{
+    public interface DetailKeys {
         String IT_DETAIL_URL = "url";
         String IT_DETAIL_IMG_URL = "img_url";
         String IT_DETAIL_ID = "id";
@@ -142,7 +140,9 @@ public class Constant {
     }
 
 
-    /**-------------------------------------键-------------------------------------------------**/
+    /**
+     * -------------------------------------键-------------------------------------------------
+     **/
     //Sp键
     public static final String KEY_FIRST_SPLASH = "first_splash";                 //是否第一次启动
     public static final String KEY_IS_LOGIN = "is_login";                         //登录
@@ -153,14 +153,15 @@ public class Constant {
     public static final String NOTICE = "notice";    //主页提示框是否显示
 
 
-
     /**-------------------------------------集合-------------------------------------------------**/
     //
 //    public static List<HomeBlogEntity> findNews = new ArrayList<>();
 //    public static List<HomeBlogEntity> findBottomNews = new ArrayList<>();
 
 
-    /**-------------------------------------腾讯x5页面-------------------------------------------------**/
+    /**
+     * -------------------------------------腾讯x5页面-------------------------------------------------
+     **/
     public static final String SP_NO_IMAGE = "no_image";
     public static final String SP_AUTO_CACHE = "auto_cache";
 
