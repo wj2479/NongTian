@@ -70,9 +70,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initData() {
-
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        UpadateManager.checkVersion(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions()
         }
@@ -95,6 +93,8 @@ class MainActivity : BaseActivity() {
                 Log.e("TAG", permission.name + " is granted.")
                 if (permission.name.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
                     initLocation()
+                } else if (permission.name.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    UpadateManager.checkVersion(this)
                 }
             } else if (permission.shouldShowRequestPermissionRationale) {
                 // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框

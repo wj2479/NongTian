@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -14,7 +13,6 @@ import com.google.gson.Gson;
 import com.qdhc.ny.entity.AppUpdate;
 import com.qdhc.ny.utils.SystemUtils;
 import com.sj.core.net.Rx.RxRestClient;
-import com.sj.core.utils.ToastUtil;
 import com.vondear.rxui.view.dialog.RxDialogSureCancel;
 
 import org.json.JSONObject;
@@ -51,7 +49,7 @@ public class UpadateManager {
                             JSONObject result = jsonObject.getJSONObject("result");
                             AppUpdate data = new Gson().fromJson(result.toString(), AppUpdate.class);
                             // 登录成功
-                            if (data.getVersionCode() > SystemUtils.getAppVersionCode(ctx)) {
+                            if (data.getVersionCode() >= SystemUtils.getAppVersionCode(ctx)) {
                                 initDialog(ctx, data);
                             }
                         }
@@ -103,10 +101,7 @@ public class UpadateManager {
             @Override
             public void onClick(View v) {
                 String url = appUpdate.getUrl();
-                if (TextUtils.isEmpty(url) || !url.startsWith("http://") || !url.startsWith("https://")) {
-                    ToastUtil.show(context, "下载地址信息错误");
-                    return;
-                }
+                Log.e("TAG", "新版本下载地址:" + url);
                 Intent intent = new Intent(context, UpdateService.class);
                 intent.putExtra("url", url);
                 context.startService(intent);

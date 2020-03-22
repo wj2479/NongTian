@@ -55,7 +55,7 @@ android {
     //打包后应用名称
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "高标农田_${defaultConfig.versionName}_${buildType.name}.apk"
+            outputFileName = "NongTian_${defaultConfig.versionName}_${buildType.name}.apk"
         }
     }
 

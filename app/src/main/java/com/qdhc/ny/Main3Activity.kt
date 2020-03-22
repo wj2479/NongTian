@@ -20,6 +20,7 @@ import com.qdhc.ny.fragment.MyFragment
 import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.fragment.ProjectInfoListFragment
 import com.qdhc.ny.fragment.ToDoListFragment
+import com.qdhc.ny.service.UpadateManager
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
@@ -41,8 +42,7 @@ class Main3Activity : BaseActivity() {
 
     override fun initData() {
         userInfo = ProjectData.getInstance().userInfo
-//        ProjectData.getInstance().initUserData()
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions()
         }
     }
@@ -64,6 +64,8 @@ class Main3Activity : BaseActivity() {
                 Log.e("TAG", permission.name + " is granted.")
                 if (permission.name.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
                     initLocation()
+                } else if (permission.name.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    UpadateManager.checkVersion(this)
                 }
             } else if (permission.shouldShowRequestPermissionRationale) {
                 // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框
