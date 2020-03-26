@@ -49,7 +49,7 @@ public class UpadateManager {
                             JSONObject result = jsonObject.getJSONObject("result");
                             AppUpdate data = new Gson().fromJson(result.toString(), AppUpdate.class);
                             // 登录成功
-                            if (data.getVersionCode() >= SystemUtils.getAppVersionCode(ctx)) {
+                            if (data.getVersionCode() > SystemUtils.getAppVersionCode(ctx)) {
                                 initDialog(ctx, data);
                             }
                         }

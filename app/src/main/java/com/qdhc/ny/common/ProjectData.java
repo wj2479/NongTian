@@ -2,6 +2,7 @@ package com.qdhc.ny.common;
 
 import com.amap.api.location.AMapLocation;
 import com.qdhc.ny.bean.UserTreeNode;
+import com.qdhc.ny.entity.LiveWeather;
 import com.qdhc.ny.entity.Project;
 import com.qdhc.ny.entity.User;
 
@@ -40,6 +41,8 @@ public class ProjectData {
      * 地区，人员总节点
      */
     private UserTreeNode rootNode = new UserTreeNode();
+
+    private LiveWeather weather = null;
 
     private static ProjectData mPorjectData = null;
 
@@ -86,6 +89,14 @@ public class ProjectData {
 
     public void setFocusReportIdList(List<Integer> focusReportIdList) {
         this.focusReportIdList = focusReportIdList;
+    }
+
+    public LiveWeather getWeather() {
+        return weather;
+    }
+
+    public void setWeather(LiveWeather weather) {
+        this.weather = weather;
     }
 
     /**

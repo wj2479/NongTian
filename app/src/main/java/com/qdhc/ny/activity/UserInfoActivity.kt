@@ -8,6 +8,7 @@ import com.luck.picture.lib.config.PictureMimeType
 import com.qdhc.ny.R
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.common.Constant
+import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.User
 import com.sj.core.utils.ImageLoaderUtil
 import com.sj.core.utils.ToastUtil
@@ -26,7 +27,7 @@ class UserInfoActivity : BaseActivity() {
     }
 
     override fun initData() {
-        user = intent.getSerializableExtra("user") as User
+        user = ProjectData.getInstance().userInfo
         edt_nickname.setText(user.nickName)
         //头像
 //        if (user.avatar != null) {
@@ -40,8 +41,7 @@ class UserInfoActivity : BaseActivity() {
             if (edt_nickname.text.isNullOrEmpty()) {
                 ToastUtil.show(mContext, "请输入姓名")
             } else {
-                showDialog("正在保存...")
-                upUser(iv_photo.getTag(R.id.TAG).toString(), edt_nickname.text.toString())
+//                showDialog("正在保存...")
             }
         })
         //头像

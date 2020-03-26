@@ -1,9 +1,10 @@
 package com.qdhc.ny.activity
 
-import android.content.Intent
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.luck.picture.lib.PictureSelector
+import com.luck.picture.lib.config.PictureMimeType
+import com.luck.picture.lib.entity.LocalMedia
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.ImageAdapter
 import com.qdhc.ny.base.BaseActivity
@@ -36,9 +37,17 @@ class ReportDetailsActivity : BaseActivity() {
             if (url.endsWith("mp4", true)) {
                 PictureSelector.create(this@ReportDetailsActivity).externalPictureVideo(url);
             } else {
-                var intent = Intent(this, ImageActivity::class.java)
-                intent.putExtra("url", url)
-                startActivity(intent)
+                var mediaList = ArrayList<LocalMedia>()
+
+                var localMedia = LocalMedia()
+                localMedia.path = url
+                localMedia.mimeType = PictureMimeType.ofImage()
+                localMedia.pictureType = "image/jpeg"
+                mediaList.add(localMedia)
+
+                PictureSelector.create(this)
+                        .themeStyle(R.style.picture_default_style)
+                        .openExternalPreview(0, mediaList);
             }
         }
         rlv.adapter = adapter

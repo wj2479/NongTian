@@ -62,6 +62,11 @@ public class DailyReport implements Serializable {
     private String address = "";
 
     /**
+     * 上报的兴趣点位置
+     */
+    private String poi = "";
+
+    /**
      * 日报的多媒体信息
      */
     private List<Media> mediaList = new ArrayList<>();
@@ -180,6 +185,14 @@ public class DailyReport implements Serializable {
         this.mediaList = mediaList;
     }
 
+    public String getPoi() {
+        return poi;
+    }
+
+    public void setPoi(String poi) {
+        this.poi = poi;
+    }
+
     @Override
     public String toString() {
         return "DailyReport{" +
@@ -193,6 +206,8 @@ public class DailyReport implements Serializable {
                 ", district='" + district + '\'' +
                 ", lnglat='" + lnglat + '\'' +
                 ", address='" + address + '\'' +
+                ", poi='" + poi + '\'' +
+                ", mediaList=" + mediaList +
                 ", createTime='" + createTime + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 '}';

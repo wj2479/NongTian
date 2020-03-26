@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
 import android.support.v4.app.ActivityCompat
@@ -14,6 +16,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
+import com.bigkoo.pickerview.view.WheelTime.dateFormat
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.entity.LocalMedia
@@ -23,11 +26,13 @@ import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
+import com.qdhc.ny.utils.ImageUtil
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.net.RestClient
 import com.sj.core.net.callback.IRequest
 import com.sj.core.utils.NetWorkUtil
 import com.sj.core.utils.ToastUtil
+import com.wj.compress.utils.CompressBitmapUtils
 import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_add_project_schedule.*
 import kotlinx.android.synthetic.main.activity_add_project_schedule.bt_add
@@ -35,6 +40,7 @@ import kotlinx.android.synthetic.main.activity_add_project_schedule.rlv
 import kotlinx.android.synthetic.main.activity_update_daily_report.*
 import kotlinx.android.synthetic.main.activity_update_daily_report.bubbleSeekbar
 import kotlinx.android.synthetic.main.layout_title_theme.*
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -70,9 +76,9 @@ class UpdateDailyReportActivity : BaseActivity() {
 
             var localMedia = selectList.get(position)
             if (localMedia.mimeType == PictureMimeType.ofImage()) {
-                var intent = Intent(this, ImageActivity::class.java)
-                intent.putExtra("url", localMedia.path)
-                startActivity(intent)
+                PictureSelector.create(this)
+                        .themeStyle(R.style.picture_default_style)
+                        .openExternalPreview(position, selectList);
             } else if (localMedia.mimeType == PictureMimeType.ofVideo()) {
                 PictureSelector.create(this@UpdateDailyReportActivity).externalPictureVideo(localMedia.path);
             }
@@ -112,54 +118,114 @@ class UpdateDailyReportActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            var files = ArrayList<String>()
-            selectList.forEach { file -> files.add(file.path) }
+            compressBitmapAndUploadReport(title, content, checkId)
 
-            var url = "report/uploadDailyReport"
-            var params: HashMap<String, Any> = HashMap()
-            var headers: HashMap<String, Any> = HashMap()
-            params["title"] = title
-            params["content"] = content
-            params["pid"] = project!!.id
-            params["uid"] = userInfo.id
-            params["check"] = checkId
-            params["schedule"] = bubbleSeekbar.progress
-            if (null != ProjectData.getInstance().location) {
-                params["address"] = ProjectData.getInstance().location.address
-                params["lnglat"] = ProjectData.getInstance().location.longitude.toString() + "," + ProjectData.getInstance().location.latitude.toString()
-            }
-            RestClient.create()
-                    .params(params)
-                    .headers(headers)
-                    .files(files)
-                    .url(url)
-                    .request(object : IRequest {
-                        override fun onRequestStart() {
-                            showDialog("正在添加日报记录...")
-                        }
-
-                        override fun onRequestEnd() {
-                            dismissDialogNow()
-                        }
-                    }).success { result ->
-                        ToastUtil.show(mContext, "上传成功")
-                        var intent = Intent()
-                        intent.putExtra("schedule", bubbleSeekbar.progress)
-                        setResult(Activity.RESULT_OK, intent)
-                        finish()
-                    }.error { code, msg ->
-                        ToastUtil.show(mContext, "请求错误code:$code$msg")
-                    }.failure {
-                        if (NetWorkUtil.isNetworkConnected(mContext)) {
-                            ToastUtil.show(mContext, resources.getString(R.string.net_error))
-                        } else {
-                            ToastUtil.show(mContext, resources.getString(R.string.net_no_worker))
-                        }
-                    }
-                    .build()
-                    .uploads()
         }
     }
+
+    /**
+     * 压缩图片 并且 上传日报信息
+     */
+    fun compressBitmapAndUploadReport(title: String, content: String, checkId: Int) {
+        showDialog("正在处理图片...")
+
+        object : Thread() {
+            override fun run() {
+                var list = ArrayList<String>()
+                list.add(project!!.name)
+                if (ProjectData.getInstance().weather != null) {
+                    list.add("天气: " + ProjectData.getInstance().weather.lives[0].weather + " · " + ProjectData.getInstance().weather.lives[0].temperature + "℃")
+                }
+                if (ProjectData.getInstance().location != null) {
+                    list.add("地点: " + ProjectData.getInstance().location.city + " · " + ProjectData.getInstance().location.poiName)
+                    list.add("经纬度: " + ProjectData.getInstance().location.longitude + "," + ProjectData.getInstance().location.latitude)
+                }
+                list.add("拍摄人: " + userInfo.nickName)
+                list.add("拍摄时间: " + dateFormat.format(Date()))
+
+                var files = ArrayList<String>()
+                selectList.forEach { file ->
+                    if (file.mimeType == PictureMimeType.ofImage()) {
+                        var bMap = BitmapFactory.decodeFile(file.path)
+                        // 将图片进行压缩
+                        CompressBitmapUtils.compressByJNI(bMap, file.path, true)
+                        if (bMap != null && !bMap.isRecycled) {
+                            bMap.recycle()
+                        }
+                        // 重新获取新的bitmap
+                        bMap = BitmapFactory.decodeFile(file.path)
+                        // 左下角添加文字
+                        var bitmap = ImageUtil.drawTextToLeftBottom(this@UpdateDailyReportActivity, bMap, list, 16, Color.RED, 8, 8, 4);
+
+                        var fileName = file.path.substring(file.path.lastIndexOf("/") + 1)
+                        var index = fileName.indexOf(".")
+                        fileName = fileName.substring(0, index) + "_compress" + fileName.substring(index)
+                        val fromJniFile = File(getExternalCacheDir(), fileName)
+                        //将bitmap保存成文件
+                        CompressBitmapUtils.compressBitmap(bitmap, fromJniFile)
+                        files.add(fromJniFile.absolutePath)
+                    } else if (file.mimeType == PictureMimeType.ofVideo()) {
+                        files.add(file.path)
+                    }
+                }
+
+                runOnUiThread {
+                    uploadReport(title, content, checkId, files)
+                }
+            }
+
+        }.start()
+    }
+
+    /**
+     * 上传文件
+     */
+    fun uploadReport(title: String, content: String, checkId: Int, files: ArrayList<String>) {
+        var url = "report/uploadDailyReport"
+        var params: HashMap<String, Any> = HashMap()
+        var headers: HashMap<String, Any> = HashMap()
+        params["title"] = title
+        params["content"] = content
+        params["pid"] = project!!.id
+        params["uid"] = userInfo.id
+        params["check"] = checkId
+        params["schedule"] = bubbleSeekbar.progress
+        if (null != ProjectData.getInstance().location) {
+            params["address"] = ProjectData.getInstance().location.address
+            params["lnglat"] = ProjectData.getInstance().location.longitude.toString() + "," + ProjectData.getInstance().location.latitude.toString()
+        }
+        RestClient.create()
+                .params(params)
+                .headers(headers)
+                .files(files)
+                .url(url)
+                .request(object : IRequest {
+                    override fun onRequestStart() {
+                        showDialog("正在添加日报记录...")
+                    }
+
+                    override fun onRequestEnd() {
+                        dismissDialogNow()
+                    }
+                }).success { result ->
+                    ToastUtil.show(mContext, "上传成功")
+                    var intent = Intent()
+                    intent.putExtra("schedule", bubbleSeekbar.progress)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }.error { code, msg ->
+                    ToastUtil.show(mContext, "请求错误code:$code$msg")
+                }.failure {
+                    if (NetWorkUtil.isNetworkConnected(mContext)) {
+                        ToastUtil.show(mContext, resources.getString(R.string.net_error))
+                    } else {
+                        ToastUtil.show(mContext, resources.getString(R.string.net_no_worker))
+                    }
+                }
+                .build()
+                .uploads()
+    }
+
 
     /**
      * 显示选择日报的对话框

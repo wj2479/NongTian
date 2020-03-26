@@ -1,1 +1,2 @@
 include ':app', ':core', ':library', ':zloadingview', ':treeview_lib'
+include ':compress'

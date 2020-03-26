@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_8"
                     android:layout_marginRight="@dimen/dp_8"
-                    android:text="进度详情"
+                    android:text="进度排行"
                     android:textColor="@color/themecolor"
                     android:textSize="@dimen/textsize_8"
                     android:textStyle="bold" />

@@ -74,7 +74,7 @@ class ProjectInfoListFragment : BaseFragment() {
     }
 
     override fun initClick() {
-        detailsIv.setOnClickListener {
+        detailsLayout.setOnClickListener {
             if (project != null) {
                 var intent = Intent(context, RegionProjectDetailsActivity::class.java)
                 intent.putExtra("project", project)
@@ -83,6 +83,12 @@ class ProjectInfoListFragment : BaseFragment() {
             } else {
                 ToastUtil.show(context, "您还没有项目")
             }
+        }
+
+        tv_title.setOnClickListener {
+            //            var intent = Intent(context, ProjectInfoActivity::class.java)
+//            intent.putExtra("project", project)
+//            startActivity(intent)
         }
     }
 
@@ -123,13 +129,6 @@ class ProjectInfoListFragment : BaseFragment() {
                                 tv_title.text = project!!.name
                                 total_procss_tv.text = project!!.process.toString() + "%"
                                 Log.e("TAG", "请求成功:" + project.toString())
-
-                                //点击事件
-                                tv_title.setOnClickListener {
-                                    var intent = Intent(context, ProjectInfoActivity::class.java)
-                                    intent.putExtra("project", project)
-                                    startActivity(intent)
-                                }
 
                                 EventBus.getDefault().post(project)
 
@@ -241,6 +240,7 @@ class ProjectInfoListFragment : BaseFragment() {
                             var weather = gson.fromJson(result, LiveWeather::class.java)
                             tempTv.text = weather.lives[0].temperature + "℃"
                             weatherTv.text = weather.lives[0].weather
+                            ProjectData.getInstance().weather = weather
                         },
                         { throwable ->
                             throwable.printStackTrace()

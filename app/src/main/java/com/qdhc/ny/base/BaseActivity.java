@@ -21,16 +21,16 @@ import com.zyao89.view.zloading.Z_TYPE;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-
 /**
  * Created by 申健 on 2018/8/12.
  */
-
 public abstract class BaseActivity extends FragmentActivity {
     protected Activity mContext;
     protected ZLoadingDialog mDialog;
 
     protected Gson gson = new Gson();
+
+    protected Handler mHandler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,6 @@ public abstract class BaseActivity extends FragmentActivity {
 
     protected abstract void initData();
 
-
     /**
      * 设置状态栏颜色
      *
@@ -81,7 +80,6 @@ public abstract class BaseActivity extends FragmentActivity {
      * @param color    状态栏颜色值
      */
     public void setColor(Activity activity, int color) {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {// 5.0的全透明设置
             Window window = activity.getWindow();
             //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
@@ -137,9 +135,7 @@ public abstract class BaseActivity extends FragmentActivity {
         int resourceId = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
         int statusBarHeight = mContext.getResources().getDimensionPixelSize(resourceId);
         return statusBarHeight;
-
     }
-
 
     /**
      * 显示对话框
@@ -164,10 +160,25 @@ public abstract class BaseActivity extends FragmentActivity {
      */
     protected void dismissDialog() {
         if (mDialog != null) {
-            new Handler().postDelayed(new Runnable() {
+            mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mDialog.dismiss();
+                }
+            }, 1500);
+        }
+    }
+
+    /**
+     * 对话框消失
+     */
+    protected void dismissDialogAndFinish() {
+        if (mDialog != null) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mDialog.dismiss();
+                    finish();
                 }
             }, 1500);
         }

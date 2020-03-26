@@ -16,12 +16,14 @@ public class DaySchedule implements Serializable {
      * 当前日期的最新进度
      */
     private int schedule = 0;
-
+    /**
+     * 当前日期的标题
+     */
+    private String title;
     /**
      * 最后一条媒体数据
      */
     private Media lastMedia = null;
-
     /**
      * 更新时间
      */
@@ -57,6 +59,14 @@ public class DaySchedule implements Serializable {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

@@ -23,6 +23,7 @@ public class RegionProjectAdapter extends BaseQuickAdapter<Project, BaseViewHold
 
     @Override
     protected void convert(final BaseViewHolder helper, Project item) {
+        helper.setText(R.id.orderTv, (helper.getAdapterPosition() + 1) + "");
 
         helper.setText(R.id.nameTv, item.getArea().getName());
         helper.setText(R.id.targetTv, "- -");

@@ -25,7 +25,7 @@ public class ProjectDaySchueduleAdapter extends BaseQuickAdapter<DaySchedule, Ba
 
     @Override
     protected void convert(final BaseViewHolder helper, DaySchedule item) {
-        helper.setText(R.id.tv_title, item.getDate());
+        helper.setText(R.id.tv_title, item.getTitle());
         helper.setText(R.id.tv_status, item.getSchedule() + "%");
 
         if (item.getLastMedia() != null) {

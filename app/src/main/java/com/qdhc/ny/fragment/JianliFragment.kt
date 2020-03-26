@@ -2,8 +2,11 @@ package com.qdhc.ny.fragment
 
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.provider.DocumentsContract
 import android.util.Log
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
@@ -18,6 +21,7 @@ import com.qdhc.ny.entity.Area
 import com.qdhc.ny.entity.LiveWeather
 import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
+import com.qdhc.ny.utils.UriToPathUtils
 import com.sj.core.net.Rx.RxRestClient
 import com.sj.core.utils.ToastUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,6 +32,7 @@ import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 监理主页面
@@ -222,6 +227,16 @@ class JianliFragment : BaseFragment() {
         }
     }
 
+    private fun getPathByUri(context: Context, uri: Uri): String? {
+        val path: String
+        path = if (DocumentsContract.isDocumentUri(context, uri)) {
+            UriToPathUtils.getPath(context, uri)
+        } else {
+            UriToPathUtils.getEncodedPath(context, uri)
+        }
+        return path
+    }
+
     /**
      * 检查定位权限
      */
@@ -281,6 +296,7 @@ class JianliFragment : BaseFragment() {
                             var weather = gson.fromJson(result, LiveWeather::class.java)
                             tempTv.text = weather.lives[0].temperature + "℃"
                             weatherTv.text = weather.lives[0].weather
+                            ProjectData.getInstance().weather = weather
                         },
                         { throwable ->
                             throwable.printStackTrace()

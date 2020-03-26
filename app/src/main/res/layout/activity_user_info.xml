@@ -40,7 +40,6 @@
             android:scaleType="fitEnd"
             android:src="@drawable/ic_defult_user" />
 
-
     </RelativeLayout>
 
     <View
@@ -92,7 +91,8 @@
         android:gravity="center"
         android:text="保存"
         android:textColor="@color/white"
-        android:textSize="@dimen/textsize_8" />
+        android:textSize="@dimen/textsize_8"
+        android:visibility="gone" />
 
 
 </LinearLayout>

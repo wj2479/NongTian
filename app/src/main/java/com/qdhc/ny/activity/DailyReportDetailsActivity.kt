@@ -13,6 +13,12 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import com.amap.api.maps.model.LatLng
+import com.amap.api.maps.model.Poi
+import com.amap.api.navi.AmapNaviPage
+import com.amap.api.navi.AmapNaviParams
+import com.amap.api.navi.AmapNaviTheme
+import com.amap.api.navi.AmapNaviType
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jaeger.ninegridimageview.ItemImageClickListener
@@ -148,6 +154,26 @@ class DailyReportDetailsActivity : BaseActivity() {
         picIv.setOnClickListener {
             requestPermissions()
         }
+
+        locationLayout.setOnClickListener {
+            if (!TextUtils.isEmpty(report.lnglat)) {
+                try {
+                    var split = report.lnglat.split(",")
+                    /**终点传入的是北京站坐标,但是POI的ID "B000A83M61"对应的是北京西站，所以实际算路以北京西站作为终点**/
+                    if (TextUtils.isEmpty(report.poi)) {
+                        var end = Poi(locationTv.text.toString(), LatLng(split[1].toDouble(), split[0].toDouble()), "");
+                        AmapNaviPage.getInstance().showRouteActivity(this, AmapNaviParams(null, null, end, AmapNaviType.DRIVER).setTheme(AmapNaviTheme.BLACK), null);
+                    } else {
+                        //  当不设置起点信息时，会采用用户当前位置作为起点，并显示地点名称为“我的位置”。
+                        var end = Poi(report.poi, LatLng(split[1].toDouble(), split[0].toDouble()), "");
+                        AmapNaviPage.getInstance().showRouteActivity(this, AmapNaviParams(null, null, end, AmapNaviType.DRIVER).setTheme(AmapNaviTheme.BLACK), null);
+                    }
+                } catch (e: Exception) {
+                }
+            } else {
+                ToastUtil.show(this, "获取位置坐标失败，无法为您导航")
+            }
+        }
     }
 
     override fun initData() {
@@ -171,7 +197,9 @@ class DailyReportDetailsActivity : BaseActivity() {
 
         nameTv.text = report.title
         if (!TextUtils.isEmpty(report.address)) {
-            locationTv.text = report.address
+            locationTv.text = report.address.replace("山东省", "")
+        } else {
+            locationLayout.visibility = View.GONE
         }
 
         if (TextUtils.isEmpty(report.updateTime)) {
@@ -179,7 +207,7 @@ class DailyReportDetailsActivity : BaseActivity() {
         } else {
             timeTv.text = report.updateTime
         }
-        contentTv.text = report.content
+        contentTv.text = "详情: " + report.content
 
         when (report.check) {
             0 -> {
@@ -321,6 +349,7 @@ class DailyReportDetailsActivity : BaseActivity() {
                                     commentList.add(reportComment)
                                 }
                                 commentAdapter.notifyDataSetChanged()
+                                commentTitleTv.text = "评论 (" + commentList.size + ")"
                             }
                         },
                         { throwable ->

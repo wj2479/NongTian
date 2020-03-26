@@ -1,11 +1,21 @@
 package com.qdhc.ny.activity
 
 import com.qdhc.ny.base.BaseActivity
+import com.qdhc.ny.common.ProjectData
+import com.qdhc.ny.entity.User
+import com.sj.core.net.Rx.RxRestClient
 import com.sj.core.utils.ToastUtil
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_update_pwd.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
+import org.json.JSONObject
+import java.util.*
 
 class UpdatePwdActivity : BaseActivity() {
+
+    lateinit var user: User
+
     override fun intiLayout(): Int {
         return (com.qdhc.ny.R.layout.activity_update_pwd)
     }
@@ -39,11 +49,36 @@ class UpdatePwdActivity : BaseActivity() {
             showDialog("正在修改密码...")
             //
 
+            var params: HashMap<String, Any> = HashMap()
+            params["username"] = user.userName
+            params["oldPwd"] = oldPwd
+            params["newPwd"] = newPwd
+
+            RxRestClient.create()
+                    .url("user/changePassword")
+                    .params(params)
+                    .build()
+                    .get()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            { result ->
+                                var json = JSONObject(result)
+                                if (json.getInt("code") == 1000) {
+                                    showDialog("密码修改成功...")
+                                }
+                                dismissDialogAndFinish()
+                            },
+                            { throwable ->
+                                throwable.printStackTrace()
+                                showDialog("密码修改失败，请稍候再试...")
+                                dismissDialog()
+                            })
         }
     }
 
     override fun initData() {
-
+        user = ProjectData.getInstance().userInfo
     }
 
     override fun initView() {

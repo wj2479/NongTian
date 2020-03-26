@@ -16,8 +16,8 @@ public class Constant {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     //    public static final String SYS_ROOT = "http://192.168.31.210:8088/"; //测试版本地址
-//    public static final String SYS_ROOT = "http://192.168.1.163:8088/"; //测试版本地址
-    public static final String SYS_ROOT = "http://39.99.168.20:8088/"; //线上版本地址
+    public static final String SYS_ROOT = "http://192.168.1.163:8088/"; //测试版本地址
+//    public static final String SYS_ROOT = "http://39.99.168.20:8088/"; //线上版本地址
 
     public static final int REPORT_TYPE_DAY = 1;
     public static final int REPORT_TYPE_WEEK = 2;

@@ -349,6 +349,7 @@ class MainActivity : BaseActivity() {
         params["locationTime"] = location.time        // 定位时间
         params["speed"] = location.speed               // 速度
         params["address"] = location.address           // 地址
+        params["poi"] = location.poiName               // 兴趣点名字
 
         var sb_temp = StringBuffer()
         sb_temp.append("* WIFI开关：").append(if (location.locationQualityReport.isWifiAble) "开启" else "关闭").append("\n");

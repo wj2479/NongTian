@@ -11,19 +11,24 @@ import com.qdhc.ny.entity.User
 import com.qdhc.ny.utils.BaseUtil
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.AcitityManagerUtil
+import com.vondear.rxtool.RxDataTool
 import kotlinx.android.synthetic.main.fragment_my.*
 
 class MyFragment : BaseFragment() {
+    lateinit var userInfo: User
 
     override fun intiLayout(): Int {
         return R.layout.fragment_my
     }
 
-    lateinit var userInfo: User
     override fun initView() {
-        userInfo = SharedPreferencesUtils.loadLogin(context)
+        userInfo = ProjectData.getInstance().userInfo
         tv_name.text = userInfo.nickName
+        tv_job.text = userInfo.role.desc
 
+        if (userInfo.phone.length == 11) {
+            phoneTv.text = RxDataTool.hideMobilePhone4(userInfo.phone)
+        }
         versionTv.text = BaseUtil.getAppVersionName(context)
 //        if (userInfo.role == 0) {
 //            ll_usermanager.visibility = View.VISIBLE
@@ -55,20 +60,17 @@ class MyFragment : BaseFragment() {
             startActivity(Intent(activity, UpdatePwdActivity::class.java))
         }
 
-        ll_usermanager.setOnClickListener {
-            //用户管理
-            startActivity(Intent(activity, UserManagerActivity::class.java))
-        }
-
         ll_notify.setOnClickListener {
             //用户通知
             startActivity(Intent(activity, NotifyActivity::class.java).putExtra("user", userInfo))
         }
+
+        ll_phone.setOnClickListener {
+            startActivityForResult(Intent(activity, UpdatePhoneActivity::class.java).putExtra("user", userInfo), 1002)
+        }
     }
 
     override fun initData() {
-
-        tv_job.text = userInfo.role.desc
 
     }
 
@@ -87,8 +89,16 @@ class MyFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-            initView()
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                100 -> initView()
+                1002 -> {
+                    var phone = data?.getStringExtra("phone")
+                    userInfo.phone = phone
+                    phoneTv.text = RxDataTool.hideMobilePhone4(userInfo.phone)
+                    ProjectData.getInstance().userInfo = userInfo
+                }
+            }
         }
     }
 

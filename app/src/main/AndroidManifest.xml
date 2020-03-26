@@ -62,7 +62,6 @@
         <activity
             android:name=".activity.UserManagerActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ImageActivity" />
         <activity
             android:name=".activity.ContradictionInfoActivity"
             android:launchMode="singleTask"
@@ -181,6 +180,12 @@
         <activity
             android:name=".activity.ShareSubmitActivity"
             android:screenOrientation="portrait" />
+
+        <!-- 高德的导航组件  方便集成-->
+        <activity
+            android:name="com.amap.api.navi.AmapRouteActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"

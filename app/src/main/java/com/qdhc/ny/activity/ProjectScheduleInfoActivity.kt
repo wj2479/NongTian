@@ -1,6 +1,5 @@
 package com.qdhc.ny.activity
 
-import android.content.Intent
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.qdhc.ny.R
@@ -36,9 +35,6 @@ class ProjectScheduleInfoActivity : BaseActivity() {
         adapter.setOnItemClickListener { position, v ->
             var url = selectList.get(position).url
 
-            var intent = Intent(this, ImageActivity::class.java)
-            intent.putExtra("url", url)
-            startActivity(intent)
         }
         rlv.adapter = adapter
     }

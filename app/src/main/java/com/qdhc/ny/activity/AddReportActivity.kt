@@ -60,9 +60,9 @@ class AddReportActivity : BaseActivity() {
 
             var localMedia = selectList.get(position)
             if (localMedia.mimeType == PictureMimeType.ofImage()) {
-                var intent = Intent(this, ImageActivity::class.java)
-                intent.putExtra("url", localMedia.path)
-                startActivity(intent)
+                PictureSelector.create(this)
+                        .themeStyle(R.style.picture_default_style)
+                        .openExternalPreview(position, selectList);
             } else if (localMedia.mimeType == PictureMimeType.ofVideo()) {
                 PictureSelector.create(this@AddReportActivity).externalPictureVideo(localMedia.path);
             }

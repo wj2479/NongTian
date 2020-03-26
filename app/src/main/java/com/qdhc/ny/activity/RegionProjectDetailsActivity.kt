@@ -7,10 +7,11 @@ import android.util.Log
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.RegionProjectAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.common.ProjectLevel
 import com.qdhc.ny.entity.Project
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_region_project_details.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 区域项目详情
@@ -34,12 +35,22 @@ class RegionProjectDetailsActivity : BaseActivity() {
     override fun initData() {
         if (intent.hasExtra("subProjects")) {
             projectList = intent.getSerializableExtra("subProjects") as ArrayList<Project>
-            if (projectList.size > 0) {
-                var level = ProjectLevel.getEnumType(projectList.get(0).level)
-                tv_district.text = level.desc + "进度详情"
-            }
+
+            //排序
+            Collections.sort(projectList, object : Comparator<Project> {
+                override fun compare(o1: Project?, o2: Project?): Int {
+                    if (o1?.process!! > o2?.process!!) {
+                        return -1
+                    } else if (o1.process < o2.process) {
+                        return 1
+                    } else {
+                        return 0
+                    }
+                }
+            })
+
         } else {
-            projectList = ArrayList<Project>()
+            projectList = ArrayList()
         }
 
         if (intent.hasExtra("project")) {
