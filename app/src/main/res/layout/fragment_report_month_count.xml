@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.ReportDayCountFragment">
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/mChart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View style="@style/line_vertical"></View>
+
+    <LinearLayout
+        android:id="@+id/ll_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_cal"
+            android:drawablePadding="@dimen/dp_10"
+            android:padding="@dimen/dp_5"
+            android:text="2013-12-12"
+            android:textColor="@color/themecolor"
+            android:textSize="@dimen/textsize_8" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.qdhc.ny.activity.NoticeActivity">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/title_iv_back"
@@ -26,8 +27,8 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="通知列表"
             android:lines="1"
+            android:text="通知列表"
             android:textColor="#333333"
             android:textSize="@dimen/textsize_9" />
 
@@ -36,18 +37,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
             android:gravity="center"
-            android:visibility="gone"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textColor="#333333"
-            android:textSize="@dimen/textsize_7" />
+            android:textSize="@dimen/textsize_7"
+            android:visibility="gone" />
 
         <View
             style="@style/line_vertical"
             android:layout_alignParentBottom="true"></View>
     </RelativeLayout>
-
 
     <!--tabIndicatorColor：指示器的颜色-->
     <!--tabIndicatorHeight：指示器的高度，可设置为0，相当于没有指示器-->
@@ -60,13 +60,13 @@
         android:id="@+id/mTabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        app:tabGravity="fill"
         app:tabIndicatorColor="@color/themecolor"
         app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"
         app:tabSelectedTextColor="@color/themecolor"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
-        app:tabTextColor="@color/_8c"
-        app:tabMode="fixed"
-        app:tabGravity="fill"></android.support.design.widget.TabLayout>
+        app:tabTextColor="@color/_8c"></android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/mViewPager"

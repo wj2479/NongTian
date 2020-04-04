@@ -109,7 +109,6 @@ public class CircleProgressBar extends View {
         canvas.drawText(centerText, width / 2 - textWidth / 2, height / 2 - textHeight / 2, fontPaint);
     }
 
-
     /**
      * 更新界面
      *

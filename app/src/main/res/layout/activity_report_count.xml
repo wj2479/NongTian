@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_250"
+        android:background="@mipmap/manager_back_ground"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLayout"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_12">
+
+            <ImageView
+                android:id="@+id/backIv"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_back"></ImageView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dp_12"
+                android:paddingRight="@dimen/dp_12"
+                android:text="日志统计"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textsize_9" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/projectLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/corners_bb_bg"
+            android:orientation="vertical">
+
+            <!--tabIndicatorColor：指示器的颜色-->
+            <!--tabIndicatorHeight：指示器的高度，可设置为0，相当于没有指示器-->
+            <!--tabTextColor：Tab未选中时字体的颜色-->
+            <!--tabSelectedTextColor：Tab选中时字体的颜色-->
+            <!--tabTextAppearance：Tab内文字的样式，TabLayout没有提供直接属性设置文字大小，需通过该属性指定style样式从而改变文字大小-->
+            <!--tabMode：Tab的显示模式，默认为fixed（固定不能滑动，标签很多时会被挤压），可设置为scrollable（标签很多时可向左滑动）-->
+            <!--tabGravity：内容的显示模式，可选center（居中）和fill（填充）-->
+            <android.support.design.widget.TabLayout
+                android:id="@+id/mTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/text_color_orange"
+                app:tabIndicatorHeight="3dp"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/text_color_orange"
+                app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+                app:tabTextColor="@color/_8c"></android.support.design.widget.TabLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/mViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

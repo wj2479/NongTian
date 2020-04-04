@@ -13,9 +13,98 @@
 
     <View style="@style/line_vertical"></View>
 
-    <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-        android:id="@+id/smrw"
+    <LinearLayout
+        android:id="@+id/countLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_16"
+        android:background="@drawable/btn_submit_selector"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_32"
+        android:paddingBottom="@dimen/dp_32">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="日志统计"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_10"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:text="查看监理的每日、每周、每月的统计"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_8"></TextView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/trackLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_16"
+        android:background="@drawable/bg_orange_selector"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_32"
+        android:paddingBottom="@dimen/dp_32">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="运动轨迹"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_10"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:text="查看监理的每日运动轨迹"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_8"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/notifyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_16"
+        android:background="@drawable/btn_submit_selector"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_32"
+        android:paddingBottom="@dimen/dp_32">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="通  知"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_10"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:text="查看、发送通知"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_8"></TextView>
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -2,7 +2,6 @@ package com.qdhc.ny.fragment
 
 
 import android.content.Intent
-import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.MotionEvent
@@ -60,8 +59,6 @@ class ProjectInfoListFragment : BaseFragment() {
 //    lateinit var mChart: BarChart
 
     var project: Project? = null
-
-    val mHandler = Handler()
 
     override fun intiLayout(): Int {
         return R.layout.fragment_project_into_list

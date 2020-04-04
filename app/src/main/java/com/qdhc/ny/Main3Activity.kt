@@ -16,8 +16,8 @@ import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TabIconBean
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.entity.User
+import com.qdhc.ny.fragment.CheckFragment
 import com.qdhc.ny.fragment.MyFragment
-import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.fragment.ProjectInfoListFragment
 import com.qdhc.ny.fragment.ToDoListFragment
 import com.qdhc.ny.service.UpadateManager
@@ -85,11 +85,11 @@ class Main3Activity : BaseActivity() {
     private val mTabEntities = ArrayList<CustomTabEntity>()
     private val mIconUnselectIds = intArrayOf(R.drawable.ic_list,
             R.drawable.ic_to_do_list,
-            R.mipmap.icon_notice,
+            R.drawable.ic_quality,
             R.mipmap.icon_wode)
     private val mIconSelectIds = intArrayOf(R.drawable.ic_list_select,
             R.drawable.ic_to_do_list_select,
-            R.mipmap.icon_notice_select,
+            R.drawable.ic_quality_select,
             R.mipmap.icon_wode_select)
 
     override fun initView() {
@@ -99,7 +99,7 @@ class Main3Activity : BaseActivity() {
         var fragmentList = ArrayList<Fragment>()
         fragmentList.add(ProjectInfoListFragment())
         fragmentList.add(ToDoListFragment())
-        fragmentList.add(NotifyFragment())
+        fragmentList.add(CheckFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)

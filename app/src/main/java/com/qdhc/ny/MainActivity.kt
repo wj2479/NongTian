@@ -111,7 +111,6 @@ class MainActivity : BaseActivity() {
                 }
                 Log.e("TAG", permission.name + " is denied.")
             }
-
         })
     }
 

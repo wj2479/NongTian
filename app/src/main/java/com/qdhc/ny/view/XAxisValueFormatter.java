@@ -12,7 +12,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 public class XAxisValueFormatter implements IAxisValueFormatter {
     String[] datas;
 
-    public XAxisValueFormatter( String[] datas) {
+    public XAxisValueFormatter(String[] datas) {
         this.datas = datas;
     }
 

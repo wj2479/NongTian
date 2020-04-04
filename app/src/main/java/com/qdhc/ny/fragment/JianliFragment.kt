@@ -2,11 +2,8 @@ package com.qdhc.ny.fragment
 
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.provider.DocumentsContract
 import android.util.Log
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
@@ -21,7 +18,6 @@ import com.qdhc.ny.entity.Area
 import com.qdhc.ny.entity.LiveWeather
 import com.qdhc.ny.entity.Project
 import com.qdhc.ny.entity.User
-import com.qdhc.ny.utils.UriToPathUtils
 import com.sj.core.net.Rx.RxRestClient
 import com.sj.core.utils.ToastUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -225,16 +221,6 @@ class JianliFragment : BaseFragment() {
         } else if (resultCode == 103) {
             Toast.makeText(activity, "请检查相机权限~", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private fun getPathByUri(context: Context, uri: Uri): String? {
-        val path: String
-        path = if (DocumentsContract.isDocumentUri(context, uri)) {
-            UriToPathUtils.getPath(context, uri)
-        } else {
-            UriToPathUtils.getEncodedPath(context, uri)
-        }
-        return path
     }
 
     /**
