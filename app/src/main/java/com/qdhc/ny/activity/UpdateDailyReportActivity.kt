@@ -210,7 +210,7 @@ class UpdateDailyReportActivity : BaseActivity() {
                 }).success { result ->
                     ToastUtil.show(mContext, "上传成功")
                     var intent = Intent()
-                    intent.putExtra("schedule", bubbleSeekbar.progress)
+                    intent.putExtra("schedule", bubbleSeekbar.progress * 1.0f)
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 }.error { code, msg ->

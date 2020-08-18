@@ -166,7 +166,7 @@ class JianliFragment : BaseFragment() {
                                 project = gson.fromJson(jsonObject.toString(), Project::class.java)
                                 project_name_tv.text = project!!.name
                                 Log.e("TAG", "请求成功:" + project.toString())
-                                progressbar.setProgress(project!!.process)
+                                progressbar.setProgress(project!!.process.toInt())
                                 progressTv.text = project!!.process.toString() + "%"
                                 getOrderProject(project!!.id)
                             } else {

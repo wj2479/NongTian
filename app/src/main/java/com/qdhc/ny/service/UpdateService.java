@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
-import android.text.TextUtils;
 
 import java.io.File;
 
@@ -42,8 +41,6 @@ public class UpdateService extends Service {
      * 初始化下载器
      **/
     private void initDownManager(String urlPath) {
-        if (TextUtils.isEmpty(urlPath) || !urlPath.startsWith("http://") || !urlPath.startsWith("https://"))
-            return;
         manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         receiver = new DownloadCompleteReceiver();
 
@@ -107,15 +104,12 @@ public class UpdateService extends Service {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             //判断是否下载完成的广播
             if (intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
-
                 //获取下载的文件id
                 long downId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-
                 //自动安装apk
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
                     Uri uriForDownloadedFile = manager.getUriForDownloadedFile(downId);
                     installApkNew(uriForDownloadedFile);
                 }

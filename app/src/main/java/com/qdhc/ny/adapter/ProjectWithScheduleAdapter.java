@@ -28,7 +28,7 @@ public class ProjectWithScheduleAdapter extends BaseQuickAdapter<Project, BaseVi
         helper.setText(R.id.tv_title, item.getName());
 
         CircleProgressBar circleBar = helper.getView(R.id.circleProgressBar);
-        circleBar.update(item.getProcess(), item.getProcess() + "%");
+//        circleBar.update(item.getProcess(), item.getProcess() + "%");
         helper.setText(R.id.tv_introduce, item.getInfo());
 //        helper.setText(R.id.tv_village, item.getVillage());
 //        helper.setText(R.id.tv_district, item.getDistrict());

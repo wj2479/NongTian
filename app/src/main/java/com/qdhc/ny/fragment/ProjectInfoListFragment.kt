@@ -165,7 +165,7 @@ class ProjectInfoListFragment : BaseFragment() {
                             } else {
                                 xTitles.add(project.area.name)
                             }
-                            entryList.add(BarEntry(index.toFloat(), project.process.toFloat(), project))
+                            entryList.add(BarEntry(index.toFloat(), project.process, project))
                             subProjectList.add(project)
                         }
 

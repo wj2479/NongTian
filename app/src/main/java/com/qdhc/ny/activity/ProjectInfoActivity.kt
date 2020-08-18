@@ -48,7 +48,7 @@ class ProjectInfoActivity : BaseActivity() {
      */
     var dailyScheduleList = ArrayList<DaySchedule>()
 
-    var initSchedule = 0
+    var initSchedule = 0f
 
     override fun intiLayout(): Int {
         return R.layout.activity_project_info
@@ -257,7 +257,7 @@ class ProjectInfoActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == 103) {
             if (data != null) {
-                val schedule = data.getIntExtra("schedule", project.process)
+                val schedule = data.getFloatExtra("schedule", project.process)
                 project.process = schedule
                 scheduleTv.text = project.process.toString()
                 checkBtnShow(schedule)
@@ -268,8 +268,8 @@ class ProjectInfoActivity : BaseActivity() {
         }
     }
 
-    fun checkBtnShow(process: Int) {
-        if (process == 100) {
+    fun checkBtnShow(process: Float) {
+        if (process == 100f) {
             bt_comment.visibility = View.GONE
         }
     }

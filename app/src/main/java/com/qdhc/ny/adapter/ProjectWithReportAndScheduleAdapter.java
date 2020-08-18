@@ -12,7 +12,6 @@ import com.qdhc.ny.R;
 import com.qdhc.ny.activity.ProjectInfoActivity;
 import com.qdhc.ny.activity.ReportAllListActivity;
 import com.qdhc.ny.entity.Project;
-import com.qdhc.ny.view.CircleProgressBar;
 
 import java.util.List;
 
@@ -36,8 +35,8 @@ public class ProjectWithReportAndScheduleAdapter extends BaseQuickAdapter<Projec
 //        helper.setText(R.id.tv_village, item.getVillage());
 //        helper.setText(R.id.tv_district, item.getDistrict());
 
-        CircleProgressBar circleBar = helper.getView(R.id.circleProgressBar);
-        circleBar.update(item.getProcess(), item.getProcess() + "%");
+//        CircleProgressBar circleBar = helper.getView(R.id.circleProgressBar);
+//        circleBar.update(item.getProcess(), item.getProcess() + "%");
 
 //        if (!userInfo.getObjectId().equals(item.getManager())) {
 //            helper.setVisible(R.id.tv_person, true);
